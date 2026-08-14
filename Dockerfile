@@ -1,7 +1,9 @@
-FROM python:3.12-alpine
+FROM node:20-alpine
 
 WORKDIR /app
 
 COPY . .
 
-CMD ["python", "-m", "http.server", "8080"]
+RUN npm install -g http-server
+
+CMD ["http-server", "-p", "8080", "-c-1"]
