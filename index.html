@@ -39,7 +39,8 @@
     display:flex;align-items:center;justify-content:space-between;
     padding:14px 18px 10px;
   }
-  .logo{font-family:'Archivo Black';font-size:19px;letter-spacing:-.01em}
+  .logo{display:flex;align-items:center;gap:8px;font-family:'Archivo Black';font-size:19px;letter-spacing:-.01em}
+  .logo svg{display:block;flex-shrink:0}
   .logo span{color:var(--site)}
   .back{
     font-size:14px;font-weight:600;color:var(--chalk);background:none;border:none;
@@ -75,11 +76,34 @@
     font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
     color:var(--ink-soft);margin-bottom:6px;
   }
-  .draft-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-top:1px solid var(--line);font-size:15px}
+  .draft-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-top:1px solid var(--line);font-size:15px}
   .draft-row:first-of-type{border-top:none}
+  .draft-row .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .draft-row .amt{font-family:'IBM Plex Mono';font-weight:600}
   .tag{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--paper);color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em}
   .tag.sent{background:#E4EDF5;color:var(--chalk)}
+
+  /* editable fields */
+  .field{display:block;width:100%;margin-bottom:12px}
+  .field label{display:block;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:5px}
+  .field input,.field textarea{
+    width:100%;font-family:'Archivo';font-size:16px;font-weight:600;color:var(--ink);
+    background:var(--card);border:2px solid var(--line);border-radius:10px;padding:13px 14px;
+  }
+  .field textarea{min-height:78px;resize:none;line-height:1.4}
+  .field input:focus,.field textarea:focus{outline:none;border-color:var(--chalk)}
+  .edit-num{
+    font-family:'IBM Plex Mono';font-weight:600;font-size:15px;color:var(--ink);
+    background:#FBFAF6;border:1px solid var(--line);border-radius:8px;padding:6px 8px;
+    width:92px;text-align:right;
+  }
+  .edit-num.hrs{width:56px}
+  .edit-num:focus{outline:none;border-color:var(--chalk);background:#fff}
+  .rate-edit{
+    font-family:'IBM Plex Mono';font-weight:600;font-size:22px;color:var(--ink);
+    background:#FBFAF6;border:1px solid var(--line);border-radius:8px;padding:2px 6px;width:74px;text-align:center;
+  }
+  .rate-edit:focus{outline:none;border-color:var(--chalk);background:#fff}
 
   .mic-wrap{display:flex;flex-direction:column;align-items:center;margin:22px 0 8px}
   .mic{
@@ -122,20 +146,20 @@
   @keyframes pulse{0%,100%{opacity:.25}50%{opacity:1}}
   @media (prefers-reduced-motion:reduce){.dot{animation:none}}
   .price-line{
-    width:100%;text-align:left;background:none;border:none;cursor:pointer;
+    width:100%;text-align:left;background:none;border:none;
     display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
     padding:12px 0;border-top:1px solid var(--line);font-family:'Archivo';
   }
   .price-line:first-of-type{border-top:none}
   .price-line .p-name{font-size:15px;font-weight:600;line-height:1.3}
   .price-line .p-src{font-size:12px;color:var(--ink-soft);margin-top:2px;font-weight:500}
-  .price-line .p-amt{font-family:'IBM Plex Mono';font-weight:600;font-size:16px;white-space:nowrap}
-  .price-line .p-edit{font-size:11.5px;color:var(--chalk);font-weight:700;text-align:right;margin-top:2px}
+  .price-line .p-edit{font-size:11.5px;color:var(--chalk);font-weight:700;text-align:right;margin-top:4px}
   .src-tag{display:inline-block;background:var(--paper);border-radius:5px;padding:1px 6px;margin-right:4px}
   .ai-note{font-size:12.5px;color:var(--ink-soft);line-height:1.5;margin:4px 0 14px}
 
-  .line{display:flex;justify-content:space-between;align-items:baseline;padding:11px 0;border-top:1px solid var(--line);font-size:15px}
+  .line{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:11px 0;border-top:1px solid var(--line);font-size:15px}
   .line:first-of-type{border-top:none}
+  .line .lbl{flex:1}
   .line .amt{font-family:'IBM Plex Mono';font-weight:600;white-space:nowrap}
   .line .sub-amt{display:block;font-size:12px;color:var(--ink-soft);font-weight:500}
   .why{
@@ -152,7 +176,20 @@
     padding:14px 16px;font-size:14.5px;line-height:1.5;margin-bottom:12px;
   }
   .guardian b{color:var(--site)}
+  .guardian button{
+    display:inline-block;margin-top:8px;background:var(--card);border:1.5px solid #E0A878;color:var(--site);
+    font-family:'Archivo';font-weight:700;font-size:13px;border-radius:8px;padding:7px 12px;cursor:pointer;
+  }
+  .guardian.off{background:var(--card);border-color:var(--line);color:var(--ink-soft)}
+  .guardian.off b{color:var(--ink-soft)}
+  .guardian.off button{border-color:var(--line);color:var(--chalk)}
   .totals .line{font-weight:700}
+
+  .complexity{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .cx{flex:1;min-width:70px;padding:10px 6px;border-radius:10px;border:2px solid var(--line);background:var(--card);
+    font-family:'Archivo';font-weight:700;font-size:14px;cursor:pointer;text-align:center;color:var(--ink-soft)}
+  .cx small{display:block;font-size:11px;font-weight:600;margin-top:2px;color:var(--ink-soft)}
+  .cx.on{border-color:var(--site);color:var(--ink);background:#FDF1E9}
 
   .gate{display:flex;gap:12px;align-items:flex-start;padding:13px 0;border-top:1px solid var(--line)}
   .gate:first-of-type{border-top:none}
@@ -188,10 +225,16 @@
 </head>
 <body>
 
-<div class="demo-strip">Demo — tap through it &nbsp;·&nbsp; <b>nothing is saved</b></div>
+<div class="demo-strip">Demo — tap through it &nbsp;·&nbsp; <b>saved on this phone only</b></div>
 <header>
   <button class="back" id="backBtn" onclick="goBack()">‹ Back</button>
-  <div class="logo">Quote<span>Right</span></div>
+  <div class="logo">
+    <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="2" y="2" width="20" height="20" rx="6" fill="var(--ink)"/>
+      <path d="M6.8 12.4l3.3 3.3L17.2 8.6" fill="none" stroke="var(--site)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span style="color:var(--ink)">Quote<span>Right</span></span>
+  </div>
   <div style="width:52px"></div>
 </header>
 
@@ -201,17 +244,18 @@
   <section class="screen active" id="s-home">
     <h1>Morning, Dave.</h1>
     <p class="sub">Quote it before the coffee gets cold.</p>
-    <button class="big-btn primary" onclick="go('s-talk')">🎙&nbsp; Start a new estimate</button>
+    <button class="big-btn primary" onclick="startNew()">🎙&nbsp; Start a new estimate</button>
     <div class="card">
       <div class="eyebrow">Your jobs</div>
-      <div class="draft-row"><span>Miller — bathroom</span><span class="tag sent">Sent</span><span class="amt">$21,600</span></div>
-      <div class="draft-row"><span>Kowalski — deck</span><span class="tag">Draft</span><span class="amt">$12,140</span></div>
+      <div id="jobList"></div>
     </div>
     <div class="card">
       <div class="eyebrow">Your number</div>
-      <div style="display:flex;align-items:baseline;gap:8px">
-        <span style="font-family:'IBM Plex Mono';font-weight:600;font-size:26px">$95/hr</span>
-        <span style="color:var(--ink-soft);font-size:13.5px">Never quote below it.</span>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-family:'IBM Plex Mono';font-weight:600;font-size:22px">$</span>
+        <input class="rate-edit" id="rateInput" type="number" inputmode="numeric" value="95" onchange="setRate(this.value)" aria-label="Your hourly rate">
+        <span style="font-family:'IBM Plex Mono';font-weight:600;font-size:20px">/hr</span>
+        <span style="color:var(--ink-soft);font-size:13.5px;margin-left:2px">Never quote below it.</span>
       </div>
     </div>
   </section>
@@ -221,16 +265,25 @@
     <h1>Tell me about the job.</h1>
     <p class="sub">Talk like you'd talk to a buddy. I'll sort it out.</p>
     <div class="mic-wrap">
-      <button class="mic" onclick="go('s-confirm')" aria-label="Tap and talk">
+      <button class="mic" onclick="fillExample()" aria-label="Tap and talk">
         <svg viewBox="0 0 24 24"><path d="M12 15a4 4 0 0 0 4-4V6a4 4 0 1 0-8 0v5a4 4 0 0 0 4 4zm6-4a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.93V22h2v-3.07A8 8 0 0 0 20 11h-2z"/></svg>
       </button>
       <div class="mic-label">Tap &amp; talk</div>
     </div>
-    <div class="transcript">
-      <em>Try saying something like:</em><br><br>
-      “Full bathroom gut at the Hendersons'. House is from the seventies. Tub to shower conversion, they're buying their own vanity. Second floor, tight stairs.”
+    <div class="field" style="margin-top:20px">
+      <label for="clientName">Who's it for?</label>
+      <input id="clientName" type="text" placeholder="Client name" value="Sarah Henderson">
     </div>
-    <p class="foot-hint">Rather type? Tap the mic, then keep talking or type — both work.</p>
+    <div class="field">
+      <label for="jobTitle">The job</label>
+      <input id="jobTitle" type="text" placeholder="e.g. Henderson bathroom" value="Henderson bathroom">
+    </div>
+    <div class="field">
+      <label for="jobDesc">In your words</label>
+      <textarea id="jobDesc" placeholder="Full bathroom gut, 1970s house, tub to shower, client's own vanity, tight second-floor access…"></textarea>
+    </div>
+    <button class="big-btn primary" onclick="go('s-confirm')">Got it — keep going</button>
+    <p class="foot-hint">Rather type? The mic just fills an example — type over it anytime.</p>
   </section>
 
   <!-- 3 CONFIRM -->
@@ -262,72 +315,53 @@
   <section class="screen" id="s-prices">
     <h1>I priced your materials.</h1>
     <div class="scanning"><span class="dot"></span> Checked today's prices near you — Home Depot, Lowe's, local averages</div>
-    <div class="card">
-      <button class="price-line" onclick="toggleNote('np')">
-        <span><span class="p-name">Schluter shower kit, 5×9</span><br><span class="p-src"><span class="src-tag">Home Depot</span>updated today</span></span>
-        <span style="text-align:right"><span class="p-amt">$812</span><br><span class="p-edit">tap to change</span></span>
-      </button>
-      <button class="price-line" onclick="toggleNote('np')">
-        <span><span class="p-name">Tile &amp; grout, 140 sqft + 10% waste</span><br><span class="p-src"><span class="src-tag">Lowe's</span>updated today</span></span>
-        <span style="text-align:right"><span class="p-amt">$1,790</span><br><span class="p-edit">tap to change</span></span>
-      </button>
-      <button class="price-line" onclick="toggleNote('np')">
-        <span><span class="p-name">Plumbing rough-in materials</span><br><span class="p-src"><span class="src-tag">Local avg</span>3 suppliers</span></span>
-        <span style="text-align:right"><span class="p-amt">$615</span><br><span class="p-edit">tap to change</span></span>
-      </button>
-      <button class="price-line" onclick="toggleNote('np')">
-        <span><span class="p-name">Shower valve, head &amp; glass door</span><br><span class="p-src"><span class="src-tag">Home Depot</span>updated today</span></span>
-        <span style="text-align:right"><span class="p-amt">$948</span><br><span class="p-edit">tap to change</span></span>
-      </button>
-      <button class="price-line" onclick="toggleNote('np')">
-        <span><span class="p-name">Backer board, fasteners &amp; misc</span><br><span class="p-src"><span class="src-tag">Local avg</span></span></span>
-        <span style="text-align:right"><span class="p-amt">$390</span><br><span class="p-edit">tap to change</span></span>
-      </button>
-    </div>
-    <div id="np" class="note">In the real app, tapping a price lets you type what YOUR supplier charges — the app remembers it for next time. AI prices are the starting point, your numbers always win.</div>
+    <div class="card" id="priceCard"><!-- rendered --></div>
     <p class="ai-note">These are today's shelf prices. Your markup gets added automatically on the next screen — small stuff +40%, mid +30%, big-ticket +20%. The client never sees this screen.</p>
     <button class="big-btn primary" onclick="go('s-est')">Use these prices</button>
   </section>
 
   <!-- 6 ESTIMATE -->
   <section class="screen" id="s-est">
-    <h1>Henderson bathroom</h1>
-    <p class="sub">Your rates. Today's prices. Your last 3 jobs baked in.</p>
+    <h1 id="estTitle">Henderson bathroom</h1>
+    <p class="sub">Your rates. Today's prices. Tap any number to change it.</p>
 
-    <div class="guardian"><b>Hold up.</b> 1970s house and no “unknowns behind walls” buffer? Last time that cost you a weekend. I added 10% — tap to remove it if you're sure.</div>
+    <div class="guardian" id="guardian">
+      <b>Hold up.</b> 1970s house and no “unknowns behind walls” buffer? Last time that cost you a weekend. I added <b>+10%</b> — tap to remove it if you're sure.
+      <br><button id="guardianBtn" onclick="toggleUnknowns()">Remove the buffer</button>
+    </div>
 
     <div class="card">
-      <div class="eyebrow">Labor — your rate $95/hr</div>
-      <div class="line"><span>Demo &amp; prep — 8 hrs</span><span class="amt">$760</span></div>
-      <div class="line"><span>Plumbing rough-in — 6 hrs</span><span class="amt">$570</span></div>
-      <div class="line"><span>Waterproofing — 8 hrs</span><span class="amt">$760</span></div>
-      <div class="line"><span>Tile install — 19 hrs<button class="why" onclick="toggleNote('n0')">Why?</button></span><span class="amt">$1,805</span></div>
-      <div id="n0" class="note">Your last 3 bathrooms ran 20% over on tile hours, so I bumped 16 hrs to 19. That's your own track record talking.</div>
-      <div class="line"><span>Fixtures &amp; finish — 8 hrs</span><span class="amt">$760</span></div>
-      <div class="line" style="font-weight:700"><span>Labor total</span><span class="amt">$4,655</span></div>
+      <div class="eyebrow">Labor — your rate <span id="rateEcho">$95</span>/hr</div>
+      <div id="laborLines"></div>
+      <div class="line" style="font-weight:700"><span class="lbl">Labor total</span><span class="amt" id="laborTotal">$0</span></div>
     </div>
 
     <div class="card">
       <div class="eyebrow">Materials — AI-priced today, your markup added</div>
-      <div class="line"><span>Schluter shower kit</span><span class="amt">$1,056<span class="sub-amt">$812 +30%</span></span></div>
-      <div class="line"><span>Tile &amp; grout (140 sqft)</span><span class="amt">$2,148<span class="sub-amt">$1,790 +20%</span></span></div>
-      <div class="line"><span>Plumbing materials</span><span class="amt">$800<span class="sub-amt">$615 +30%</span></span></div>
-      <div class="line"><span>Shower valve, head &amp; door</span><span class="amt">$1,232<span class="sub-amt">$948 +30%</span></span></div>
-      <div class="line"><span>Backer board &amp; misc</span><span class="amt">$546<span class="sub-amt">$390 +40%</span></span></div>
-      <div class="line" style="font-weight:700"><span>Materials total</span><span class="amt">$5,782</span></div>
+      <div id="matLines"></div>
+      <div class="line" style="font-weight:700"><span class="lbl">Materials total</span><span class="amt" id="matTotal">$0</span></div>
     </div>
 
     <div class="card">
       <div class="eyebrow">Protection</div>
-      <div class="line"><span>Older-home factor (×1.5)<button class="why" onclick="toggleNote('n1')">Why?</button></span><span class="amt">$5,219</span></div>
+      <div class="line">
+        <span class="lbl">How complex is this job?<button class="why" onclick="toggleNote('n1')">Why?</button></span>
+      </div>
+      <div class="complexity" id="cxPicker">
+        <button class="cx" data-mult="1" onclick="setComplexity(1,this)">Standard<small>×1.0</small></button>
+        <button class="cx" data-mult="1.25" onclick="setComplexity(1.25,this)">Medium<small>×1.25</small></button>
+        <button class="cx on" data-mult="1.5" onclick="setComplexity(1.5,this)">High<small>×1.5</small></button>
+        <button class="cx" data-mult="1.75" onclick="setComplexity(1.75,this)">Extreme<small>×1.75</small></button>
+      </div>
       <div id="n1" class="note">Pre-1980 house with tight access — hidden rot, old pipes, maybe asbestos. Jobs like this run about 50% heavier than a new build. This keeps the surprise from coming out of your pocket.</div>
-      <div class="line"><span>Contingency (25%)<button class="why" onclick="toggleNote('n2')">Why?</button></span><span class="amt">$3,914</span></div>
+      <div class="line"><span class="lbl">Older-home factor</span><span class="amt" id="cxAmt">$0</span></div>
+      <div class="line"><span class="lbl">Contingency (<span id="contPct">25</span>%)<button class="why" onclick="toggleNote('n2')">Why?</button></span><span class="amt" id="contAmt">$0</span></div>
       <div id="n2" class="note">15% base for a standard reno, +10% for unknowns behind the walls. It shows on the client's quote as its own line — and if you don't need it, you hand it back and look like a hero.</div>
     </div>
 
     <div class="card totals">
-      <div class="line"><span>Client pays</span><span class="amt">$19,570</span></div>
-      <div class="line"><span style="color:var(--ok)">Your profit</span><span class="amt" style="color:var(--ok)">$5,460 · 28%</span></div>
+      <div class="line"><span class="lbl">Client pays</span><span class="amt" id="clientPays">$0</span></div>
+      <div class="line"><span class="lbl" style="color:var(--ok)">Built-in cushion</span><span class="amt" id="cushion" style="color:var(--ok)">$0</span></div>
     </div>
 
     <button class="big-btn" onclick="go('s-check')">Looks good — check it over</button>
@@ -338,27 +372,27 @@
     <h1>Last look before it goes.</h1>
     <p class="sub">Five quick gut checks. Tap each one you're solid on.</p>
     <div class="card">
-      <div class="gate"><div class="box" onclick="gate(this)"></div><p>If this job goes sideways, I still make money.<small>Margin holds at 21% even if labor runs 20% over.</small></p></div>
-      <div class="gate"><div class="box" onclick="gate(this)"></div><p>This price is fair for my work and my market.<small>Similar jobs around here: $15k–$30k. You're mid-range.</small></p></div>
-      <div class="gate"><div class="box" onclick="gate(this)"></div><p>I hit my $95/hr and my target margin.<small>This quote pays you $98/hr. ✓</small></p></div>
+      <div class="gate"><div class="box" onclick="gate(this)"></div><p>If this job goes sideways, I still make money.<small>Your cushion holds even if labor runs 20% over.</small></p></div>
+      <div class="gate"><div class="box" onclick="gate(this)"></div><p>This price is fair for my work and my market.<small>Similar jobs around here: $15k–$30k.</small></p></div>
+      <div class="gate"><div class="box" onclick="gate(this)"></div><p>I hit my rate and my target margin.<small>This quote pays your rate on every hour. ✓</small></p></div>
       <div class="gate"><div class="box" onclick="gate(this)"></div><p>I captured everything at the site visit.<small>Checklist 14/15 — photo of the shut-off is missing.</small></p></div>
       <div class="gate"><div class="box" onclick="gate(this)"></div><p>The quote says why I'm worth it.<small>Warranty, premium waterproofing, weekly photo updates — in.</small></p></div>
     </div>
-    <button class="big-btn primary" id="sendBtn" onclick="go('s-sent')" disabled style="opacity:.45">Send the quote</button>
+    <button class="big-btn primary" id="sendBtn" onclick="sendQuote()" disabled style="opacity:.45">Send the quote</button>
     <p class="foot-hint">Button unlocks when all five are checked.</p>
   </section>
 
   <!-- 8 SENT -->
   <section class="screen" id="s-sent">
     <div class="sent-mark">✓</div>
-    <h1 style="text-align:center">Sent to Sarah Henderson.</h1>
+    <h1 style="text-align:center" id="sentTitle">Sent to Sarah Henderson.</h1>
     <p class="sub" style="text-align:center">Texted and emailed. You'll get a ping when she opens it.<br>Follow-up reminder set for Friday.</p>
     <div class="pdf">
-      <b>Henderson Bathroom Renovation — Estimate</b><br>
+      <b id="pdfTitle">Henderson Bathroom Renovation — Estimate</b><br>
       Dave Kowalczyk Contracting · 2-year workmanship warranty<br>
       Scope: full renovation incl. tub-to-shower conversion, premium waterproofing system…<br>
-      Contingency allowance (25%) — covers hidden water damage &amp; surprises: <span class="pdf-total">$3,914</span><br>
-      <b>Total: <span class="pdf-total">$19,570</span></b>
+      Contingency allowance — covers hidden water damage &amp; surprises: <span class="pdf-total" id="pdfCont">$0</span><br>
+      <b>Total: <span class="pdf-total" id="pdfTotal">$0</span></b>
     </div>
     <button class="big-btn ghost" style="margin-top:16px" onclick="go('s-home')">Back to my jobs</button>
   </section>
@@ -368,24 +402,183 @@
 <div class="tape-bar" id="tapeBar">
   <div>
     <div class="t-label">Client pays</div>
-    <div class="t-amt">$19,570</div>
+    <div class="t-amt" id="tapeAmt">$0</div>
   </div>
   <div class="t-side">
-    Your profit<br><span class="m">$5,460 · 28%</span>
+    Built-in cushion<br><span class="m" id="tapeSide">$0</span>
   </div>
 </div>
 
 <script>
+  /* ---------- state ---------- */
+  const est = {
+    rate: 95,
+    complexity: 1.5,
+    unknowns: true, // guardian +10% on/off
+    labor: [
+      {name:'Demo & prep', hours:8},
+      {name:'Plumbing rough-in', hours:6},
+      {name:'Waterproofing', hours:8},
+      {name:'Tile install', hours:19},
+      {name:'Fixtures & finish', hours:8},
+    ],
+    materials: [
+      {name:'Schluter shower kit', base:812, markup:.30, src:'Home Depot · updated today'},
+      {name:'Tile & grout (140 sqft +10% waste)', base:1790, markup:.20, src:"Lowe's · updated today"},
+      {name:'Plumbing rough-in materials', base:615, markup:.30, src:'Local avg · 3 suppliers'},
+      {name:'Shower valve, head & glass door', base:948, markup:.30, src:'Home Depot · updated today'},
+      {name:'Backer board, fasteners & misc', base:390, markup:.40, src:'Local avg'},
+    ],
+    title:'Henderson bathroom',
+    client:'Sarah Henderson',
+  };
+
+  const money = n => '$' + Math.round(n).toLocaleString('en-US');
+
+  function calc(){
+    const laborTotal = est.labor.reduce((s,l)=> s + l.hours*est.rate, 0);
+    let matTotal = 0, matBase = 0;
+    est.materials.forEach(m=>{ matTotal += m.base*(1+m.markup); matBase += m.base; });
+    const subtotal = laborTotal + matTotal;
+    const cxAdd = subtotal * (est.complexity - 1);
+    const contPct = 15 + (est.unknowns ? 10 : 0);
+    const contBase = subtotal + cxAdd;
+    const contingency = contBase * contPct/100;
+    const clientPays = contBase + contingency;
+    const matMarkup = matTotal - matBase;
+    const cushion = matMarkup + cxAdd + contingency; // margin above bare cost
+    return {laborTotal, matTotal, subtotal, cxAdd, contPct, contingency, clientPays, cushion};
+  }
+
+  /* ---------- render ---------- */
+  function renderPrices(){
+    const el = document.getElementById('priceCard');
+    el.innerHTML = est.materials.map((m,i)=>`
+      <div class="price-line">
+        <span><span class="p-name">${m.name}</span><br><span class="p-src"><span class="src-tag">${m.src.split(' · ')[0]}</span>${m.src.split(' · ')[1]||''}</span></span>
+        <span style="text-align:right">
+          <input class="edit-num" type="number" inputmode="decimal" value="${m.base}" onchange="setMatBase(${i}, this.value)" aria-label="${m.name} price">
+          <span class="p-edit">tap to change</span>
+        </span>
+      </div>`).join('');
+  }
+
+  function renderEstimate(){
+    document.getElementById('estTitle').textContent = est.title || 'Estimate';
+    document.getElementById('rateEcho').textContent = money(est.rate);
+
+    document.getElementById('laborLines').innerHTML = est.labor.map((l,i)=>`
+      <div class="line">
+        <span class="lbl">${l.name} —
+          <input class="edit-num hrs" type="number" inputmode="numeric" value="${l.hours}" onchange="setHours(${i}, this.value)" aria-label="${l.name} hours"> hrs
+        </span>
+        <span class="amt">${money(l.hours*est.rate)}</span>
+      </div>`).join('');
+
+    document.getElementById('matLines').innerHTML = est.materials.map((m,i)=>`
+      <div class="line">
+        <span class="lbl">${m.name}</span>
+        <span class="amt">${money(m.base*(1+m.markup))}<span class="sub-amt">${money(m.base)} +${Math.round(m.markup*100)}%</span></span>
+      </div>`).join('');
+
+    // complexity picker highlight
+    document.querySelectorAll('#cxPicker .cx').forEach(b=>{
+      b.classList.toggle('on', parseFloat(b.dataset.mult)===est.complexity);
+    });
+
+    // guardian state
+    const g = document.getElementById('guardian');
+    g.classList.toggle('off', !est.unknowns);
+    document.getElementById('guardianBtn').textContent = est.unknowns ? 'Remove the buffer' : 'Add the buffer back';
+
+    const t = calc();
+    document.getElementById('laborTotal').textContent = money(t.laborTotal);
+    document.getElementById('matTotal').textContent = money(t.matTotal);
+    document.getElementById('cxAmt').textContent = money(t.cxAdd);
+    document.getElementById('contPct').textContent = t.contPct;
+    document.getElementById('contAmt').textContent = money(t.contingency);
+    document.getElementById('clientPays').textContent = money(t.clientPays);
+    document.getElementById('cushion').textContent = money(t.cushion) + ' · ' + Math.round(t.cushion/t.clientPays*100) + '%';
+    document.getElementById('tapeAmt').textContent = money(t.clientPays);
+    document.getElementById('tapeSide').textContent = money(t.cushion);
+  }
+
+  function renderJobs(){
+    const seed = [
+      {title:'Miller — bathroom', status:'Sent', amt:21600},
+      {title:'Kowalski — deck', status:'Draft', amt:12140},
+    ];
+    const saved = JSON.parse(localStorage.getItem('qr_jobs')||'[]');
+    const all = [...saved, ...seed];
+    document.getElementById('jobList').innerHTML = all.map(j=>`
+      <div class="draft-row">
+        <span class="nm">${j.title}</span>
+        <span class="tag ${j.status==='Sent'?'sent':''}">${j.status}</span>
+        <span class="amt">${money(j.amt)}</span>
+      </div>`).join('');
+  }
+
+  /* ---------- edit handlers ---------- */
+  function setRate(v){ est.rate = Math.max(0, parseFloat(v)||0); document.getElementById('rateInput').value = est.rate; }
+  function setHours(i,v){ est.labor[i].hours = Math.max(0, parseFloat(v)||0); renderEstimate(); }
+  function setMatBase(i,v){ est.materials[i].base = Math.max(0, parseFloat(v)||0); renderEstimate(); renderPrices(); }
+  function setComplexity(m,el){ est.complexity = m; renderEstimate(); }
+  function toggleUnknowns(){ est.unknowns = !est.unknowns; renderEstimate(); }
+
+  /* ---------- intake ---------- */
+  function startNew(){
+    document.getElementById('clientName').value = 'Sarah Henderson';
+    document.getElementById('jobTitle').value = 'Henderson bathroom';
+    document.getElementById('jobDesc').value = '';
+    go('s-talk');
+  }
+  function fillExample(){
+    document.getElementById('jobDesc').value =
+      "Full bathroom gut at the Hendersons'. House is from the seventies. Tub to shower conversion, they're buying their own vanity. Second floor, tight stairs.";
+  }
+
+  /* ---------- send ---------- */
+  function sendQuote(){
+    const t = calc();
+    const jobs = JSON.parse(localStorage.getItem('qr_jobs')||'[]');
+    jobs.unshift({title: est.client.split(' ')[0] + ' — ' + shortJob(est.title), status:'Sent', amt: t.clientPays});
+    localStorage.setItem('qr_jobs', JSON.stringify(jobs.slice(0,6)));
+    document.getElementById('sentTitle').textContent = 'Sent to ' + est.client + '.';
+    document.getElementById('pdfTitle').textContent = est.title + ' — Estimate';
+    document.getElementById('pdfCont').textContent = money(t.contingency);
+    document.getElementById('pdfTotal').textContent = money(t.clientPays);
+    // reset gates for next time
+    document.querySelectorAll('.gate .box').forEach(b=>{ b.classList.remove('on'); b.textContent=''; });
+    const btn = document.getElementById('sendBtn'); btn.disabled = true; btn.style.opacity = .45;
+    go('s-sent');
+  }
+  function shortJob(t){
+    const w = (t||'job').toLowerCase();
+    if(w.includes('bath')) return 'bathroom';
+    if(w.includes('deck')) return 'deck';
+    if(w.includes('kitchen')) return 'kitchen';
+    return t;
+  }
+
+  /* ---------- navigation ---------- */
   const flowBack = {'s-talk':'s-home','s-confirm':'s-talk','s-q1':'s-confirm','s-prices':'s-q1','s-est':'s-prices','s-check':'s-est','s-sent':'s-home'};
   const tapeOn = ['s-est','s-check'];
   let current = 's-home';
 
   function go(id){
+    // capture intake when leaving talk
+    if(current==='s-talk'){
+      est.client = document.getElementById('clientName').value.trim() || 'your client';
+      est.title  = document.getElementById('jobTitle').value.trim() || 'New estimate';
+    }
     document.getElementById(current).classList.remove('active');
     document.getElementById(id).classList.add('active');
     current = id;
     document.getElementById('backBtn').classList.toggle('show', id !== 's-home');
     document.getElementById('tapeBar').classList.toggle('show', tapeOn.includes(id));
+    if(id==='s-prices') renderPrices();
+    if(id==='s-est') renderEstimate();
+    if(id==='s-home') renderJobs();
     document.querySelector('main').scrollTop = 0;
     window.scrollTo(0,0);
   }
@@ -399,6 +592,9 @@
     btn.disabled = !all;
     btn.style.opacity = all ? 1 : .45;
   }
+
+  /* ---------- init ---------- */
+  renderJobs();
 </script>
 </body>
 </html>
