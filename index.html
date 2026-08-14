@@ -72,7 +72,8 @@
   }
   .step-dot[hidden]{display:none}
 
-  main{flex:1;display:flex;flex-direction:column;padding:4px 18px 132px;overflow-y:auto}
+  main{flex:1;display:flex;flex-direction:column;padding:4px 18px 40px;overflow-y:auto}
+  body.has-bottom main{padding-bottom:calc(112px + env(safe-area-inset-bottom))}
   .screen{display:none;flex-direction:column;animation:fade .22s ease}
   .screen.active{display:flex}
   @keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
@@ -89,8 +90,9 @@
   }
   .cta .ic{width:40px;height:40px;border-radius:50%;background:var(--site);display:flex;align-items:center;justify-content:center;flex-shrink:0}
   .cta .ic svg{width:19px;height:19px;fill:#fff}
-  .cta .t{font:600 17px/1.15 'Archivo',sans-serif;letter-spacing:-.02em;color:#fff}
-  .cta .d{font:400 12.5px/1.3 'Archivo',sans-serif;color:var(--on-dark-soft);margin-top:3px}
+  .cta .tx{flex:1;min-width:0}
+  .cta .t{display:block;font:600 17px/1.15 'Archivo',sans-serif;letter-spacing:-.02em;color:#fff}
+  .cta .d{display:block;font:400 12.5px/1.3 'Archivo',sans-serif;color:var(--on-dark-soft);margin-top:4px}
   .cta:active{transform:scale(.99)}
 
   .btn{
@@ -144,8 +146,9 @@
   }
   .type:active{border-color:var(--site)}
   .type .emo{font-size:26px;line-height:1;flex-shrink:0;width:30px;text-align:center}
-  .type .tn{font:600 16.5px/1.2 'Archivo',sans-serif;letter-spacing:-.02em}
-  .type .td{font:400 12.5px/1.3 'Archivo',sans-serif;color:var(--faint);margin-top:4px}
+  .type .tx{flex:1;min-width:0}
+  .type .tn{display:block;font:600 16.5px/1.2 'Archivo',sans-serif;letter-spacing:-.02em}
+  .type .td{display:block;font:400 12.5px/1.35 'Archivo',sans-serif;color:var(--faint);margin-top:5px}
   .type .chev{margin-left:auto;color:#C2BEB8;font-size:18px;flex-shrink:0}
 
   /* fields */
@@ -222,8 +225,9 @@
   @media (prefers-reduced-motion:reduce){.pulse{animation:none}}
   .price{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--line)}
   .price:first-child{border-top:none}
-  .price .pn{font:500 14.5px/1.3 'Archivo',sans-serif}
-  .price .ps{font:400 11.5px/1 'Archivo',sans-serif;color:var(--faint);margin-top:5px}
+  .price .px{flex:1;min-width:0}
+  .price .pn{display:block;font:500 14.5px/1.3 'Archivo',sans-serif}
+  .price .ps{display:block;font:400 11.5px/1.4 'Archivo',sans-serif;color:var(--faint);margin-top:6px}
   .src{display:inline-block;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:2px 6px;margin-right:5px;font:500 10px/1.4 var(--mono);color:var(--label)}
 
   /* gates */
@@ -275,6 +279,30 @@
   .bar .bs{text-align:right;font:400 11.5px/1.4 'Archivo',sans-serif;color:var(--on-dark-soft)}
   .bar .bs b{display:block;font:500 13px/1 var(--mono);color:var(--site-lift);margin-top:4px;font-weight:500}
 
+  /* bottom tab bar */
+  .tabs{
+    position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:460px;z-index:50;
+    background:rgba(255,255,255,.94);backdrop-filter:blur(12px);
+    border-top:1px solid var(--line);
+    padding:6px 8px calc(6px + env(safe-area-inset-bottom));
+    display:none;align-items:stretch;
+  }
+  .tabs.show{display:flex}
+  .tab{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+    padding:8px 4px;min-height:56px;border-radius:var(--r-sm);color:var(--faint);
+  }
+  .tab svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .tab .tl{font:600 10.5px/1 'Archivo',sans-serif;letter-spacing:.01em}
+  .tab.on{color:var(--ink)}
+  .tab.on svg{stroke:var(--site)}
+  .tab.mid svg{stroke:#fff}
+  .tab.mid .ring{
+    width:42px;height:42px;border-radius:50%;background:var(--site);
+    display:flex;align-items:center;justify-content:center;margin-top:-2px;
+  }
+  .tab.mid .tl{margin-top:1px}
+
   .hint{font:400 12.5px/1.45 'Archivo',sans-serif;color:var(--faint);text-align:center;padding-top:14px}
   .empty{text-align:center;padding:26px 10px;font:400 14px/1.5 'Archivo',sans-serif;color:var(--faint)}
   .toast{
@@ -312,7 +340,7 @@
 
     <button class="cta" onclick="newEstimate()">
       <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 15a4 4 0 0 0 4-4V6a4 4 0 1 0-8 0v5a4 4 0 0 0 4 4zm6-4a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.93V22h2v-3.07A8 8 0 0 0 20 11h-2z"/></svg></span>
-      <span><span class="t">New estimate</span><span class="d">Talk it out — about 2 minutes</span></span>
+      <span class="tx"><span class="t">New estimate</span><span class="d">Talk it out — about 2 minutes</span></span>
     </button>
 
     <div class="stats" id="stats"></div>
@@ -447,7 +475,47 @@
     </div>
     <div class="sheet" id="sheet"></div>
     <div class="madeby">Prepared with QuoteRight</div>
-    <button class="btn ghost" style="margin-top:12px" onclick="back()">Back</button>
+    <button class="btn dark" style="margin-top:12px" onclick="shareQuote()">Send it to them</button>
+    <button class="btn ghost" onclick="back()">Back</button>
+  </section>
+
+  <!-- SETUP -->
+  <section class="screen" id="s-set">
+    <h1>Your setup.</h1>
+    <p class="sub">Set once. Every quote uses it.</p>
+
+    <div class="card">
+      <div class="card-hd"><span class="eyebrow">Your rate</span></div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font:500 22px/1 var(--mono)">$</span>
+        <input class="num sm" id="setRate" type="number" inputmode="numeric" onchange="setRate(this.value)" aria-label="Hourly rate" style="width:88px;font-size:19px">
+        <span style="font:400 14px/1 var(--mono);color:var(--faint)">/hr</span>
+      </div>
+      <p style="font:400 12.5px/1.45 'Archivo';color:var(--faint);margin-top:10px">Every labour hour bills at this. Nothing you send goes below it.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-hd"><span class="eyebrow">Markup on materials</span></div>
+      <div id="setMarkup"></div>
+      <p style="font:400 12.5px/1.45 'Archivo';color:var(--faint);margin-top:10px">Cheap stuff carries more markup than big-ticket items. The client never sees these.</p>
+    </div>
+
+    <div class="card">
+      <div class="card-hd"><span class="eyebrow">How the total is shown</span></div>
+      <div id="setRound"></div>
+      <p style="font:400 12.5px/1.45 'Archivo';color:var(--faint);margin-top:10px" id="roundHint"></p>
+    </div>
+
+    <div class="card">
+      <div class="card-hd"><span class="eyebrow">On every quote</span></div>
+      <label class="field"><label for="setBiz">Business name</label><input id="setBiz" type="text" onchange="setProfile()"></label>
+      <label class="field"><label for="setLic">Licence #</label><input id="setLic" type="text" onchange="setProfile()"></label>
+      <label class="field"><label for="setPhone">Phone</label><input id="setPhone" type="text" onchange="setProfile()"></label>
+      <label class="field"><label for="setEmail">Email</label><input id="setEmail" type="text" onchange="setProfile()"></label>
+      <label class="field" style="margin-bottom:0"><label for="setWarranty">Warranty line</label><input id="setWarranty" type="text" onchange="setProfile()"></label>
+    </div>
+
+    <button class="btn ghost" onclick="resetDemo()">Reset the demo data</button>
   </section>
 
   <!-- JOB DETAIL -->
@@ -472,6 +540,21 @@
   </div>
   <div class="bs">cushion<b id="barC">$0</b></div>
 </div>
+
+<nav class="tabs" id="tabs">
+  <button class="tab" id="tab-home" onclick="tabTo('s-home')">
+    <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M9.5 20v-6h5v6"/></svg>
+    <span class="tl">Jobs</span>
+  </button>
+  <button class="tab mid" onclick="newEstimate()">
+    <span class="ring"><svg viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
+    <span class="tl">New</span>
+  </button>
+  <button class="tab" id="tab-set" onclick="tabTo('s-set')">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>
+    <span class="tl">Setup</span>
+  </button>
+</nav>
 
 <div class="toast" id="toast"><span id="toastT"></span><button id="toastB" onclick="undo()">Undo</button></div>
 
@@ -566,7 +649,7 @@ const GATES = [
 /* ---------- storage ---------- */
 const KEY='quoteright_v3';
 const seed=()=>({
-  profile:{rate:95, biz:'Dave Kowalczyk Contracting', lic:'CB-448192', phone:'(216) 555-0148', email:'dave@kowalczykcontracting.com', warranty:'2-year workmanship warranty'},
+  profile:{rate:95, biz:'Dave Kowalczyk Contracting', lic:'CB-448192', phone:'(216) 555-0148', email:'dave@kowalczykcontracting.com', warranty:'2-year workmanship warranty', mk:[.40,.30,.20], round:25},
   jobs:[
     j('Miller — bathroom','Ellen Miller','bathroom','sent',21600,'Sent Tue · opened 3×'),
     j('Ruiz — kitchen','Ana Ruiz','kitchen','won',46900,'Won · starts Sep 8'),
@@ -604,7 +687,11 @@ function blank(type){
 
 /* ---------- money ---------- */
 const money = n => '$' + Math.round(n).toLocaleString('en-US');
-const markup = b => b<100 ? .40 : b<=1000 ? .30 : .20;
+const markup = b => b<100 ? (DB.profile.mk?.[0]??.40) : b<=1000 ? (DB.profile.mk?.[1]??.30) : (DB.profile.mk?.[2]??.20);
+// Client-facing totals land on a deliberate increment. Research says precise
+// beats round for trust, but to-the-dollar reads machine-generated — so we
+// round to a step that still looks calculated ($25 by default).
+const roundTo = n => { const s=DB.profile.round||25; return s<=1 ? Math.round(n) : Math.round(n/s)*s; };
 function calc(e){
   e = e || E;
   const labor = e.labor.reduce((s,l)=>s+l.hours*e.rate,0);
@@ -615,9 +702,10 @@ function calc(e){
   const cxAdd = sub*(e.cx-1);
   const pct = 15 + (e.buffer?10:0);
   const cont = (sub+cxAdd)*pct/100;
-  const total = sub+cxAdd+cont;
-  const cushion = (mats-base)+cxAdd+cont;
-  return {labor,hours,mats,cxAdd,pct,cont,total,cushion,pctCushion:total?Math.round(cushion/total*100):0};
+  const raw = sub+cxAdd+cont;
+  const total = roundTo(raw);
+  const cushion = (mats-base)+cxAdd+cont + (total-raw);
+  return {labor,hours,mats,cxAdd,pct,cont,raw,total,cushion,pctCushion:total?Math.round(cushion/total*100):0};
 }
 
 /* ---------- render: home ---------- */
@@ -651,7 +739,7 @@ function renderTypes(){
     const t=T[id];
     return `<button class="type" onclick="pick('${id}')">
       <span class="emo">${t.emoji}</span>
-      <span style="flex:1;min-width:0"><span class="tn">${t.name}</span><span class="td">${t.desc}${t.checks?` · ${t.checks} checks`:''}</span></span>
+      <span class="tx"><span class="tn">${t.name}</span><span class="td">${t.desc}${t.checks?` · ${t.checks} checks`:''}</span></span>
       <span class="chev">›</span>
     </button>`;
   }).join('');
@@ -672,7 +760,7 @@ function renderQ(){
 function renderPrices(){
   document.getElementById('prices').innerHTML = E.mats.map((m,i)=>`
     <div class="price">
-      <span style="flex:1;min-width:0">
+      <span class="px">
         <span class="pn">${esc(m.name)}</span>
         <span class="ps"><span class="src">${esc(m.src)}</span>${esc(m.when||'')}</span>
       </span>
@@ -759,7 +847,7 @@ function renderSheet(e){
       <div><div class="est-k">ESTIMATE</div><div class="est-n">#${esc(num)}</div><div class="est-n" style="color:var(--faint)">${today}</div></div>
     </div>
     <div class="blk"><div class="blk-k">PREPARED FOR</div>
-      <div class="blk-v"><b>${esc(e.client||'Your client')}</b>${e.addr?'<br>'+esc(e.addr):''}</div></div>
+      <div class="blk-v">${e.client?`<b>${esc(e.client)}</b>`:'<span style="color:var(--site-ink);font-weight:600">Add a client name →</span>'}${e.addr?'<br>'+esc(e.addr):''}</div></div>
     <div class="blk"><div class="blk-k">THE WORK</div><div class="blk-v">${esc(e.desc||t.scope)}</div></div>
     <div class="blk"><div class="blk-k">WHAT'S INCLUDED</div>
       ${items.map(i=>`<div class="item"><div><div class="it-n">${esc(i.name)}</div><div class="it-d">${esc(i.desc)}</div></div><div class="it-a">${money(i.amt)}</div></div>`).join('')}
@@ -809,9 +897,65 @@ function openSheet(){
   if(!e){ toast('No estimate on this one yet'); return; }
   renderSheet(e); nav('s-sheet');
 }
+function shareQuote(){
+  const e = E || (viewingJob && viewingJob.est); if(!e) return;
+  const c=calc(e), p=DB.profile;
+  const text = `${e.title||'Estimate'} — ${p.biz}\n`
+    + `Prepared for ${e.client||'you'}\n\n`
+    + `Total: ${money(c.total)}\n`
+    + `Includes a ${money(c.cont)} contingency allowance — any unused portion comes back to you.\n\n`
+    + `${p.warranty}. Valid 30 days.\n${p.phone} · ${p.email}`;
+  if(navigator.share){ navigator.share({title:e.title||'Estimate', text}).catch(()=>{}); return; }
+  if(navigator.clipboard){ navigator.clipboard.writeText(text).then(()=>toast('Quote copied — paste it in a text')).catch(()=>toast('Could not copy')); return; }
+  toast('Sharing not supported here');
+}
+
+/* ---------- setup screen ---------- */
+const ROUND=[[1,'Exact','$19,495 — every dollar shown'],[25,'Nearest $25','$19,500 — calculated, not robotic'],[100,'Nearest $100','$19,500 — clean and confident']];
+function renderSet(){
+  const p=DB.profile;
+  document.getElementById('setRate').value=p.rate;
+  document.getElementById('setBiz').value=p.biz;
+  document.getElementById('setLic').value=p.lic;
+  document.getElementById('setPhone').value=p.phone;
+  document.getElementById('setEmail').value=p.email;
+  document.getElementById('setWarranty').value=p.warranty;
+  const mk=p.mk||[.40,.30,.20];
+  const bands=[['Under $100',0],['$100 – $1,000',1],['Over $1,000',2]];
+  document.getElementById('setMarkup').innerHTML=bands.map(([l,i])=>`
+    <div class="row"><span class="l">${l}</span>
+      <span style="display:flex;align-items:center;gap:7px">
+        <span style="font:400 14px/1 var(--mono);color:var(--faint)">+</span>
+        <input class="num sm" type="number" inputmode="numeric" value="${Math.round(mk[i]*100)}" onchange="setMk(${i},this.value)" aria-label="${l} markup">
+        <span style="font:400 14px/1 var(--mono);color:var(--faint)">%</span>
+      </span></div>`).join('');
+  document.getElementById('setRound').innerHTML=ROUND.map(([v,l])=>`
+    <button class="chip" onclick="setRound(${v})" style="margin-bottom:8px">
+      <span class="cl">${l}</span><span class="cs">${(p.round||25)===v?'✓ using':''}</span></button>`).join('');
+  const cur=ROUND.find(r=>r[0]===(p.round||25));
+  document.getElementById('roundHint').textContent = cur?cur[2]:'';
+}
+function setMk(i,v){ const mk=(DB.profile.mk||[.40,.30,.20]).slice(); mk[i]=Math.max(0,parseFloat(v)||0)/100; DB.profile.mk=mk; save(); renderSet(); }
+function setRound(v){ DB.profile.round=v; save(); renderSet(); toast('Totals show '+(v===1?'exact':'to the nearest $'+v)); }
+function setProfile(){
+  const g=id=>document.getElementById(id).value.trim();
+  Object.assign(DB.profile,{biz:g('setBiz'),lic:g('setLic'),phone:g('setPhone'),email:g('setEmail'),warranty:g('setWarranty')});
+  save();
+}
+function resetDemo(){
+  undoState={type:'reset',prev:JSON.parse(JSON.stringify(DB))};
+  DB=seed(); save(); renderHome(); renderSet(); toast('Demo data reset');
+}
 
 /* ---------- edits ---------- */
-function setRate(v){ DB.profile.rate = Math.max(0,parseFloat(v)||0); if(E) E.rate=DB.profile.rate; save(); renderHome(); }
+function setRate(v){
+  DB.profile.rate = Math.max(0,parseFloat(v)||0);
+  if(E) E.rate=DB.profile.rate;
+  save();
+  const a=document.getElementById('rate'), b=document.getElementById('setRate');
+  if(a) a.value=DB.profile.rate; if(b) b.value=DB.profile.rate;
+  renderHome();
+}
 function setHrs(i,v){ E.labor[i].hours = Math.max(0,parseFloat(v)||0); renderEst(); }
 function setMat(i,v){ E.mats[i].base = Math.max(0,parseFloat(v)||0); renderPrices(); draftSave(); }
 function setCx(v){ E.cx=v; renderEst(); }
@@ -883,14 +1027,16 @@ function undo(){
     const x=DB.jobs.find(j=>j.id===undoState.id);
     if(x){ x.status=undoState.prev; x.note=undoState.prevNote; save(); openJob(x.id); }
   }
+  if(undoState.type==='reset'){ DB=undoState.prev; save(); renderHome(); renderSet(); }
   undoState=null;
   document.getElementById('toast').classList.remove('show');
 }
 
 /* ---------- nav ---------- */
 const STEPS={'s-type':1,'s-talk':2,'s-confirm':3,'s-q':4,'s-prices':5,'s-est':6};
-const BACK={'s-type':'s-home','s-talk':'s-type','s-confirm':'s-talk','s-q':'s-confirm','s-prices':'s-q','s-est':'s-prices','s-check':'s-est','s-sent':'s-home','s-job':'s-home','s-sheet':null};
+const BACK={'s-type':'s-home','s-talk':'s-type','s-confirm':'s-talk','s-q':'s-confirm','s-prices':'s-q','s-est':'s-prices','s-check':'s-est','s-sent':'s-home','s-job':'s-home','s-set':'s-home','s-sheet':null};
 const BAR=['s-est','s-check'];
+const TABS=['s-home','s-set'];              // top-level screens show the tab bar
 let cur='s-home', sheetFrom=null;
 
 function nav(id){
@@ -899,18 +1045,25 @@ function nav(id){
   document.getElementById(cur).classList.remove('active');
   document.getElementById(id).classList.add('active');
   cur=id;
-  document.getElementById('backBtn').hidden = (id==='s-home');
+  document.getElementById('backBtn').hidden = TABS.includes(id);
   const dot=document.getElementById('stepDot');
   if(STEPS[id]){ dot.hidden=false; dot.textContent=STEPS[id]+'/6'; } else dot.hidden=true;
   document.getElementById('bar').classList.toggle('show', BAR.includes(id));
+  // tab bar and the money bar never share the bottom
+  document.getElementById('tabs').classList.toggle('show', TABS.includes(id));
+  document.getElementById('tab-home').classList.toggle('on', id==='s-home');
+  document.getElementById('tab-set').classList.toggle('on', id==='s-set');
+  document.body.classList.toggle('has-bottom', TABS.includes(id)||BAR.includes(id));
   if(id==='s-confirm') renderConfirm();
   if(id==='s-q') renderQ();
   if(id==='s-prices') renderPrices();
   if(id==='s-est') renderEst();
   if(id==='s-check') renderGates();
   if(id==='s-home') renderHome();
+  if(id==='s-set') renderSet();
   document.querySelector('main').scrollTop=0; window.scrollTo(0,0);
 }
+function tabTo(id){ if(id==='s-home'){ E=null; viewingJob=null; } nav(id); }
 function back(){
   if(cur==='s-sheet'){ nav(sheetFrom||'s-home'); return; }
   const b=BACK[cur]; if(b) nav(b); else home();
@@ -926,6 +1079,8 @@ function bar(c){
   document.getElementById('greet').textContent = (h<12?'Morning':h<17?'Afternoon':'Evening')+', Dave.';
   renderHome();
   document.getElementById('s-home').classList.add('active');
+  document.getElementById('tabs').classList.add('show');
+  document.getElementById('tab-home').classList.add('on');
 })();
 </script>
 </body>
