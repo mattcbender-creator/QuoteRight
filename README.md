@@ -52,6 +52,8 @@ Everything that defines the product lives in [`docs/`](docs/):
 | [`docs/build-plan-v2-working-app.md`](docs/build-plan-v2-working-app.md) | Current build plan for the working app (Next.js + Railway + OpenRouter). "AI is the interface, code is the calculator." Phased P0–P8. |
 | [`docs/poc-build-plan-claude-code.md`](docs/poc-build-plan-claude-code.md) | POC build plan with milestone-by-milestone prompts for Claude Code. Encodes the exact pricing business logic. |
 | [`docs/confident-contractor-guide.pdf`](docs/confident-contractor-guide.pdf) | The "Confident Contractor" methodology guide — the source-of-truth "consult" document the pricing engine implements (rate calc, tiered markups, complexity multipliers, contingency, confidence check). |
+| [`docs/research/contractor-needs-and-jobs.md`](docs/research/contractor-needs-and-jobs.md) | **Who we're building for** — what jobs contractors actually get paid for, what estimating really costs them, where margin leaks, why they abandon software, and the field constraints the UI has to survive. |
+| [`docs/logo-brief-and-prompts.md`](docs/logo-brief-and-prompts.md) | Logo brief, five concept directions, and paste-ready AI image prompts + how to judge the results. |
 | [`docs/research/viability-review-estimating-app.md`](docs/research/viability-review-estimating-app.md) | Market viability review of the low-cost estimating-app idea (competitors, pricing, the live-pricing-data problem). |
 | [`docs/research/better-fit-opportunities-solo-dev.md`](docs/research/better-fit-opportunities-solo-dev.md) | Adjacent opportunity research for a solo AI dev serving small contractors. |
 
