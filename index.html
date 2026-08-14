@@ -136,6 +136,12 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 .p-sent{background:#EFEDE8;color:var(--muted)}
 .p-accepted{background:var(--ok-soft);color:var(--ok-ink)}
 .p-lost{background:#EFEDE8;color:var(--ghost)}
+/* Price provenance — only the uncertain ones get flagged. Silence means the
+   number is a real one the contractor stands behind, AI-suggested or not. */
+.p-ai{background:var(--blue-soft);color:var(--blue);text-transform:none;letter-spacing:0}
+.p-mine{background:var(--ok-soft);color:var(--ok-ink);text-transform:none;letter-spacing:0}
+.itag{display:inline-block;margin-top:5px;border-radius:99px;padding:2px 8px;
+  font:600 10px/1.6 'Archivo';letter-spacing:.02em;background:var(--blue-soft);color:var(--blue)}
 
 /* ============ STATS ============ */
 .stats{display:flex;gap:18px;flex-wrap:wrap;padding:2px 2px 0}
@@ -679,7 +685,7 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 <!-- ===== "AI is building your quote" transition ===== -->
 <div class="buildov" id="buildOv">
   <div class="spark"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7.7-2z"/></svg></div>
-  <div class="bt">Building your quote</div>
+  <div class="bt" id="buildOvTitle">Building your quote</div>
   <div class="bs" id="buildOvSub">Drafting the labour, materials and pricing…</div>
 </div>
 
@@ -802,6 +808,55 @@ const CX = [[1,'Standard','New build, easy access'],[1.25,'Medium','80s–2000s,
 // a big one (a $50 swing is noise at $50,000) — a quote isn't a bill.
 const ROUND=[['auto','Smart (recommended)','nearest $10 under $2k, nearest $100 above'],
              [100,'Always nearest $100','$19,500'],[10,'Always nearest $10','$19,500']];
+
+// Illustrative starter catalogues for the "let AI draft one for you" onboarding
+// path — regional-average placeholder numbers in the same spirit as the T job
+// templates above, not a real pricing feed. Every item is tagged source:'ai'
+// so the review screen can flag it as a draft, never as fact.
+const AI_CATALOGS = {
+  electrical:{label:'Electrical', sections:[
+    {section:'Devices & switches', items:[
+      ['Receptacle 15a, new location, installed',70],
+      ['Receptacle 20a GFCI, installed',115],
+      ['Switch, new location, installed',68],
+      ['3-way switch, new location, installed',105],
+      ['Dimmer, LED-capable, installed',95],
+    ]},
+    {section:'Lighting', items:[
+      ['Pot light, LED 4in, installed',125],
+      ['Ceiling box + fixture hookup',70],
+      ['Ceiling fan install, existing box',150],
+      ['Under-cabinet LED run, per section',85],
+    ]},
+    {section:'Panel & circuits', items:[
+      ['New circuit to panel, 15/20a, incl. breaker',210],
+      ['Dedicated appliance circuit (stove/dryer)',380],
+      ['Smoke/CO detector, interconnected, installed',215],
+    ]},
+    {section:'Permits & fees', items:[
+      ['Electrical permit, typical residential',420],
+    ]},
+  ]},
+  general:{label:'General renovation', sections:[
+    {section:'Demo & site', items:[
+      ['Interior demo, per room',650],
+      ['Dumpster & disposal, standard bin',480],
+      ['Dust barrier & floor protection, per job',150],
+    ]},
+    {section:'Carpentry & finishing', items:[
+      ['Interior door, supply & install',320],
+      ['Baseboard & casing, per linear ft',9],
+      ['Drywall patch & finish, per sheet',140],
+    ]},
+    {section:'Paint & flooring', items:[
+      ['Paint, per room (walls + ceiling)',480],
+      ['LVP flooring, supply & install, per sqft',7],
+    ]},
+    {section:'Permits & fees', items:[
+      ['Building permit, typical residential',350],
+    ]},
+  ]},
+};
 
 /* ---------- store ---------- */
 const KEY='quoteright_poc_v4';
@@ -1136,6 +1191,7 @@ function createQuote(){
   // contractor an assistant just did the work, rather than them wondering
   // whether they were supposed to type all of this themselves.
   const ov=document.getElementById('buildOv');
+  document.getElementById('buildOvTitle').textContent='Building your quote';
   document.getElementById('buildOvSub').textContent = fromBook
     ? `Opening your price list — ${bookItemCount()} items ready…`
     : desc ? 'Reading your description and drafting the scope…'
@@ -1353,9 +1409,9 @@ function sectionDrawerHTML(gi){
     ${(g.units&&g.units.length)?`
     <div style="padding:2px 0 4px"><span class="eyebrow">From your price list</span></div>
     <div class="grp" style="margin-bottom:16px">
-      ${g.units.map(([n,qty,pr],i)=>`
+      ${g.units.map(([n,qty,pr,src],i)=>`
         <div class="li stack">
-          <span class="nm">${esc(n)}<span class="src">${money(pr)} each</span></span>
+          <span class="nm">${esc(n)}<span class="src">${money(pr)} each</span>${src==='ai'?'<br><span class="itag">AI suggested</span>':''}</span>
           <span class="ctl">
             <span class="qty">
               <button onclick="bumpUnit(${gi},${i},-1)" aria-label="Fewer">–</button>
@@ -1399,8 +1455,8 @@ function pickerHTML(){
       <div style="padding:2px 0 6px"><span class="eyebrow">${esc(s.section)}</span></div>
       <div class="grp" style="margin-bottom:14px">
         ${s.items.map(it=>`
-          <button class="li" style="width:100%;text-align:left" onclick="pickItem(${JSON.stringify(it.name).replace(/"/g,'&quot;')},${it.price})">
-            <span class="nm">${esc(it.name)}</span>
+          <button class="li" style="width:100%;text-align:left" onclick="pickItem(${JSON.stringify(it.name).replace(/"/g,'&quot;')},${it.price},${JSON.stringify(it.source||null)})">
+            <span class="nm">${esc(it.name)}${it.source==='ai'?'<br><span class="itag">AI suggested</span>':''}</span>
             <span class="amt">${money(it.price)}</span>
             <span class="x" aria-hidden="true"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
           </button>`).join('')}
@@ -1415,11 +1471,11 @@ function pickerSearch(v){
   const inp=document.getElementById('pickQ');
   if(inp){ inp.focus(); inp.setSelectionRange(inp.value.length,inp.value.length); }
 }
-function pickItem(name,price){
+function pickItem(name,price,source){
   const g=cur.groups[pickerGi];
   if(!g.units) g.units=[];
   const ex=g.units.find(u=>u[0]===name&&u[2]===price);
-  if(ex) ex[1]++; else g.units.push([name,1,price]);
+  if(ex) ex[1]++; else g.units.push([name,1,price,source]);
   cur.when='Edited just now'; save(); renderWs();
   toast(ex?`${name} ×${ex[1]}`:'Added');
 }
@@ -1573,20 +1629,26 @@ function renderSettings(){
   document.getElementById('menuName').textContent=p.name;
   document.getElementById('menuBiz').textContent=p.biz;
 }
-/* ---------- price list (imported spreadsheet) ---------- */
+/* ---------- price list (AI-drafted or imported) ---------- */
 const bookItemCount=()=> (DB.book?DB.book.sections.reduce((s,x)=>s+x.items.length,0):0);
+const bookAiCount=()=> (DB.book?DB.book.sections.reduce((s,x)=>s+x.items.filter(i=>i.source==='ai').length,0):0);
 function renderBook(){
   const el=document.getElementById('s-book'); if(!el) return;
   if(!DB.book){
     el.innerHTML=`<p style="font:400 13.5px/1.5 'Archivo';color:var(--faint);margin-bottom:12px">
-        Already price your work in a spreadsheet? Bring it in and every line becomes
-        something you can drop straight into a quote. Stays on this device.</p>
-      <button class="btn gh full" onclick="document.getElementById('bookFile').click()">
+        No prices entered yet, and nobody wants to type 80 of them from scratch.
+        Have AI draft a starting list for your trade, or bring in a spreadsheet
+        you already use. Either way, stays on this device.</p>
+      <button class="btn org full" onclick="openAiCatalogDrawer()">
+        <svg class="i i-s" viewBox="0 0 24 24"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z"/></svg>
+        Let AI draft one for you</button>
+      <button class="btn gh full" style="margin-top:8px" onclick="document.getElementById('bookFile').click()">
         <svg class="i i-s" viewBox="0 0 24 24"><path d="M12 16V4M7.5 8.5L12 4l4.5 4.5"/><path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"/></svg>
         Import a spreadsheet</button>`;
     return;
   }
-  el.innerHTML=`<div class="kv"><span class="k">${esc(DB.book.name)}<span class="sub">${DB.book.sections.length} sections · imported ${esc(DB.book.when)}</span></span>
+  const aiN=bookAiCount();
+  el.innerHTML=`<div class="kv"><span class="k">${esc(DB.book.name)}<span class="sub">${DB.book.sections.length} sections · ${esc(DB.book.when)}${aiN?` · ${aiN} still AI-suggested`:''}</span></span>
       <span class="v">${bookItemCount()} items</span></div>
     <div style="display:flex;gap:8px;margin-top:12px">
       <button class="btn gh" style="flex:1" onclick="document.getElementById('bookFile').click()">Replace</button>
@@ -1599,12 +1661,87 @@ async function importBook(input){
   toast('Reading your spreadsheet…');
   try{
     const sections=await parseWorkbook(f);
-    DB.book={name:f.name.replace(/\.xlsx$/i,''), when:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}), sections};
+    DB.book={name:f.name.replace(/\.xlsx$/i,''), when:'imported '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}), sections};
     save(); renderBook();
     toast(`Imported ${bookItemCount()} priced items`);
   }catch(e){ toast(e.message||'Could not read that file'); }
 }
 function removeBook(){ delete DB.book; save(); renderBook(); toast('Price list removed'); }
+
+/* ---------- AI-drafted price list (onboarding without a spreadsheet) ---------- */
+// aiDraft is a working copy, separate from DB.book, so closing this drawer
+// before hitting "Save" throws the draft away instead of half-committing it.
+let aiDraft=null, aiCatTrade='', aiCatRegion='';
+function openAiCatalogDrawer(){
+  aiDraft=null; aiCatTrade=''; aiCatRegion='';
+  openDrawerType='aicatalog'; openDrawer(aiCatalogStep1HTML());
+}
+function aiCatalogStep1HTML(){
+  const chips=Object.keys(AI_CATALOGS).map(k=>`<button class="tchip ${aiCatTrade===k?'on':''}" onclick="selectAiTrade('${k}')">${esc(AI_CATALOGS[k].label)}</button>`).join('');
+  return `<div class="drawer-handle"></div>
+    <div class="drawer-hd"><h3>Let AI draft your price list</h3><button class="drawer-x" onclick="closeDrawer()">${xIcon}</button></div>
+    <p style="font:400 13.5px/1.5 'Archivo';color:var(--faint);margin-bottom:16px">
+      A starting point built from typical pricing for your trade — nothing here is a
+      real price until you say so. Edit anything on the next screen, or accept it
+      as-is and correct it as you go.</p>
+    <span class="tmpl-label">Your trade</span>
+    <div class="chiprow" style="margin-bottom:16px">${chips}</div>
+    <div class="fld" style="margin-bottom:16px"><label for="ai-region">Region (optional)</label>
+      <input id="ai-region" type="text" placeholder="e.g. Ottawa, ON" value="${esc(aiCatRegion)}" oninput="aiCatRegion=this.value"></div>
+    <button class="btn org full" ${aiCatTrade?'':'disabled'} onclick="draftAiCatalog()">Draft my price list</button>`;
+}
+function selectAiTrade(k){
+  aiCatTrade=(aiCatTrade===k)?'':k;
+  document.getElementById('drawerBody').innerHTML=aiCatalogStep1HTML();
+}
+function draftAiCatalog(){
+  if(!aiCatTrade) return;
+  const t=AI_CATALOGS[aiCatTrade];
+  const ov=document.getElementById('buildOv');
+  document.getElementById('buildOvTitle').textContent='Drafting your price list';
+  document.getElementById('buildOvSub').textContent=`Pulling typical pricing for ${t.label.toLowerCase()}${aiCatRegion?' in '+aiCatRegion:''}…`;
+  ov.classList.add('on');
+  setTimeout(()=>{
+    aiDraft={name:`${t.label} starter${aiCatRegion?' — '+aiCatRegion:''}`, when:'AI draft, today',
+      sections:t.sections.map(s=>({section:s.section, items:s.items.map(([name,price])=>({name,price,source:'ai'}))}))};
+    document.getElementById('drawerBody').innerHTML=aiCatalogReviewHTML();
+    ov.classList.remove('on');
+  },700);
+}
+function aiCatalogReviewHTML(){
+  const n=aiDraft.sections.reduce((s,x)=>s+x.items.length,0);
+  const left=aiDraft.sections.reduce((s,x)=>s+x.items.filter(i=>i.source==='ai').length,0);
+  return `<div class="drawer-handle"></div>
+    <div class="drawer-hd"><h3>Review your starter list</h3><button class="drawer-x" onclick="closeDrawer()">${xIcon}</button></div>
+    <p style="font:400 13px/1.5 'Archivo';color:var(--faint);margin-bottom:14px">
+      ${n} starting prices. ${left ? `${left} still marked <b style="color:var(--blue)">AI suggested</b> — tap a price to correct
+      it to what you actually charge; it's then yours for good.` : `All confirmed — every price here is now yours.`}</p>
+    ${aiDraft.sections.map((s,si)=>`
+      <div style="padding:2px 0 6px"><span class="eyebrow">${esc(s.section)}</span></div>
+      <div class="grp" style="margin-bottom:14px">
+        ${s.items.map((it,ii)=>`
+          <div class="li stack">
+            <span class="nm">${esc(it.name)}</span>
+            <span class="ctl">
+              ${it.source==='ai'?'<span class="pill p-ai">AI suggested</span>':'<span class="pill p-mine">Your price</span>'}
+              <span class="sp"></span>
+              <span class="u">$</span>
+              <input class="num w" type="number" inputmode="decimal" value="${it.price}"
+                onchange="editAiCatalogPrice(${si},${ii},this.value)" aria-label="Price for ${esc(it.name)}">
+            </span>
+          </div>`).join('')}
+      </div>`).join('')}
+    <button class="btn org full" onclick="saveAiCatalog()">Save price list</button>`;
+}
+function editAiCatalogPrice(si,ii,v){
+  const it=aiDraft.sections[si].items[ii];
+  it.price=Math.max(0,parseFloat(v)||0); it.source='contractor';
+  document.getElementById('drawerBody').innerHTML=aiCatalogReviewHTML();
+}
+function saveAiCatalog(){
+  DB.book=aiDraft; aiDraft=null; save(); closeDrawer(); renderBook();
+  toast(`Price list ready — ${bookItemCount()} starting prices, edit anytime`);
+}
 
 function setRate(v){ DB.profile.rate=Math.max(0,parseFloat(v)||0);
   DB.quotes.forEach(q=>{ if(q.status==='draft'||q.status==='ready') q.rate=DB.profile.rate; });

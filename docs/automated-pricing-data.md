@@ -77,6 +77,38 @@ Over time, for an active contractor, the catalogue converges toward being
 dependency — the app should need it less and less per contractor the longer
 he uses it.
 
+### Layer 2b — Prices update themselves from things he already does
+
+Layer 1 solves the one-time problem (no upload on day one). It does not
+solve the *ongoing* one — a supplier raises a price, he never finds out until
+he loses money on a job. That's the actual "time-consuming bullshit": not the
+first setup, but staying current forever, by hand, in a spreadsheet, which is
+exactly the behaviour nobody sticks with.
+
+The fix is to stop asking him to *enter* anything and instead read it off
+things that already exist in his day:
+
+- **Snap the receipt or the supplier invoice.** After he buys materials, one
+  photo. A vision model reads the line items and prices and matches them
+  against his catalogue by name; anything that moved gets flagged for a
+  one-tap confirm, same as Layer 3's review pattern. He was already going to
+  keep that receipt for his books — this is zero extra work, not a chore
+  added on top of a chore.
+- **Forward a supplier price sheet.** Electrical/plumbing/lumber wholesalers
+  routinely email PDF or CSV price updates. Forwarding one email (or the app
+  watching a designated inbox) lets the same extraction pull structured
+  prices automatically — this generalizes the `.xlsx` importer already built
+  for `docs/pricing-model.md` to any document a supplier already sends him,
+  not just a file he'd have to compose himself.
+- **Say it.** The product's whole voice-first identity (`build-plan-v2-working-app.md`
+  §4.3) applies here too — "duplex outlet installed is one-ten now" while
+  he's driving updates the catalogue exactly like typing would, with no
+  screen involved.
+
+Every one of these still lands through Layer 2's rule — a price sourced this
+way is `source: contractor`, confirmed, done. The mechanism changes; the
+"his edit is gospel" guarantee doesn't.
+
 ### Layer 3 — Scheduled refresh, not live-per-quote
 
 Re-checking prices on every quote is neither necessary nor affordable at
@@ -151,16 +183,48 @@ never as the number itself.
    room-template/operation skeleton from `pricing-model.md` per trade, and one
    LLM-with-web-search onboarding call. This is the single highest-leverage
    piece — it's what makes signup require zero files.
-3. **Layer 3** — a scheduled job, straightforward once Layer 1/2 exist.
-4. **Layer 4** — needs real users first; design the schema (trade, region,
+3. **Layer 2b (receipt/document capture)** — the answer to the *ongoing*
+   burden, not just onboarding. Needs a vision-model extraction call and the
+   same review-and-confirm pattern Layer 1 already uses, so it's a natural
+   next build once Layer 1 exists rather than a separate system.
+4. **Layer 3** — a scheduled job, straightforward once Layer 1/2 exist.
+5. **Layer 4** — needs real users first; design the schema (trade, region,
    operation, price, confirmed_at) from day one so historical data isn't lost
    waiting for this phase, but don't build the aggregation UI until there's
    enough data for it to mean something.
 
+## Built in the POC
+
+Layer 1's UI and Layer 2's tagging rule are mocked in `index.html` — no real
+backend or AI call yet (the POC has neither), but the interaction is real:
+
+- **Settings → Your price list → "Let AI draft one for you"** — pick a trade
+  (electrical or general renovation) and an optional region, and a starter
+  catalogue appears after a brief "drafting" transition, matching the same
+  honest-loading pattern the quote-builder already uses. The catalogues
+  themselves (`AI_CATALOGS` in `index.html`) are illustrative placeholder
+  numbers in the same spirit as the existing job templates — not a real
+  pricing feed, since the POC doesn't call one.
+- **The review screen never hides what's a guess.** Every line shows an
+  *AI suggested* tag until he edits the price; the moment he does, the tag
+  disappears and it's counted as his. Settings shows a running "N still
+  AI-suggested" count so the gap to a fully-confirmed list is always visible,
+  not just implied.
+- **The tag survives into the actual quote**, not just the catalogue browser
+  — pick an unconfirmed item into a section and the "AI suggested" flag is
+  still there on the line he's about to send to a client. This was
+  deliberate: the trust signal has to reach the moment he's relying on the
+  number, not just the settings screen he glanced at once.
+
+What's still a mock, honestly: the catalogue content is hand-written, not
+AI-generated (no backend to call), and Layers 2b/3/4 aren't in the POC at
+all — they need real infrastructure (vision extraction, a scheduled job, a
+cross-contractor database) that a static HTML file can't provide.
+
 ## Open question for you
 
-Layer 1 needs a **skeleton of operations per trade** to seed its questions
-(the way `pricing-model.md` proposes for electrical, built from your friend's
-real sheet). Should I build that skeleton for one trade first — electrical,
-since we have a real reference sheet — or is there a different trade you want
-prioritized for the next contractor design partner?
+Layer 1's demo catalogue only covers two trades (electrical, general
+renovation) as a proof of the *pattern*. Building out the real thing needs a
+proper operations skeleton per trade — the way `pricing-model.md` proposes
+for electrical, built from your friend's real sheet. Which trade should get
+that treatment next, for the next contractor design partner?
