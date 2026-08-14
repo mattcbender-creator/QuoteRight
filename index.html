@@ -2,1086 +2,1070 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>QuoteRight</title>
 <meta name="theme-color" content="#0E1113">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
 <meta name="apple-mobile-web-app-title" content="QuoteRight">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230E1113'/%3E%3Cpath d='M6.8 12.4l3.3 3.3L17.2 8.6' fill='none' stroke='%23E8630A' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
-<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230E1113'/%3E%3Cpath d='M6.8 12.4l3.3 3.3L17.2 8.6' fill='none' stroke='%23E8630A' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%230E1113'/%3E%3Cpath d='M6.6 12.5l3.4 3.4 7.4-7.4' fill='none' stroke='%23E8630A' stroke-width='2.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --ink:#0E1113;
-    --page:#F0EEE9;
-    --card:#FFFFFF;
-    --panel:#FAF9F7;
-    --line:#E8E6E1;
-    --line-2:#DDDBD3;
-    --muted:#63605A;
-    --faint:#6E6A64;
-    --label:#736F68;
-    --site:#E8630A;
-    --site-ink:#B5500B;
-    --site-lift:#FF7A33;
-    --ok:#2E7D46;
-    --ok-ink:#226B38;
-    --tape:#F5C511;
-    --on-dark-soft:#A8ACA6;
-    --r-sm:10px; --r:12px; --r-lg:16px;
-    --mono:'IBM Plex Mono',ui-monospace,monospace;
+:root{
+  --ink:#0E1113; --ink-2:#1C2124;
+  --page:#F4F2ED; --card:#FFFFFF; --panel:#FAF9F7;
+  --line:#E4E1DB; --line-2:#D3CFC7;
+  --muted:#63605A; --faint:#6E6A64; --label:#736F68; --ghost:#9A958D;
+  --site:#E8630A; --site-ink:#B5500B; --site-soft:#FDF1E9; --site-lift:#FF7A33;
+  --ok:#2E7D46; --ok-ink:#226B38; --ok-soft:#E9F4EC;
+  --blue:#2B5D8A; --blue-soft:#E9F0F6;
+  --warn:#B5500B; --warn-soft:#FDF0E6;
+  --r-s:8px; --r:11px; --r-l:14px;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --rail:232px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+/* display rules below (flex/grid) would otherwise beat the hidden attribute */
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{
+  font-family:'Archivo',system-ui,-apple-system,sans-serif;
+  background:var(--page);color:var(--ink);min-height:100dvh;
+  -webkit-font-smoothing:antialiased;font-size:15px;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,textarea,select{font-family:inherit;color:inherit}
+:focus-visible{outline:2.5px solid var(--blue);outline-offset:2px;border-radius:6px}
+svg{display:block;flex-shrink:0}
+.i{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.i-s{width:15px;height:15px}
+.i-l{width:22px;height:22px}
+
+/* ============ SHELL ============ */
+.app{display:flex;min-height:100dvh}
+.rail{display:none}
+.body{flex:1;min-width:0;display:flex;flex-direction:column}
+
+.topbar{
+  position:sticky;top:0;z-index:40;background:rgba(244,242,237,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:11px 16px;min-height:56px;
+}
+.brand{display:flex;align-items:center;gap:8px}
+.brand .wm{font:700 16.5px/1 'Archivo';letter-spacing:-.04em}
+.brand .wm i{font-style:normal;color:var(--site-ink)}
+.topbar .back{display:flex;align-items:center;gap:5px;font:600 14px/1 'Archivo';color:var(--blue);padding:9px 6px;min-height:42px}
+.topbar h2{font:700 16px/1.2 'Archivo';letter-spacing:-.03em;text-align:center;flex:1;min-width:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.avatar{
+  width:34px;height:34px;border-radius:50%;background:var(--ink);color:#fff;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font:600 12px/1 var(--mono);
+}
+main{flex:1;padding:18px 16px 120px;max-width:100%}
+.wrap{max-width:100%}
+
+/* ============ MOBILE TAB BAR ============ */
+.tabbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:45;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-top:1px solid var(--line);
+  display:flex;align-items:center;padding:5px 10px calc(5px + env(safe-area-inset-bottom));
+}
+.tabbar .tb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;
+  min-height:54px;justify-content:center;color:var(--faint);border-radius:var(--r-s)}
+.tabbar .tb span{font:600 10.5px/1 'Archivo'}
+.tabbar .tb.on{color:var(--ink)}
+.tabbar .tb.on .i{stroke:var(--site)}
+.tabbar .newq{
+  flex:0 0 auto;display:flex;align-items:center;gap:8px;background:var(--site);color:#fff;
+  border-radius:99px;padding:12px 18px;margin:0 6px;min-height:48px;
+  font:600 14.5px/1 'Archivo';letter-spacing:-.01em;box-shadow:0 3px 12px rgba(232,99,10,.3);
+}
+.tabbar .newq .i{stroke:#fff;stroke-width:2.4}
+
+/* ============ TYPE ============ */
+h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
+.lede{font:400 14.5px/1.45 'Archivo';color:var(--faint);margin-top:5px}
+.eyebrow{font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--label)}
+.sec{margin-bottom:26px}
+.sec-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.sec-hd .n{font:500 11px/1 var(--mono);color:var(--ghost)}
+
+/* ============ BUTTONS ============ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  border-radius:var(--r);padding:14px 18px;min-height:48px;
+  font:600 15px/1 'Archivo';letter-spacing:-.01em;white-space:nowrap}
+.btn.blk{background:var(--ink);color:#fff}
+.btn.org{background:var(--site);color:#fff}
+.btn.gh{background:var(--card);color:var(--ink);border:1.5px solid var(--line-2)}
+.btn.full{width:100%}
+.btn:active{transform:scale(.99)}
+.btn:disabled{opacity:.4;pointer-events:none}
+.btn .i{stroke-width:2}
+.mini{display:inline-flex;align-items:center;gap:6px;font:600 12.5px/1 'Archivo';
+  color:var(--blue);padding:9px 10px;min-height:38px;border-radius:var(--r-s)}
+.mini.dn{color:var(--muted)}
+.mini:hover{background:var(--panel)}
+
+/* ============ ROWS (the core list unit) ============ */
+.list{background:var(--card);border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden}
+.row{display:flex;align-items:center;gap:13px;padding:14px 15px;width:100%;text-align:left;
+  border-top:1px solid var(--line);min-height:70px}
+.row:first-child{border-top:none}
+.row:hover{background:var(--panel)}
+.row .rm{flex:1;min-width:0}
+.row .r1{display:flex;align-items:baseline;gap:8px}
+.row .cl{font:600 15px/1.25 'Archivo';letter-spacing:-.015em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .jb{font:400 13px/1.35 'Archivo';color:var(--faint);margin-top:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .rr{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
+.row .amt{font:600 15.5px/1 var(--mono);letter-spacing:-.02em}
+.row .amt.dim{color:var(--ghost);font-weight:500}
+.row .act{display:flex;align-items:center;gap:4px;font:600 12.5px/1 'Archivo';color:var(--site-ink)}
+.row .act .i{stroke-width:2.2}
+.row .meta{font:400 11.5px/1 'Archivo';color:var(--ghost)}
+
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:3px 9px;
+  font:600 10.5px/1.5 'Archivo';letter-spacing:.02em;text-transform:uppercase;white-space:nowrap}
+.pill .d{width:5px;height:5px;border-radius:50%;background:currentColor}
+.p-draft{background:var(--site-soft);color:var(--site-ink)}
+.p-ready{background:var(--blue-soft);color:var(--blue)}
+.p-sent{background:#EFEDE8;color:var(--muted)}
+.p-accepted{background:var(--ok-soft);color:var(--ok-ink)}
+.p-lost{background:#EFEDE8;color:var(--ghost)}
+
+/* ============ STATS ============ */
+.stats{display:flex;gap:18px;flex-wrap:wrap;padding:2px 2px 0}
+.st .k{font:500 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ghost)}
+.st .v{font:500 15px/1 var(--mono);color:var(--muted);margin-top:6px}
+
+/* ============ FILTERS / SEARCH ============ */
+.search{display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:0 13px;min-height:46px;margin-bottom:12px}
+.search .i{stroke:var(--ghost)}
+.search input{flex:1;border:none;background:none;font:500 15px/1 'Archivo';padding:13px 0;outline:none}
+.search input::placeholder{color:var(--ghost)}
+.chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:12px;margin-bottom:4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.fc{border:1.5px solid var(--line-2);background:var(--card);border-radius:99px;padding:8px 14px;
+  font:600 13px/1 'Archivo';color:var(--muted);white-space:nowrap;min-height:38px}
+.fc.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.fc .c{opacity:.55;margin-left:4px;font-family:var(--mono);font-size:11px}
+
+/* ============ FORM ============ */
+.form{background:var(--card);border:1px solid var(--line);border-radius:var(--r-l);padding:18px}
+.fld{margin-bottom:16px}
+.fld:last-child{margin-bottom:0}
+.fld label{display:block;font:500 10.5px/1 var(--mono);letter-spacing:.15em;text-transform:uppercase;
+  color:var(--label);margin-bottom:8px}
+.fld input,.fld textarea{width:100%;font:500 15.5px/1.4 'Archivo';background:var(--panel);
+  border:1.5px solid var(--line);border-radius:var(--r);padding:13px 14px;outline:none}
+.fld textarea{min-height:90px;resize:vertical}
+.fld input:focus,.fld textarea:focus{border-color:var(--blue);background:#fff}
+.fld input::placeholder,.fld textarea::placeholder{color:var(--ghost);font-weight:400}
+.afford{display:flex;gap:8px;margin-top:9px}
+.aff{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line-2);background:var(--card);
+  border-radius:99px;padding:8px 13px;font:600 12.5px/1 'Archivo';color:var(--muted);min-height:38px}
+.aff:hover{border-color:var(--site);color:var(--site-ink)}
+.aff .i{stroke-width:2}
+
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:9px}
+.tsel{display:flex;align-items:center;gap:10px;border:1.5px solid var(--line-2);background:var(--card);
+  border-radius:var(--r);padding:13px;min-height:58px;text-align:left}
+.tsel .i{stroke:var(--muted)}
+.tsel .tn{font:600 14px/1.2 'Archivo';letter-spacing:-.01em}
+.tsel .tc{font:400 11.5px/1 'Archivo';color:var(--ghost);margin-top:4px}
+.tsel.on{border-color:var(--site);background:var(--site-soft)}
+.tsel.on .i{stroke:var(--site)}
+
+/* ============ WORKSPACE ============ */
+.wstabs{display:flex;gap:2px;background:#E9E6E0;border-radius:var(--r);padding:3px;margin-bottom:18px}
+.wt{flex:1;padding:10px 8px;border-radius:var(--r-s);font:600 13.5px/1 'Archivo';color:var(--muted);min-height:40px}
+.wt.on{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.07)}
+.pane{display:none}
+.pane.on{display:block}
+
+.grp{background:var(--card);border:1px solid var(--line);border-radius:var(--r-l);margin-bottom:12px;overflow:hidden}
+.grp-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;
+  border-bottom:1px solid var(--line);background:var(--panel)}
+.grp-hd .t{font:600 13.5px/1 'Archivo';letter-spacing:-.01em}
+.grp-hd .v{font:600 13.5px/1 var(--mono)}
+.li{display:flex;align-items:center;gap:11px;padding:11px 15px;border-top:1px solid var(--line)}
+.li:first-of-type{border-top:none}
+.li .nm{flex:1;min-width:0;font:400 14.5px/1.35 'Archivo'}
+.li .nm input{width:100%;border:none;background:none;font:inherit;outline:none;padding:2px 0}
+.li .nm input:focus{border-bottom:1.5px solid var(--blue)}
+.num{font:500 14.5px/1 var(--mono);background:var(--panel);border:1.5px solid var(--line);
+  border-radius:var(--r-s);padding:11px 10px;width:78px;text-align:right;outline:none;min-height:44px}
+.num:focus{border-color:var(--blue);background:#fff}
+.num.w{width:96px}
+.li .u{font:400 12px/1 'Archivo';color:var(--ghost);width:26px}
+.li .amt{font:500 14.5px/1 var(--mono);width:76px;text-align:right}
+.li .x{color:var(--ghost);padding:9px;border-radius:var(--r-s);min-height:40px;display:flex;align-items:center}
+.li .x:hover{color:#C0392B;background:#FBEDEB}
+.addline{display:flex;align-items:center;gap:7px;padding:12px 15px;border-top:1px dashed var(--line-2);
+  width:100%;font:600 13px/1 'Archivo';color:var(--blue);min-height:46px}
+.addline:hover{background:var(--panel)}
+
+.kv{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
+.kv:first-child{border-top:none}
+.kv .k{font:400 14px/1.35 'Archivo';color:var(--muted);flex:1}
+.kv .v{font:500 14.5px/1 var(--mono);white-space:nowrap}
+.kv.big .k{font-weight:600;color:var(--ink)}
+.kv.big .v{font-weight:600;font-size:16px}
+.kv .sub{display:block;font:400 11.5px/1 var(--mono);color:var(--ghost);margin-top:5px}
+
+.seg{display:flex;gap:6px;margin-top:10px}
+.sg{flex:1;border:1.5px solid var(--line-2);background:var(--card);border-radius:var(--r-s);
+  padding:10px 4px;text-align:center;min-height:52px}
+.sg .a{font:600 13px/1 'Archivo';color:var(--muted)}
+.sg .b{font:500 10.5px/1 var(--mono);color:var(--ghost);margin-top:5px}
+.sg.on{border-color:var(--site);background:var(--site-soft)}
+.sg.on .a{color:var(--ink)} .sg.on .b{color:var(--site-ink)}
+
+.flag{display:flex;gap:11px;align-items:flex-start;background:var(--warn-soft);border:1px solid #F0C9A6;
+  border-radius:var(--r);padding:13px 14px;margin-bottom:12px}
+.flag .i{stroke:var(--warn);margin-top:1px}
+.flag .ft{font:400 13.5px/1.45 'Archivo';color:#5A3A1E;flex:1}
+.flag .ft b{font-weight:700;color:var(--warn)}
+.flag.ok{background:var(--ok-soft);border-color:#BFDCC8}
+.flag.ok .i{stroke:var(--ok-ink)} .flag.ok .ft{color:#1E4F2E} .flag.ok .ft b{color:var(--ok-ink)}
+.flag.off{background:var(--panel);border-color:var(--line)}
+.flag.off .i{stroke:var(--ghost)} .flag.off .ft{color:var(--faint)} .flag.off .ft b{color:var(--faint)}
+
+/* ============ CLIENT QUOTE SHEET ============ */
+.sheet{background:#fff;border:1px solid var(--line);border-radius:var(--r-l);padding:24px 22px}
+.sh-top{display:flex;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:2px solid var(--ink)}
+.sh-top .biz{font:700 16px/1.2 'Archivo';letter-spacing:-.03em}
+.sh-top .sm{font:400 11.5px/1.5 'Archivo';color:var(--faint);margin-top:5px}
+.sh-top .rt{text-align:right;flex-shrink:0}
+.sh-top .rt .k{font:500 9.5px/1 var(--mono);letter-spacing:.2em;color:var(--label)}
+.sh-top .rt .v{font:500 12px/1 var(--mono);margin-top:6px;white-space:nowrap}
+.sh-blk{padding:16px 0;border-bottom:1px solid var(--line)}
+.sh-blk .k{font:500 9.5px/1 var(--mono);letter-spacing:.2em;color:var(--label);margin-bottom:9px}
+.sh-blk .v{font:400 14px/1.55 'Archivo'}
+.sh-blk .v b{font-weight:600}
+.sh-it{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-top:1px solid var(--line)}
+.sh-it:first-of-type{border-top:none}
+.sh-it .n{font:600 14px/1.3 'Archivo'}
+.sh-it .d{font:400 12.5px/1.45 'Archivo';color:var(--faint);margin-top:4px}
+.sh-it .a{font:500 14px/1 var(--mono);white-space:nowrap}
+.sh-tot{display:flex;justify-content:space-between;align-items:baseline;padding-top:18px}
+.sh-tot .k{font:700 15px/1 'Archivo';letter-spacing:-.02em}
+.sh-tot .v{font:600 26px/1 var(--mono);letter-spacing:-.025em}
+.sh-terms{font:400 11.5px/1.5 'Archivo';color:var(--faint);margin-top:9px}
+.vp{display:flex;gap:11px;padding:12px 0;border-top:1px solid var(--line)}
+.vp .i{stroke:var(--ok-ink);margin-top:1px}
+.vp .n{font:600 13.5px/1.3 'Archivo'}
+.vp .d{font:400 12.5px/1.4 'Archivo';color:var(--faint);margin-top:3px}
+.madeby{text-align:center;font:500 10px/1 var(--mono);letter-spacing:.16em;color:var(--ghost);padding:16px 0 4px}
+
+/* ============ STICKY ACTION BAR (mobile) ============ */
+.actbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:46;background:var(--ink);color:#fff;
+  padding:12px 16px calc(14px + env(safe-area-inset-bottom));
+  display:none;align-items:center;justify-content:space-between;gap:14px;
+}
+.actbar.on{display:flex}
+.actbar .lt .k{font:500 9.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:#A8ACA6}
+.actbar .lt .v{font:600 23px/1 var(--mono);letter-spacing:-.025em;margin-top:6px}
+.actbar .lt .s{font:400 11px/1 'Archivo';color:#A8ACA6;margin-top:5px}
+.actbar .btn{background:var(--site);color:#fff;padding:13px 17px;min-height:46px;font-size:14.5px}
+
+/* ============ MISC ============ */
+.empty{text-align:center;padding:34px 18px;color:var(--faint);font:400 14px/1.55 'Archivo';
+  background:var(--card);border:1px dashed var(--line-2);border-radius:var(--r-l)}
+.empty .i{stroke:var(--ghost);margin:0 auto 10px;width:26px;height:26px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:110px;z-index:70;background:var(--ink);
+  color:#fff;border-radius:99px;padding:12px 20px;font:500 13.5px/1 'Archivo';
+  opacity:0;pointer-events:none;transition:opacity .2s;box-shadow:0 6px 20px rgba(0,0,0,.22)}
+.toast.on{opacity:1}
+.menu{position:fixed;inset:0;z-index:80;background:rgba(14,17,19,.32);display:none}
+.menu.on{display:block}
+.menu .sheet-m{position:absolute;right:12px;top:60px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r-l);padding:7px;min-width:216px;box-shadow:0 12px 34px rgba(0,0,0,.16)}
+.menu .mi{display:flex;align-items:center;gap:11px;padding:12px 13px;border-radius:var(--r-s);
+  font:500 14.5px/1 'Archivo';width:100%;text-align:left;min-height:46px}
+.menu .mi:hover{background:var(--panel)}
+.menu .mh{padding:11px 13px 9px;border-bottom:1px solid var(--line);margin-bottom:5px}
+.menu .mh .n{font:600 14.5px/1 'Archivo'}
+.menu .mh .e{font:400 12px/1 'Archivo';color:var(--ghost);margin-top:5px}
+.side{display:none}
+
+/* ============ DESKTOP ============ */
+@media (min-width:900px){
+  body{font-size:15px}
+  .app{max-width:1400px;margin:0 auto;box-shadow:0 0 0 1px var(--line);background:var(--page);min-height:100dvh}
+  .rail{
+    display:flex;flex-direction:column;width:var(--rail);flex-shrink:0;
+    background:var(--card);border-right:1px solid var(--line);position:sticky;top:0;height:100dvh;padding:18px 13px;
   }
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  html,body{height:100%}
-  body{
-    font-family:'Archivo',system-ui,-apple-system,sans-serif;
-    background:var(--page);color:var(--ink);
-    display:flex;flex-direction:column;
-    max-width:460px;margin:0 auto;min-height:100dvh;
-    -webkit-font-smoothing:antialiased;
-  }
-  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
-  input,textarea{font-family:inherit}
-  :focus-visible{outline:3px solid #2B5D8A;outline-offset:2px;border-radius:6px}
-
-  /* ---------- chrome ---------- */
-  .demo-strip{
-    background:var(--ink);color:#fff;font:500 9.5px/1 var(--mono);
-    letter-spacing:.18em;text-transform:uppercase;text-align:center;padding:7px 8px;
-  }
-  .demo-strip b{color:var(--tape);font-weight:500}
-  header{
-    display:flex;align-items:center;justify-content:space-between;gap:10px;
-    padding:14px 18px 10px;
-  }
-  .logo{display:flex;align-items:center;gap:9px}
-  .logo svg{display:block;flex-shrink:0}
-  .wm{font:700 17px/1 'Archivo',sans-serif;letter-spacing:-.04em;color:var(--ink)}
-  .wm span{color:var(--site-ink)}
-  .hdr-btn{
-    font:600 14px/1 'Archivo',sans-serif;color:#2B5D8A;
-    padding:10px 6px;min-height:44px;display:flex;align-items:center;
-  }
-  .hdr-btn[hidden]{display:none}
-  .step-dot{
-    width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;
-    display:flex;align-items:center;justify-content:center;font:500 10.5px/1 var(--mono);flex-shrink:0;
-  }
-  .step-dot[hidden]{display:none}
-
-  main{flex:1;display:flex;flex-direction:column;padding:4px 18px 40px;overflow-y:auto}
-  body.has-bottom main{padding-bottom:calc(112px + env(safe-area-inset-bottom))}
-  .screen{display:none;flex-direction:column;animation:fade .22s ease}
-  .screen.active{display:flex}
-  @keyframes fade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
-  @media (prefers-reduced-motion:reduce){.screen{animation:none}}
-
-  h1{font:700 27px/1.12 'Archivo',sans-serif;letter-spacing:-.035em;margin:14px 0 5px}
-  .sub{font:400 14.5px/1.45 'Archivo',sans-serif;color:var(--faint);margin-bottom:18px}
-  .eyebrow{font:500 10.5px/1 var(--mono);letter-spacing:.18em;text-transform:uppercase;color:var(--label)}
-
-  /* ---------- buttons ---------- */
-  .cta{
-    width:100%;background:var(--ink);border-radius:var(--r-lg);padding:17px 18px;
-    display:flex;align-items:center;gap:14px;min-height:72px;margin-bottom:12px;text-align:left;
-  }
-  .cta .ic{width:40px;height:40px;border-radius:50%;background:var(--site);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .cta .ic svg{width:19px;height:19px;fill:#fff}
-  .cta .tx{flex:1;min-width:0}
-  .cta .t{display:block;font:600 17px/1.15 'Archivo',sans-serif;letter-spacing:-.02em;color:#fff}
-  .cta .d{display:block;font:400 12.5px/1.3 'Archivo',sans-serif;color:var(--on-dark-soft);margin-top:4px}
-  .cta:active{transform:scale(.99)}
-
-  .btn{
-    width:100%;min-height:60px;border-radius:var(--r);padding:18px;
-    font:600 16.5px/1 'Archivo',sans-serif;letter-spacing:-.015em;
-    display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px;
-  }
-  .btn.dark{background:var(--ink);color:#fff}
-  .btn.orange{background:var(--site);color:#fff}
-  .btn.ghost{background:var(--card);color:var(--ink);border:1.5px solid var(--line-2)}
-  .btn:active{transform:scale(.99)}
-  .btn:disabled{opacity:.4}
-  .btn-sm{
-    font:600 13px/1 'Archivo',sans-serif;padding:11px 14px;min-height:44px;
-    border-radius:var(--r-sm);background:var(--card);border:1.5px solid var(--line-2);color:var(--ink);
-  }
-
-  /* ---------- cards ---------- */
-  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:15px;margin-bottom:12px}
-  .card-hd{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:11px}
-  .sec{margin-bottom:22px}
-
-  /* stats */
-  .stats{display:flex;background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:12px}
-  .stat{flex:1;padding:14px 12px;min-width:0}
-  .stat + .stat{border-left:1px solid var(--line)}
-  .stat .k{font:500 9.5px/1.3 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--label)}
-  .stat .v{font:500 19px/1 var(--mono);color:var(--ink);margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .stat .v .u{font-size:12px;color:var(--faint)}
-
-  /* job rows */
-  .job{
-    width:100%;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-    padding:14px 15px;display:flex;align-items:center;gap:12px;margin-bottom:8px;text-align:left;min-height:64px;
-  }
-  .job:active{border-color:var(--line-2)}
-  .job .jm{flex:1;min-width:0}
-  .job .jn{font:600 15.5px/1.2 'Archivo',sans-serif;letter-spacing:-.015em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .job .js{display:flex;align-items:center;gap:7px;margin-top:6px}
-  .job .js .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-  .job .js .txt{font:400 12px/1.3 'Archivo',sans-serif;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .job .ja{font:500 16.5px/1 var(--mono);color:var(--ink);white-space:nowrap}
-  .job .ja.dim{color:var(--faint)}
-  .d-won{background:var(--ok)} .d-sent{background:#2B5D8A} .d-draft{background:var(--site)}
-  .d-lost{background:#C2BEB8} .d-dead{background:#C2BEB8}
-
-  /* type picker */
-  .type{
-    width:100%;background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-    padding:16px;display:flex;align-items:center;gap:14px;margin-bottom:9px;text-align:left;min-height:74px;
-  }
-  .type:active{border-color:var(--site)}
-  .type .emo{font-size:26px;line-height:1;flex-shrink:0;width:30px;text-align:center}
-  .type .tx{flex:1;min-width:0}
-  .type .tn{display:block;font:600 16.5px/1.2 'Archivo',sans-serif;letter-spacing:-.02em}
-  .type .td{display:block;font:400 12.5px/1.35 'Archivo',sans-serif;color:var(--faint);margin-top:5px}
-  .type .chev{margin-left:auto;color:#C2BEB8;font-size:18px;flex-shrink:0}
-
-  /* fields */
-  .field{display:block;margin-bottom:14px}
-  .field label{display:block;font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--label);margin-bottom:7px}
-  .field input,.field textarea{
-    width:100%;font:600 16px/1.35 'Archivo',sans-serif;color:var(--ink);
-    background:var(--card);border:1.5px solid var(--line-2);border-radius:var(--r-sm);padding:14px;
-  }
-  .field textarea{min-height:84px;resize:none;font-weight:500}
-  .field input:focus,.field textarea:focus{outline:none;border-color:#2B5D8A}
-  .field input::placeholder,.field textarea::placeholder{color:#A9A59E;font-weight:500}
-
-  .num{
-    font:500 15px/1 var(--mono);color:var(--ink);background:var(--panel);
-    border:1.5px solid var(--line-2);border-radius:9px;padding:11px 10px;width:104px;text-align:right;min-height:44px;
-  }
-  .num.sm{width:64px}
-  .num:focus{outline:none;border-color:#2B5D8A;background:#fff}
-
-  /* rows */
-  .row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
-  .row:first-child{border-top:none}
-  .row .l{flex:1;font:400 14.5px/1.35 'Archivo',sans-serif;min-width:0}
-  .row .a{font:500 15px/1 var(--mono);white-space:nowrap}
-  .row .a .s{display:block;font:400 11.5px/1 var(--mono);color:var(--faint);margin-top:5px}
-  .row.tot{border-top:1px solid var(--line-2)}
-  .row.tot .l{font-weight:600}
-  .row.tot .a{font-weight:600}
-
-  .why{font:600 12.5px/1 'Archivo',sans-serif;color:#2B5D8A;padding:6px 8px;margin-left:2px;min-height:32px}
-  .note{background:#FFF8DF;border:1px solid #EFD98A;border-radius:var(--r-sm);padding:12px 14px;font:400 13.5px/1.45 'Archivo',sans-serif;margin:4px 0 10px;display:none}
-  .note.show{display:block}
-
-  /* guardian */
-  .guard{background:#FDF0E6;border:1px solid #F0C9A6;border-radius:var(--r);padding:14px 15px;margin-bottom:12px}
-  .guard .gt{font:400 14px/1.45 'Archivo',sans-serif;color:#5A3A1E}
-  .guard .gt b{font-weight:700;color:var(--site-ink)}
-  .guard.off{background:var(--panel);border-color:var(--line)}
-  .guard.off .gt{color:var(--faint)}
-  .guard.off .gt b{color:var(--faint)}
-  .guard button{margin-top:10px}
-
-  /* complexity */
-  .cx-wrap{display:flex;gap:7px;margin:10px 0 4px}
-  .cx{
-    flex:1;padding:12px 4px;border-radius:var(--r-sm);border:1.5px solid var(--line-2);background:var(--card);
-    text-align:center;min-height:56px;
-  }
-  .cx .cn{font:600 13px/1 'Archivo',sans-serif;color:var(--faint)}
-  .cx .cv{font:500 11px/1 var(--mono);color:#A9A59E;margin-top:5px}
-  .cx.on{border-color:var(--site);background:#FDF1E9}
-  .cx.on .cn{color:var(--ink)} .cx.on .cv{color:var(--site-ink)}
-
-  /* chips (questions) */
-  .chip{
-    width:100%;background:var(--card);border:1.5px solid var(--line-2);border-radius:var(--r);
-    padding:17px;margin-bottom:9px;display:flex;justify-content:space-between;align-items:center;gap:12px;
-    text-align:left;min-height:62px;
-  }
-  .chip:active{border-color:var(--site)}
-  .chip .cl{font:600 16px/1.2 'Archivo',sans-serif;letter-spacing:-.015em}
-  .chip .cs{font:400 12.5px/1.3 'Archivo',sans-serif;color:var(--faint);text-align:right}
-
-  /* confirm */
-  .conf{display:flex;gap:11px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--line);font:400 15px/1.4 'Archivo',sans-serif}
-  .conf:first-child{border-top:none}
-  .conf .ck{color:var(--ok-ink);font-weight:700;flex-shrink:0}
-
-  /* prices */
-  .scan{display:flex;align-items:center;gap:9px;background:#EAF1F7;border:1px solid #C6D6E4;border-radius:var(--r-sm);padding:12px 14px;margin-bottom:14px;font:500 13px/1.3 'Archivo',sans-serif;color:#20527A}
-  .pulse{width:8px;height:8px;border-radius:50%;background:#2B5D8A;animation:p 1.1s infinite;flex-shrink:0}
-  @keyframes p{0%,100%{opacity:.25}50%{opacity:1}}
-  @media (prefers-reduced-motion:reduce){.pulse{animation:none}}
-  .price{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--line)}
-  .price:first-child{border-top:none}
-  .price .px{flex:1;min-width:0}
-  .price .pn{display:block;font:500 14.5px/1.3 'Archivo',sans-serif}
-  .price .ps{display:block;font:400 11.5px/1.4 'Archivo',sans-serif;color:var(--faint);margin-top:6px}
-  .src{display:inline-block;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:2px 6px;margin-right:5px;font:500 10px/1.4 var(--mono);color:var(--label)}
-
-  /* gates */
-  .gate{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line)}
-  .gate:first-child{border-top:none}
-  .gate .box{width:28px;height:28px;border-radius:8px;border:1.5px solid var(--line-2);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--ok-ink);background:var(--card)}
-  .gate .box.on{border-color:var(--ok);background:#E9F4EC}
-  .gate .gp{font:400 15px/1.4 'Archivo',sans-serif}
-  .gate .gs{display:block;font:400 12.5px/1.35 'Archivo',sans-serif;color:var(--faint);margin-top:3px}
-
-  /* sent */
-  .seal{width:78px;height:78px;border-radius:50%;background:var(--ok);color:#fff;display:flex;align-items:center;justify-content:center;font-size:36px;font-weight:700;margin:24px auto 16px}
-
-  /* client quote sheet */
-  .sheet{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:22px 20px;margin-bottom:12px}
-  .sheet .sh-top{display:flex;justify-content:space-between;gap:14px;padding-bottom:16px;border-bottom:1.5px solid var(--ink)}
-  .sheet .biz{font:700 16px/1.2 'Archivo',sans-serif;letter-spacing:-.03em}
-  .sheet .bizl{font:400 11.5px/1.5 'Archivo',sans-serif;color:var(--faint);margin-top:4px}
-  .sheet .est-k{font:500 9.5px/1 var(--mono);letter-spacing:.2em;color:var(--label);text-align:right}
-  .sheet .est-n{font:500 12px/1 var(--mono);color:var(--ink);margin-top:6px;text-align:right;white-space:nowrap}
-  .sheet .blk{padding:16px 0;border-bottom:1px solid var(--line)}
-  .sheet .blk-k{font:500 9.5px/1 var(--mono);letter-spacing:.2em;color:var(--label);margin-bottom:8px}
-  .sheet .blk-v{font:400 14px/1.5 'Archivo',sans-serif}
-  .sheet .blk-v b{font-weight:600}
-  .sheet .item{display:flex;justify-content:space-between;gap:14px;padding:13px 0;border-top:1px solid var(--line)}
-  .sheet .item:first-of-type{border-top:none}
-  .sheet .it-n{font:600 14px/1.3 'Archivo',sans-serif}
-  .sheet .it-d{font:400 12.5px/1.45 'Archivo',sans-serif;color:var(--faint);margin-top:4px}
-  .sheet .it-a{font:500 14px/1 var(--mono);white-space:nowrap}
-  .sheet .tot{display:flex;justify-content:space-between;align-items:baseline;padding-top:16px}
-  .sheet .tot-k{font:700 15px/1 'Archivo',sans-serif;letter-spacing:-.02em}
-  .sheet .tot-v{font:600 25px/1 var(--mono);letter-spacing:-.02em}
-  .sheet .terms{font:400 11.5px/1.5 'Archivo',sans-serif;color:var(--faint);margin-top:8px}
-  .vprop{display:flex;gap:11px;padding:12px 0;border-top:1px solid var(--line)}
-  .vprop .vi{color:var(--ok-ink);font-weight:700;flex-shrink:0}
-  .vprop .vn{font:600 13.5px/1.3 'Archivo',sans-serif}
-  .vprop .vd{font:400 12.5px/1.4 'Archivo',sans-serif;color:var(--faint);margin-top:3px}
-  .madeby{text-align:center;font:500 10px/1 var(--mono);letter-spacing:.16em;color:#A9A59E;padding:14px 0 2px}
-
-  /* sticky number bar */
-  .bar{
-    position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:460px;
-    background:var(--ink);color:#fff;padding:14px 18px calc(16px + env(safe-area-inset-bottom));
-    display:none;align-items:center;justify-content:space-between;gap:12px;
-  }
-  .bar.show{display:flex}
-  .bar .bk{font:500 9.5px/1 var(--mono);letter-spacing:.2em;text-transform:uppercase;color:var(--on-dark-soft)}
-  .bar .bv{font:600 27px/1 var(--mono);letter-spacing:-.025em;margin-top:6px}
-  .bar .bs{text-align:right;font:400 11.5px/1.4 'Archivo',sans-serif;color:var(--on-dark-soft)}
-  .bar .bs b{display:block;font:500 13px/1 var(--mono);color:var(--site-lift);margin-top:4px;font-weight:500}
-
-  /* bottom tab bar */
-  .tabs{
-    position:fixed;left:0;right:0;bottom:0;margin:0 auto;max-width:460px;z-index:50;
-    background:rgba(255,255,255,.94);backdrop-filter:blur(12px);
-    border-top:1px solid var(--line);
-    padding:6px 8px calc(6px + env(safe-area-inset-bottom));
-    display:none;align-items:stretch;
-  }
-  .tabs.show{display:flex}
-  .tab{
-    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
-    padding:8px 4px;min-height:56px;border-radius:var(--r-sm);color:var(--faint);
-  }
-  .tab svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-  .tab .tl{font:600 10.5px/1 'Archivo',sans-serif;letter-spacing:.01em}
-  .tab.on{color:var(--ink)}
-  .tab.on svg{stroke:var(--site)}
-  .tab.mid svg{stroke:#fff}
-  .tab.mid .ring{
-    width:42px;height:42px;border-radius:50%;background:var(--site);
-    display:flex;align-items:center;justify-content:center;margin-top:-2px;
-  }
-  .tab.mid .tl{margin-top:1px}
-
-  .hint{font:400 12.5px/1.45 'Archivo',sans-serif;color:var(--faint);text-align:center;padding-top:14px}
-  .empty{text-align:center;padding:26px 10px;font:400 14px/1.5 'Archivo',sans-serif;color:var(--faint)}
-  .toast{
-    position:fixed;left:50%;transform:translateX(-50%);bottom:104px;z-index:60;
-    background:var(--ink);color:#fff;border-radius:99px;padding:11px 18px;
-    font:500 13px/1 'Archivo',sans-serif;display:flex;align-items:center;gap:12px;
-    opacity:0;pointer-events:none;transition:opacity .18s;max-width:92vw;
-  }
-  .toast.show{opacity:1;pointer-events:auto}
-  .toast button{font:600 13px/1 'Archivo',sans-serif;color:var(--site-lift);padding:4px}
+  .rail .brand{padding:6px 8px 22px}
+  .rail .nv{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:var(--r);
+    font:600 14.5px/1 'Archivo';color:var(--muted);margin-bottom:3px;width:100%;text-align:left;min-height:44px}
+  .rail .nv:hover{background:var(--panel)}
+  .rail .nv.on{background:var(--panel);color:var(--ink)}
+  .rail .nv.on .i{stroke:var(--site)}
+  .rail .newq{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--site);color:#fff;
+    border-radius:var(--r);padding:13px;margin:14px 0 20px;font:600 14.5px/1 'Archivo';min-height:48px}
+  .rail .newq .i{stroke:#fff;stroke-width:2.3}
+  .rail .foot{margin-top:auto}
+  .rail .me{display:flex;align-items:center;gap:10px;padding:10px 8px;border-top:1px solid var(--line);width:100%;text-align:left}
+  .rail .me>span{min-width:0}
+  .rail .me .nm{display:block;font:600 13.5px/1.2 'Archivo';white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .rail .me .rl{display:block;font:400 11.5px/1.3 'Archivo';color:var(--ghost);margin-top:5px;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tabbar{display:none}
+  .topbar{padding:14px 30px;min-height:64px}
+  .topbar .brand{display:none}
+  .topbar h2{text-align:left;font-size:17px}
+  main{padding:26px 30px 60px}
+  .wrap{max-width:960px}
+  h1{font-size:29px}
+  .actbar{display:none!important}
+  /* two-column workspace */
+  .ws{display:grid;grid-template-columns:minmax(0,1fr) 372px;gap:24px;align-items:start}
+  .side{display:block;position:sticky;top:88px}
+  .wrap.ws{max-width:1180px}
+  .wt[data-tab="client"]{display:none}
+  .pane[data-pane="client"]{display:none!important}
+  .tgrid{grid-template-columns:repeat(auto-fill,minmax(168px,1fr))}
+  .row{padding:15px 18px}
+  .stats{gap:26px}
+}
+@media (min-width:1180px){
+  .wrap.ws{grid-template-columns:minmax(0,1fr) 410px}
+}
 </style>
 </head>
 <body>
 
-<div class="demo-strip">Demo &nbsp;·&nbsp; <b>saved on this phone only</b></div>
+<div class="app">
 
-<header>
-  <button class="hdr-btn" id="backBtn" onclick="back()" hidden>‹ Back</button>
-  <div class="logo">
-    <svg width="21" height="21" viewBox="0 0 24 24" aria-hidden="true">
-      <rect width="24" height="24" rx="6" fill="#0E1113"/>
-      <path d="M6.8 12.4l3.3 3.3L17.2 8.6" fill="none" stroke="#E8630A" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <span class="wm">Quote<span>Right</span></span>
-  </div>
-  <div class="step-dot" id="stepDot" hidden>1/6</div>
-</header>
-
-<main>
-
-  <!-- HOME -->
-  <section class="screen" id="s-home">
-    <h1 id="greet">Morning, Dave.</h1>
-    <p class="sub">Quote it before the coffee gets cold.</p>
-
-    <button class="cta" onclick="newEstimate()">
-      <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 15a4 4 0 0 0 4-4V6a4 4 0 1 0-8 0v5a4 4 0 0 0 4 4zm6-4a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.93V22h2v-3.07A8 8 0 0 0 20 11h-2z"/></svg></span>
-      <span class="tx"><span class="t">New estimate</span><span class="d">Talk it out — about 2 minutes</span></span>
-    </button>
-
-    <div class="stats" id="stats"></div>
-
-    <div class="sec">
-      <div class="card-hd"><span class="eyebrow">Your jobs</span><span class="eyebrow" id="jobCount"></span></div>
-      <div id="jobs"></div>
+  <!-- ===== DESKTOP RAIL ===== -->
+  <aside class="rail">
+    <div class="brand">
+      <svg width="21" height="21" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#0E1113"/><path d="M6.6 12.5l3.4 3.4 7.4-7.4" fill="none" stroke="#E8630A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="wm">Quote<i>Right</i></span>
     </div>
-
-    <div class="card">
-      <div class="card-hd"><span class="eyebrow">Your rate</span></div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="font:500 22px/1 var(--mono)">$</span>
-        <input class="num sm" id="rate" type="number" inputmode="numeric" onchange="setRate(this.value)" aria-label="Your hourly rate" style="width:78px;font-size:19px">
-        <span style="font:400 14px/1 var(--mono);color:var(--faint)">/hr</span>
-        <span style="font:400 13px/1.35 'Archivo';color:var(--faint);margin-left:4px">Nothing you send goes below it.</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- JOB TYPE -->
-  <section class="screen" id="s-type">
-    <h1>What are we quoting?</h1>
-    <p class="sub">Pick the job — I load its checklist and your prices.</p>
-    <div id="types"></div>
-  </section>
-
-  <!-- TALK -->
-  <section class="screen" id="s-talk">
-    <h1>Tell me about the job.</h1>
-    <p class="sub">Talk like you'd talk to a buddy. I'll sort it out.</p>
-    <div style="display:flex;flex-direction:column;align-items:center;margin:2px 0 20px">
-      <button style="width:96px;height:96px;border-radius:50%;background:var(--site);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 9px rgba(232,99,10,.13)" onclick="dictate()" aria-label="Tap and talk">
-        <svg viewBox="0 0 24 24" style="width:36px;height:36px;fill:#fff"><path d="M12 15a4 4 0 0 0 4-4V6a4 4 0 1 0-8 0v5a4 4 0 0 0 4 4zm6-4a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.93V22h2v-3.07A8 8 0 0 0 20 11h-2z"/></svg>
+    <button class="newq" onclick="startNew()"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> New quote</button>
+    <button class="nv" id="nv-today" onclick="go('today')"><svg class="i" viewBox="0 0 24 24"><path d="M3 10.2 12 3.4l9 6.8"/><path d="M5.4 9v11h13.2V9"/><path d="M9.6 20v-5.6h4.8V20"/></svg> Today</button>
+    <button class="nv" id="nv-quotes" onclick="go('quotes')"><svg class="i" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9.5 12h6M9.5 16h4"/></svg> Quotes</button>
+    <div class="foot">
+      <button class="me" onclick="openMenu()">
+        <span class="avatar">DK</span>
+        <span><span class="nm" id="railName">Dave K.</span><span class="rl">Kowalczyk Contracting</span></span>
       </button>
-      <div style="font:600 14.5px/1 'Archivo';margin-top:12px">Tap &amp; talk</div>
     </div>
-    <label class="field"><label for="f-client">Who's it for?</label>
-      <input id="f-client" type="text" placeholder="Client name" oninput="draftSave()"></label>
-    <label class="field"><label for="f-title">The job</label>
-      <input id="f-title" type="text" placeholder="e.g. Henderson bathroom" oninput="draftSave()"></label>
-    <label class="field"><label for="f-addr">Address <span style="text-transform:none;letter-spacing:0;color:#A9A59E">(optional)</span></label>
-      <input id="f-addr" type="text" placeholder="1418 Ridgewood Ave" oninput="draftSave()"></label>
-    <label class="field"><label for="f-desc">In your words</label>
-      <textarea id="f-desc" placeholder="Say what you saw on the walk-through…" oninput="draftSave()"></textarea></label>
-    <button class="btn orange" onclick="nav('s-confirm')">Got it — keep going</button>
-    <p class="hint">Everything saves as you type. You can stop and come back.</p>
-  </section>
+  </aside>
 
-  <!-- CONFIRM -->
-  <section class="screen" id="s-confirm">
-    <h1>Got it. Sound right?</h1>
-    <p class="sub">Tap anything that's wrong.</p>
-    <div class="card" id="confirm"></div>
-    <button class="btn orange" onclick="nav('s-q')">Looks right — keep going</button>
-    <button class="btn ghost" onclick="nav('s-talk')">Fix something</button>
-  </section>
+  <div class="body">
 
-  <!-- QUESTION -->
-  <section class="screen" id="s-q">
-    <h1 id="qT"></h1>
-    <p class="sub" id="qH"></p>
-    <div id="qC"></div>
-  </section>
-
-  <!-- PRICES -->
-  <section class="screen" id="s-prices">
-    <h1>I priced your materials.</h1>
-    <p class="sub">Tap any price to put your own number in. It sticks for next time.</p>
-    <div class="scan"><span class="pulse"></span> Checked today's prices near you — big box + local averages</div>
-    <div class="card" id="prices"></div>
-    <p class="hint" style="text-align:left;padding:0 0 16px">Your markup gets added on the next screen — small stuff +40%, mid +30%, big-ticket +20%. The client never sees this page.</p>
-    <button class="btn orange" onclick="nav('s-est')">Use these prices</button>
-  </section>
-
-  <!-- ESTIMATE -->
-  <section class="screen" id="s-est">
-    <h1 id="estT">Estimate</h1>
-    <p class="sub">Your rate, today's prices. Tap any number to change it.</p>
-
-    <div class="guard" id="guard">
-      <div class="gt" id="guardT"></div>
-      <button class="btn-sm" id="guardB" onclick="toggleBuffer()">Remove the buffer</button>
-    </div>
-
-    <div class="card">
-      <div class="card-hd"><span class="eyebrow" id="laborK">Labor</span><span class="eyebrow" id="laborV"></span></div>
-      <div id="labor"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-hd"><span class="eyebrow">Materials · markup in</span><span class="eyebrow" id="matV"></span></div>
-      <div id="mats"></div>
-    </div>
-
-    <div class="card">
-      <div class="card-hd"><span class="eyebrow">Protection</span></div>
-      <div style="font:400 14.5px/1.35 'Archivo'">How complex is this job? <button class="why" onclick="note('n1')">Why?</button></div>
-      <div class="cx-wrap" id="cx"></div>
-      <div id="n1" class="note">Older or tighter jobs run heavier than a clean new build — hidden damage, surprises behind walls. This keeps that off your bottom line.</div>
-      <div class="row"><span class="l">Complexity</span><span class="a" id="cxA">$0</span></div>
-      <div class="row"><span class="l">Contingency <span id="cP">25</span>%<button class="why" onclick="note('n2')">Why?</button></span><span class="a" id="cA">$0</span></div>
-      <div id="n2" class="note">15% base for a standard reno, +10% for unknowns behind the walls. It shows on the client's quote as its own line — and if you don't need it, you hand it back and look like a hero.</div>
-    </div>
-
-    <button class="btn dark" onclick="nav('s-check')">Check it over →</button>
-  </section>
-
-  <!-- CONFIDENCE CHECK -->
-  <section class="screen" id="s-check">
-    <h1>Last look before it goes.</h1>
-    <p class="sub">Five gut checks. Tap each one you're solid on.</p>
-    <div class="card" id="gates"></div>
-    <button class="btn orange" id="sendB" onclick="send()" disabled>Send the quote</button>
-    <p class="hint">Unlocks when all five are checked.</p>
-  </section>
-
-  <!-- SENT -->
-  <section class="screen" id="s-sent">
-    <div class="seal">✓</div>
-    <h1 style="text-align:center" id="sentT">Sent.</h1>
-    <p class="sub" style="text-align:center">Texted and emailed. You'll get a ping when they open it.<br>Follow-up reminder set for Friday.</p>
-    <button class="btn dark" onclick="openSheet()">View what they got</button>
-    <button class="btn ghost" onclick="home()">Back to my jobs</button>
-  </section>
-
-  <!-- CLIENT QUOTE SHEET -->
-  <section class="screen" id="s-sheet">
-    <div class="card-hd" style="margin:12px 0 10px">
-      <span class="eyebrow">What the client sees</span>
-      <span class="eyebrow">No costs · no markup</span>
-    </div>
-    <div class="sheet" id="sheet"></div>
-    <div class="madeby">Prepared with QuoteRight</div>
-    <button class="btn dark" style="margin-top:12px" onclick="shareQuote()">Send it to them</button>
-    <button class="btn ghost" onclick="back()">Back</button>
-  </section>
-
-  <!-- SETUP -->
-  <section class="screen" id="s-set">
-    <h1>Your setup.</h1>
-    <p class="sub">Set once. Every quote uses it.</p>
-
-    <div class="card">
-      <div class="card-hd"><span class="eyebrow">Your rate</span></div>
-      <div style="display:flex;align-items:center;gap:10px">
-        <span style="font:500 22px/1 var(--mono)">$</span>
-        <input class="num sm" id="setRate" type="number" inputmode="numeric" onchange="setRate(this.value)" aria-label="Hourly rate" style="width:88px;font-size:19px">
-        <span style="font:400 14px/1 var(--mono);color:var(--faint)">/hr</span>
+    <!-- ===== TOP BAR ===== -->
+    <header class="topbar">
+      <button class="back" id="backBtn" onclick="back()" hidden><svg class="i i-s" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg> Back</button>
+      <div class="brand" id="tbBrand">
+        <svg width="20" height="20" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#0E1113"/><path d="M6.6 12.5l3.4 3.4 7.4-7.4" fill="none" stroke="#E8630A" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="wm">Quote<i>Right</i></span>
       </div>
-      <p style="font:400 12.5px/1.45 'Archivo';color:var(--faint);margin-top:10px">Every labour hour bills at this. Nothing you send goes below it.</p>
-    </div>
+      <h2 id="tbTitle" hidden></h2>
+      <button class="avatar" onclick="openMenu()" aria-label="Your account">DK</button>
+    </header>
 
-    <div class="card">
-      <div class="card-hd"><span class="eyebrow">Markup on materials</span></div>
-      <div id="setMarkup"></div>
-      <p style="font:400 12.5px/1.45 'Archivo';color:var(--faint);margin-top:10px">Cheap stuff carries more markup than big-ticket items. The client never sees these.</p>
-    </div>
+    <main>
 
-    <div class="card">
-      <div class="card-hd"><span class="eyebrow">How the total is shown</span></div>
-      <div id="setRound"></div>
-      <p style="font:400 12.5px/1.45 'Archivo';color:var(--faint);margin-top:10px" id="roundHint"></p>
-    </div>
+      <!-- ===== TODAY ===== -->
+      <section class="wrap" id="v-today" hidden>
+        <div class="sec" style="margin-bottom:20px">
+          <h1 id="greet">Morning, Dave.</h1>
+          <p class="lede" id="todayLede"></p>
+        </div>
+        <div id="todayGroups"></div>
+        <div class="sec">
+          <div class="stats" id="todayStats"></div>
+        </div>
+      </section>
 
-    <div class="card">
-      <div class="card-hd"><span class="eyebrow">On every quote</span></div>
-      <label class="field"><label for="setBiz">Business name</label><input id="setBiz" type="text" onchange="setProfile()"></label>
-      <label class="field"><label for="setLic">Licence #</label><input id="setLic" type="text" onchange="setProfile()"></label>
-      <label class="field"><label for="setPhone">Phone</label><input id="setPhone" type="text" onchange="setProfile()"></label>
-      <label class="field"><label for="setEmail">Email</label><input id="setEmail" type="text" onchange="setProfile()"></label>
-      <label class="field" style="margin-bottom:0"><label for="setWarranty">Warranty line</label><input id="setWarranty" type="text" onchange="setProfile()"></label>
-    </div>
+      <!-- ===== QUOTES ===== -->
+      <section class="wrap" id="v-quotes" hidden>
+        <div class="sec" style="margin-bottom:16px">
+          <h1>Quotes</h1>
+          <p class="lede">Everything you've priced.</p>
+        </div>
+        <div class="search">
+          <svg class="i i-s" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+          <input id="q" type="search" placeholder="Search client, job or address" oninput="renderQuotes()">
+        </div>
+        <div class="chips" id="filters"></div>
+        <div id="quoteList"></div>
+      </section>
 
-    <button class="btn ghost" onclick="resetDemo()">Reset the demo data</button>
-  </section>
+      <!-- ===== NEW QUOTE ===== -->
+      <section class="wrap" id="v-new" hidden style="max-width:660px">
+        <div class="sec" style="margin-bottom:18px">
+          <h1>New quote</h1>
+          <p class="lede">Just the basics — you can change all of it later.</p>
+        </div>
+        <div class="form">
+          <div class="fld"><label for="n-client">Client</label>
+            <input id="n-client" type="text" placeholder="Sarah Henderson" autocomplete="off"></div>
+          <div class="fld"><label for="n-job">Job name</label>
+            <input id="n-job" type="text" placeholder="Main bathroom gut" autocomplete="off"></div>
+          <div class="fld"><label for="n-addr">Address</label>
+            <input id="n-addr" type="text" placeholder="1418 Ridgewood Ave" autocomplete="off"></div>
+          <div class="fld"><label>Job type</label><div class="tgrid" id="typeGrid"></div></div>
+          <div class="fld"><label for="n-notes">Notes from the site visit</label>
+            <textarea id="n-notes" placeholder="What you saw on the walk-through…"></textarea>
+            <div class="afford">
+              <button class="aff" onclick="dictate()"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 14.5a3.2 3.2 0 0 0 3.2-3.2V6a3.2 3.2 0 1 0-6.4 0v5.3a3.2 3.2 0 0 0 3.2 3.2z"/><path d="M18 11.3a6 6 0 0 1-12 0M12 17.3V21"/></svg> Talk it out</button>
+              <button class="aff" onclick="toast('Photos land in the site-visit notes')"><svg class="i i-s" viewBox="0 0 24 24"><path d="M3 8.6h3.4L8.2 6h7.6l1.8 2.6H21V19H3z"/><circle cx="12" cy="13.2" r="3.2"/></svg> Add photos</button>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <button class="btn org" style="flex:1" onclick="createQuote()">Start the quote</button>
+          <button class="btn gh" onclick="back()">Cancel</button>
+        </div>
+      </section>
 
-  <!-- JOB DETAIL -->
-  <section class="screen" id="s-job">
-    <h1 id="jobT">Job</h1>
-    <p class="sub" id="jobS"></p>
-    <div class="card" id="jobSum"></div>
-    <div class="card">
-      <div class="card-hd"><span class="eyebrow">Where's it at?</span></div>
-      <div id="jobStatus"></div>
-    </div>
-    <button class="btn dark" onclick="openSheet()">View the client's quote</button>
-    <button class="btn ghost" onclick="resume()" id="resumeB">Open the estimate</button>
-  </section>
+      <!-- ===== WORKSPACE ===== -->
+      <section class="wrap ws" id="v-ws" hidden>
+        <div>
+          <div class="sec" style="margin-bottom:14px">
+            <h1 id="wsTitle">Quote</h1>
+            <p class="lede" id="wsSub"></p>
+          </div>
+          <div class="wstabs">
+            <button class="wt on" data-tab="scope" onclick="tab('scope')">Scope</button>
+            <button class="wt" data-tab="costs" onclick="tab('costs')">Costs</button>
+            <button class="wt" data-tab="client" onclick="tab('client')">Client quote</button>
+          </div>
 
-</main>
+          <div class="pane on" data-pane="scope" id="paneScope"></div>
+          <div class="pane" data-pane="costs" id="paneCosts"></div>
+          <div class="pane" data-pane="client" id="paneClientM"></div>
+        </div>
 
-<div class="bar" id="bar">
-  <div>
-    <div class="bk">Client pays</div>
-    <div class="bv" id="barV">$0</div>
+        <!-- desktop right column -->
+        <aside class="side" id="wsSide"></aside>
+      </section>
+
+      <!-- ===== PREVIEW / SEND ===== -->
+      <section class="wrap" id="v-preview" hidden style="max-width:720px">
+        <div class="sec" style="margin-bottom:16px">
+          <h1>What they'll get</h1>
+          <p class="lede" id="prevSub"></p>
+        </div>
+        <div id="prevSheet"></div>
+        <div class="madeby">Prepared with QuoteRight</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+          <button class="btn org" style="flex:1;min-width:190px" onclick="sendQuote()">
+            <svg class="i i-s" viewBox="0 0 24 24"><path d="M21 3L10.5 13.5M21 3l-6.8 18-3.7-7.5L3 10.1z"/></svg> Send quote</button>
+          <button class="btn gh" onclick="saveDraft()">Save draft</button>
+        </div>
+      </section>
+
+      <!-- ===== SETTINGS ===== -->
+      <section class="wrap" id="v-settings" hidden style="max-width:660px">
+        <div class="sec" style="margin-bottom:18px">
+          <h1>Settings</h1>
+          <p class="lede">Set once. Every quote uses it.</p>
+        </div>
+        <div class="form" style="margin-bottom:12px">
+          <div class="eyebrow" style="margin-bottom:14px">Your rate &amp; markup</div>
+          <div class="kv"><span class="k">Hourly rate</span>
+            <span style="display:flex;align-items:center;gap:7px"><span style="font:500 15px/1 var(--mono)">$</span>
+            <input class="num" id="s-rate" type="number" inputmode="numeric" onchange="setRate(this.value)"><span class="k">/hr</span></span></div>
+          <div id="s-markup"></div>
+          <div class="kv"><span class="k">Target margin</span>
+            <span style="display:flex;align-items:center;gap:7px">
+            <input class="num" id="s-target" type="number" inputmode="numeric" onchange="setTarget(this.value)"><span class="k">%</span></span></div>
+        </div>
+        <div class="form" style="margin-bottom:12px">
+          <div class="eyebrow" style="margin-bottom:14px">Totals are shown</div>
+          <div id="s-round"></div>
+        </div>
+        <div class="form">
+          <div class="eyebrow" style="margin-bottom:14px">On every client quote</div>
+          <div class="fld"><label for="s-biz">Business name</label><input id="s-biz" onchange="setProfile()"></div>
+          <div class="fld"><label for="s-lic">Licence #</label><input id="s-lic" onchange="setProfile()"></div>
+          <div class="fld"><label for="s-phone">Phone</label><input id="s-phone" onchange="setProfile()"></div>
+          <div class="fld"><label for="s-email">Email</label><input id="s-email" onchange="setProfile()"></div>
+          <div class="fld"><label for="s-warranty">Warranty line</label><input id="s-warranty" onchange="setProfile()"></div>
+          <div class="fld" style="margin-bottom:0"><label for="s-timeline">Typical timeline</label><input id="s-timeline" onchange="setProfile()"></div>
+        </div>
+        <button class="btn gh full" style="margin-top:14px" onclick="resetDemo()">Reset demo data</button>
+      </section>
+
+    </main>
   </div>
-  <div class="bs">cushion<b id="barC">$0</b></div>
 </div>
 
-<nav class="tabs" id="tabs">
-  <button class="tab" id="tab-home" onclick="tabTo('s-home')">
-    <svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5.5 9.5V20h13V9.5"/><path d="M9.5 20v-6h5v6"/></svg>
-    <span class="tl">Jobs</span>
-  </button>
-  <button class="tab mid" onclick="newEstimate()">
-    <span class="ring"><svg viewBox="0 0 24 24" style="width:20px;height:20px"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
-    <span class="tl">New</span>
-  </button>
-  <button class="tab" id="tab-set" onclick="tabTo('s-set')">
-    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-1.8-.3 1.6 1.6 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1A1.6 1.6 0 0 0 9 19.4a1.6 1.6 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0 .3-1.8 1.6 1.6 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1A1.6 1.6 0 0 0 4.6 9a1.6 1.6 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 1.8.3H9a1.6 1.6 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.6 1.6 0 0 0 1 1.5 1.6 1.6 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-.3 1.8V9a1.6 1.6 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.6 1.6 0 0 0-1.5 1z"/></svg>
-    <span class="tl">Setup</span>
-  </button>
+<!-- ===== MOBILE TAB BAR ===== -->
+<nav class="tabbar" id="tabbar">
+  <button class="tb" id="tb-today" onclick="go('today')">
+    <svg class="i i-l" viewBox="0 0 24 24"><path d="M3 10.2 12 3.4l9 6.8"/><path d="M5.4 9v11h13.2V9"/><path d="M9.6 20v-5.6h4.8V20"/></svg><span>Today</span></button>
+  <button class="newq" onclick="startNew()"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> New quote</button>
+  <button class="tb" id="tb-quotes" onclick="go('quotes')">
+    <svg class="i i-l" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9.5 12h6M9.5 16h4"/></svg><span>Quotes</span></button>
 </nav>
 
-<div class="toast" id="toast"><span id="toastT"></span><button id="toastB" onclick="undo()">Undo</button></div>
+<!-- ===== STICKY WORKSPACE BAR (mobile) ===== -->
+<div class="actbar" id="actbar">
+  <div class="lt"><div class="k">Client pays</div><div class="v" id="abTotal">$0</div><div class="s" id="abSub"></div></div>
+  <button class="btn" id="abBtn" onclick="preview()">Preview</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="menu" id="menu" onclick="if(event.target===this)closeMenu()">
+  <div class="sheet-m">
+    <div class="mh"><div class="n" id="menuName">Dave Kowalczyk</div><div class="e" id="menuBiz">Kowalczyk Contracting</div></div>
+    <button class="mi" onclick="closeMenu();go('settings')"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.8 1.1V21a2 2 0 1 1-4 0v-.2a1.6 1.6 0 0 0-2.8-1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1-2.8H3a2 2 0 1 1 0-4h.2a1.6 1.6 0 0 0 1-2.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.6 1.6 0 0 0 2.8-1V3a2 2 0 1 1 4 0v.2a1.6 1.6 0 0 0 2.8 1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0 1 2.8H21a2 2 0 1 1 0 4h-.2a1.6 1.6 0 0 0-1.4 1.2z"/></svg> Settings</button>
+    <button class="mi" onclick="closeMenu();toast('Demo — nothing to log out of')"><svg class="i" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg> Sign out</button>
+  </div>
+</div>
 
 <script>
-/* ============================================================
-   QuoteRight — demo app
-   Money math is deterministic. Nothing here guesses a price.
-   ============================================================ */
+/* ==========================================================
+   QuoteRight POC — demo content only, no backend.
+   ========================================================== */
 
-/* ---------- job templates ---------- */
+const ICON = {
+  bath:'<path d="M4 11.5h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M6 11.5V6.2A2.2 2.2 0 0 1 8.2 4c1 0 1.7.5 2.1 1.3"/><path d="M6.5 21.5l1-2.5M17.5 21.5l-1-2.5"/>',
+  kitchen:'<path d="M5 3v7a2.5 2.5 0 0 0 5 0V3M7.5 10v11"/><path d="M17.5 3c-1.6 0-2.5 2.2-2.5 5s.9 4 2.5 4 2.5-1.2 2.5-4-.9-5-2.5-5z"/><path d="M17.5 12v9"/>',
+  deck:'<path d="M3 8h18M3 13h18M3 18h18"/><path d="M7 4v16M17 4v16"/>',
+  framing:'<path d="M4 20V6l8-3 8 3v14"/><path d="M4 12h16M12 3v17"/>',
+  custom:'<path d="M4 20l4-1 10-10a2.1 2.1 0 0 0-3-3L5 16z"/><path d="M14.5 6.5l3 3"/>',
+  addition:'<path d="M3 11l9-7 9 7"/><path d="M6 10v10h12V10"/><path d="M12 13v5M9.5 15.5h5"/>',
+};
 const T = {
-  bathroom:{
-    emoji:'🛁', name:'Bathroom reno', desc:'full gut, tile, fixtures', checks:15, cx:1.5,
-    ex:"Full bathroom gut at the Hendersons'. House is from the seventies. Tub to shower conversion, they're buying their own vanity. Second floor, tight stairs.",
-    confirm:['<b>Bathroom — full gut</b>, approx. 5×9 ft','House built in the <b>1970s</b>','<b>Tub → shower</b> conversion','Client supplies the <b>vanity</b>','<b>Second floor</b>, tight access'],
-    q:{t:'Any signs of water damage on the floor?',h:'Soft spots, stains, that smell. Old houses love to hide it.',c:[['Yes','saw some staining'],['No','floor feels solid'],['Not sure',"I'll buffer for it"]]},
-    guard:'<b>Hold up.</b> 1970s house and no unknowns-behind-walls buffer? Last time that cost you a weekend. I added <b>+10%</b>.',
-    labor:[['Demo & prep',8],['Plumbing rough-in',6],['Waterproofing',8],['Tile install',19],['Fixtures & finish',8]],
-    mats:[['Schluter shower kit, 5×9',812,'Home Depot','updated today'],['Tile & grout, 140 sqft +10% waste',1790,"Lowe's",'updated today'],['Plumbing rough-in materials',615,'Local avg','3 suppliers'],['Shower valve, head & glass door',948,'Home Depot','updated today'],['Backer board, fasteners & misc',390,'Local avg','']],
+  bathroom:{icon:'bath', name:'Bathroom', checks:15, cx:1.5,
+    ex:"Full bathroom gut. House is from the seventies, tub to shower conversion, they're buying their own vanity. Second floor, tight stairs.",
     scope:'Full bathroom renovation including tub-to-shower conversion and a fully bonded waterproofing system.',
-    groups:[['Demolition, disposal and site protection','Dust barriers, floor protection, dumpster and haul-away',['Demo & prep']],
-            ['Plumbing rough-in and fixture set','Tub removed, shower drain and valve relocated, all new supply',['Plumbing rough-in','Fixtures & finish']],
-            ['Waterproofing — Schluter system','Full bonded membrane, flood-tested before tile goes on',['Waterproofing']],
-            ['Tile, grout and finish carpentry','140 sqft floor and walls, client-supplied vanity installed',['Tile install']]],
-  },
-  kitchen:{
-    emoji:'🍳', name:'Kitchen reno', desc:'cabinets, counters, the works', checks:22, cx:1.5,
-    ex:"Full kitchen reno. Tearing out the old cabinets, new shakers, quartz tops, tile backsplash and new LVP floor. Keeping the sink and stove roughly where they are. House is late 80s.",
-    confirm:['<b>Full kitchen reno</b> — cabinets, counters, floor','Cabinets <b>replaced</b> (not refaced)','<b>Quartz</b> countertops, ~45 sqft','Keeping the <b>same footprint</b>','Client supplies the <b>appliances</b>'],
-    q:{t:'Are the sink and stove staying put?',h:'Moving them means new plumbing, gas or electrical runs — a big cost swing.',c:[['Yes','same layout, keeps it clean'],['No','moving them, add rough-in'],['Not sure',"I'll buffer for it"]]},
-    guard:'<b>Hold up.</b> Kitchen with no unknowns-behind-walls buffer? Cabinets always hide a surprise. I added <b>+10%</b>.',
-    labor:[['Demo & haul-out',12],['Plumbing rough-in',8],['Electrical rough-in',10],['Drywall & patch',8],['Cabinet install',20],['Countertop template & install',6],['Backsplash tile',10],['Flooring',12],['Fixture & finish plumbing',8],['Paint',10],['Punch list',6]],
-    mats:[['Cabinets — shaker, mid-grade',6500,'Local supplier','quoted'],['Countertop — quartz, ~45 sqft',3200,'Fabricator','quoted'],['Flooring — LVP, ~200 sqft',1400,"Lowe's",'updated today'],['Backsplash tile + setting materials',650,'Home Depot','updated today'],['Sink, faucet & disposal',560,'Home Depot','updated today'],['Electrical — cans, outlets, GFCI',480,'Local avg',''],['Plumbing rough & finish materials',430,'Local avg',''],['Drywall, primer & paint',380,'Local avg',''],['Fasteners, adhesives & misc',300,'Local avg','']],
+    groups:[
+      {n:'Demolition & site protection', d:'Dust barriers, floor protection, dumpster and haul-away',
+       labor:[['Demo & prep',8]], mats:[['Dumpster & disposal',420,'Local'],['Floor & dust protection',110,'Home Depot']]},
+      {n:'Plumbing rough-in & fixtures', d:'Tub removed, shower drain and valve relocated, all new supply',
+       labor:[['Plumbing rough-in',6],['Fixtures & finish',8]], mats:[['Plumbing rough-in materials',615,'Local avg'],['Shower valve, head & glass door',948,'Home Depot']]},
+      {n:'Waterproofing — Schluter', d:'Full bonded membrane, flood-tested before tile goes on',
+       labor:[['Waterproofing',8]], mats:[['Schluter shower kit, 5×9',812,'Home Depot'],['Backer board & fasteners',390,'Local avg']]},
+      {n:'Tile, grout & finish carpentry', d:'140 sqft floor and walls, client-supplied vanity installed',
+       labor:[['Tile install',19]], mats:[['Tile & grout, 140 sqft +10% waste',1790,"Lowe's"]]},
+    ]},
+  kitchen:{icon:'kitchen', name:'Kitchen', checks:22, cx:1.5,
+    ex:"Full kitchen reno. Old cabinets out, new shakers, quartz tops, tile backsplash, new LVP floor. Sink and stove stay put. House is late 80s.",
     scope:'Full kitchen renovation including cabinetry, quartz countertops, backsplash and new flooring.',
-    groups:[['Demolition, disposal and site protection','Old kitchen removed, dust barriers, dumpster and haul-away',['Demo & haul-out']],
-            ['Plumbing and electrical rough-in','New supply, drain and circuits brought up to current code',['Plumbing rough-in','Electrical rough-in','Fixture & finish plumbing']],
-            ['Cabinetry and countertops','Cabinets set and levelled, quartz templated and installed',['Cabinet install','Countertop template & install']],
-            ['Tile, flooring, drywall and paint','Backsplash, new floor, walls patched and finished',['Backsplash tile','Flooring','Drywall & patch','Paint','Punch list']]],
-  },
-  deck:{
-    emoji:'🪚', name:'Deck', desc:'framing, decking, railing, stairs', checks:11, cx:1.25,
-    ex:"Building a 16 by 20 composite deck off the back, attached to the house. PT frame, one set of stairs, full railing. Yard slopes a bit. Permit needed.",
-    confirm:['<b>16×20 deck</b>, ~320 sqft','<b>Composite</b> decking, PT frame','Attached to house (<b>ledger</b>)','One <b>stair run</b> + full railing','<b>Permit</b> required'],
-    q:{t:'Any slope or bad soil under the deck?',h:'Grade and soft ground change footings and framing time.',c:[['Flat & solid','standard footings'],['Some slope','add framing time'],['Not sure',"I'll buffer for it"]]},
-    guard:'<b>Heads up.</b> Outdoor build with no weather or soil buffer? Footings love to surprise you. I added <b>+10%</b>.',
-    labor:[['Layout & footings',10],['Framing & ledger',16],['Decking',14],['Railing',8],['Stairs',6],['Seal & finish',6]],
-    mats:[['PT framing lumber',1200,'Local yard','quoted'],['Composite decking, ~320 sqft',2600,'Home Depot','updated today'],['Hidden fasteners & joist hangers',480,'Home Depot','updated today'],['Railing system',1100,'Home Depot','updated today'],['Footings, concrete & hardware',420,'Local avg',''],['Stair materials',350,'Local avg','']],
+    groups:[
+      {n:'Demolition & haul-out', d:'Old kitchen removed, dust barriers, dumpster and haul-away',
+       labor:[['Demo & haul-out',12]], mats:[['Dumpster & disposal',560,'Local']]},
+      {n:'Plumbing & electrical rough-in', d:'New supply, drain and circuits brought to current code',
+       labor:[['Plumbing rough-in',8],['Electrical rough-in',10],['Fixture & finish plumbing',8]],
+       mats:[['Electrical — cans, outlets, GFCI',480,'Local avg'],['Plumbing rough & finish',430,'Local avg'],['Sink, faucet & disposal',560,'Home Depot']]},
+      {n:'Cabinetry & countertops', d:'Cabinets set and levelled, quartz templated and installed',
+       labor:[['Cabinet install',20],['Countertop install',6]],
+       mats:[['Cabinets — shaker, mid-grade',6500,'Local supplier'],['Quartz countertop, ~45 sqft',3200,'Fabricator']]},
+      {n:'Tile, flooring & paint', d:'Backsplash, new floor, walls patched and finished',
+       labor:[['Backsplash tile',10],['Flooring',12],['Drywall & patch',8],['Paint',10],['Punch list',6]],
+       mats:[['Flooring — LVP, ~200 sqft',1400,"Lowe's"],['Backsplash tile & setting',650,'Home Depot'],['Drywall, primer & paint',380,'Local avg']]},
+    ]},
+  deck:{icon:'deck', name:'Deck', checks:11, cx:1.25,
+    ex:"16 by 20 composite deck off the back, attached to the house. PT frame, one set of stairs, full railing. Yard slopes a bit. Permit needed.",
     scope:'16×20 composite deck including footings, framing, railing and one stair run.',
-    groups:[['Footings and site layout','Deck laid out, footings dug and poured to code depth',['Layout & footings']],
-            ['Framing and ledger','Pressure-treated frame, ledger flashed and fastened to the house',['Framing & ledger']],
-            ['Decking, railing and stairs','Composite boards with hidden fasteners, full railing, one stair run',['Decking','Railing','Stairs']],
-            ['Seal and finish','Cut ends sealed, site cleaned, hardware checked',['Seal & finish']]],
-  },
-  framing:{
-    emoji:'🔨', name:'Framing', desc:'walls, sheathing, headers', checks:9, cx:1.0,
-    ex:"Framing job — about 180 linear feet of walls, interior and exterior, 9 foot ceilings. One structural opening for a beam. Sheathing included.",
-    confirm:['<b>Wall framing</b>, ~180 linear ft','<b>9 ft</b> walls','Interior + exterior walls','One <b>structural opening</b>','Sheathing <b>included</b>'],
-    q:{t:'Standard height walls, or tall / vaulted?',h:'Height drives lumber and labor more than length does.',c:[['Standard','straightforward'],['Tall / vaulted','add material & time'],['Not sure',"I'll buffer for it"]]},
-    guard:'<b>Quick check.</b> Framing with zero buffer? One crooked existing wall eats a day. I added <b>+10%</b>.',
-    labor:[['Layout & plates',6],['Wall framing',24],['Sheathing',10],['Headers & openings',6],['Blocking & strapping',6]],
-    mats:[['Studs & plates (SPF)',1400,'Local yard','quoted'],['Sheathing (OSB)',900,'Home Depot','updated today'],['Headers & LVL',650,'Local yard','quoted'],['Fasteners, hangers & hardware',520,'Home Depot','updated today'],['Waste & misc',300,'Local avg','']],
+    groups:[
+      {n:'Footings & layout', d:'Deck laid out, footings dug and poured to code depth',
+       labor:[['Layout & footings',10]], mats:[['Footings, concrete & hardware',420,'Local avg'],['Permit',280,'City']]},
+      {n:'Framing & ledger', d:'Pressure-treated frame, ledger flashed and fastened to the house',
+       labor:[['Framing & ledger',16]], mats:[['PT framing lumber',1200,'Local yard'],['Joist hangers & fasteners',480,'Home Depot']]},
+      {n:'Decking, railing & stairs', d:'Composite boards with hidden fasteners, full railing, one stair run',
+       labor:[['Decking',14],['Railing',8],['Stairs',6]],
+       mats:[['Composite decking, ~320 sqft',2600,'Home Depot'],['Railing system',1100,'Home Depot'],['Stair materials',350,'Local avg']]},
+      {n:'Seal & finish', d:'Cut ends sealed, site cleaned, hardware checked',
+       labor:[['Seal & finish',6]], mats:[['Sealer & consumables',140,'Local avg']]},
+    ]},
+  framing:{icon:'framing', name:'Framing', checks:9, cx:1.0,
+    ex:"About 180 linear feet of walls, interior and exterior, 9 foot ceilings. One structural opening for a beam. Sheathing included.",
     scope:'Interior and exterior wall framing including sheathing and structural openings.',
-    groups:[['Layout and plates','Walls laid out and plated to the drawings',['Layout & plates']],
-            ['Wall framing and openings','Walls framed square and plumb, headers set at all openings',['Wall framing','Headers & openings']],
-            ['Sheathing','Exterior sheathed and nailed to schedule',['Sheathing']],
-            ['Blocking and strapping','Backing for finishes, strapping as required',['Blocking & strapping']]],
-  },
-  custom:{
-    emoji:'✏️', name:'Something else', desc:'just describe it — I build the list', checks:0, cx:1.25,
-    ex:"Describe the job in your own words and I'll build the line items with you.",
-    confirm:['Custom job — we build the list together','Your rate applies to every hour','Markup and contingency work the same'],
-    q:{t:'Rough size of this one?',h:'Just a gut feel — it sets the starting hours.',c:[['Small','a day or two'],['Medium','about a week'],['Big','multiple weeks']]},
-    guard:'<b>Careful.</b> Custom work is where scope creep lives. I added a <b>+10%</b> buffer.',
-    labor:[['Prep & setup',6],['Main work',20],['Finish & clean-up',6]],
-    mats:[['Materials — main',800,'Local avg',''],['Fasteners & consumables',180,'Local avg','']],
+    groups:[
+      {n:'Layout & plates', d:'Walls laid out and plated to the drawings',
+       labor:[['Layout & plates',6]], mats:[['Plates & layout stock',260,'Local yard']]},
+      {n:'Wall framing & openings', d:'Walls framed square and plumb, headers set at all openings',
+       labor:[['Wall framing',24],['Headers & openings',6]],
+       mats:[['Studs & plates (SPF)',1400,'Local yard'],['Headers & LVL',650,'Local yard']]},
+      {n:'Sheathing', d:'Exterior sheathed and nailed to schedule',
+       labor:[['Sheathing',10]], mats:[['Sheathing (OSB)',900,'Home Depot'],['Fasteners & hardware',520,'Home Depot']]},
+      {n:'Blocking & strapping', d:'Backing for finishes, strapping as required',
+       labor:[['Blocking & strapping',6]], mats:[['Blocking stock',180,'Local yard']]},
+    ]},
+  addition:{icon:'addition', name:'Room addition', checks:26, cx:1.75,
+    ex:"Adding a 12x14 room off the back. Foundation, framing, roof tie-in, windows, drywall and finishes.",
+    scope:'12×14 room addition including foundation, framing, roof tie-in, windows and interior finishes.',
+    groups:[
+      {n:'Foundation & site', d:'Excavation, footings and foundation wall',
+       labor:[['Excavation & footings',20]], mats:[['Concrete & rebar',2400,'Local'],['Permit & survey',900,'City']]},
+      {n:'Framing & roof tie-in', d:'Floor, walls and roof framed and tied into the existing structure',
+       labor:[['Framing',40],['Roof tie-in',18]], mats:[['Framing lumber package',4200,'Local yard'],['Roofing materials',1600,'Local yard']]},
+      {n:'Envelope — windows, doors, insulation', d:'Weather-tight: windows set, house wrap, insulation',
+       labor:[['Windows & doors',12],['Insulation',10]], mats:[['Windows & exterior door',3100,'Supplier'],['Insulation & wrap',890,'Home Depot']]},
+      {n:'Interior finishes', d:'Drywall, trim, paint and flooring',
+       labor:[['Drywall',20],['Trim & paint',22],['Flooring',12]],
+       mats:[['Drywall & finishing',760,'Home Depot'],['Trim, paint & flooring',2300,'Local avg']]},
+    ]},
+  custom:{icon:'custom', name:'Something else', checks:0, cx:1.25,
+    ex:"Describe the job in your own words — you build the list from here.",
     scope:'Custom scope of work as discussed and detailed below.',
-    groups:[['Preparation','Site set up and protected',['Prep & setup']],
-            ['The work','Main scope as discussed',['Main work']],
-            ['Finish and clean-up','Site cleaned and left tidy',['Finish & clean-up']]],
-  },
+    groups:[
+      {n:'Preparation', d:'Site set up and protected', labor:[['Prep & setup',6]], mats:[['Protection & consumables',140,'Local avg']]},
+      {n:'The work', d:'Main scope as discussed', labor:[['Main work',20]], mats:[['Materials — main',800,'Local avg']]},
+      {n:'Finish & clean-up', d:'Site cleaned and left tidy', labor:[['Finish & clean-up',6]], mats:[['Disposal',180,'Local']]},
+    ]},
 };
 
-const CX = [[1,'Standard'],[1.25,'Medium'],[1.5,'High'],[1.75,'Extreme']];
-const GATES = [
-  ['If this job goes sideways, I still make money.', c=>`Your cushion is ${money(c.cushion)} — it holds if labor runs 20% over.`],
-  ['This price is fair for my work and my market.', ()=>'In line with similar jobs around here.'],
-  ['I hit my rate and my target margin.', c=>`Every hour is billed at $${DB.profile.rate}. ✓`],
-  ['I captured everything at the site visit.', ()=>'Checklist 14/15 — one photo still missing.'],
-  ['The quote says why I\'m worth it.', ()=>'Warranty, quality materials, clear timeline — in.'],
-];
+const STATUS = {
+  draft:{l:'Draft', act:'Finish it'}, ready:{l:'Ready', act:'Send it'},
+  sent:{l:'Sent', act:'Follow up'}, accepted:{l:'Accepted', act:'View'}, lost:{l:'Lost', act:'View'},
+};
+const CX = [[1,'Standard','New build, easy access'],[1.25,'Medium','80s–2000s, some tight spots'],
+            [1.5,'High','Pre-1980, hidden-issue risk'],[1.75,'Extreme','Heritage or structural unknowns']];
+const ROUND=[[1,'Exact','$19,495'],[25,'Nearest $25','$19,500'],[100,'Nearest $100','$19,500']];
 
-/* ---------- storage ---------- */
-const KEY='quoteright_v3';
-const seed=()=>({
-  profile:{rate:95, biz:'Dave Kowalczyk Contracting', lic:'CB-448192', phone:'(216) 555-0148', email:'dave@kowalczykcontracting.com', warranty:'2-year workmanship warranty', mk:[.40,.30,.20], round:25},
-  jobs:[
-    j('Miller — bathroom','Ellen Miller','bathroom','sent',21600,'Sent Tue · opened 3×'),
-    j('Ruiz — kitchen','Ana Ruiz','kitchen','won',46900,'Won · starts Sep 8'),
-    j('Kowalski — deck','Pete Kowalski','deck','draft',12140,'Draft · 2 questions left'),
-    j('Whitfield — deck rebuild','Ray Whitfield','deck','sent',16275,'Sent Fri · not opened yet'),
-    j('Petrov — basement framing','Ivan Petrov','framing','draft',8410,'Draft · started yesterday'),
-    j('Nakamura — kitchen','Kenji Nakamura','kitchen','lost',41200,'Lost · went with low bid'),
-  ],
-  seq:431,
-});
-function j(title,client,type,status,total,note){
-  return {id:'seed-'+title.replace(/\W+/g,'-').toLowerCase(),title,client,addr:'',desc:'',type,status,total,note,cushion:Math.round(total*.5),seeded:true,num:null};
-}
-let DB = load();
-function load(){
-  try{ const d=JSON.parse(localStorage.getItem(KEY)); if(d&&d.profile&&d.jobs) return d; }catch(e){}
-  return seed();
-}
-function save(){ try{ localStorage.setItem(KEY, JSON.stringify(DB)); }catch(e){} }
-
-/* ---------- working estimate ---------- */
-let E = null;          // active estimate
-let undoState = null;  // for undo toast
-
-function blank(type){
-  const t=T[type];
+/* ---------- store ---------- */
+const KEY='quoteright_poc_v4';
+function seed(){
+  const mk=(o)=>{
+    const t=T[o.type];
+    return Object.assign({
+      id:'q'+Math.random().toString(36).slice(2,9),
+      rate:95, cx:t.cx, buffer:true, notes:'',
+      groups:JSON.parse(JSON.stringify(t.groups)),
+    }, o);
+  };
   return {
-    id:'e'+Date.now(), type, title:'', client:'', addr:'', desc:'',
-    rate:DB.profile.rate, cx:t.cx, buffer:true, step:1, status:'draft',
-    labor:t.labor.map(([name,hours])=>({name,hours})),
-    mats:t.mats.map(([name,base,src,when])=>({name,base,src,when})),
-    num:null,
+    profile:{name:'Dave Kowalczyk', biz:'Kowalczyk Contracting', lic:'CB-448192',
+      phone:'(216) 555-0148', email:'dave@kowalczykcontracting.com',
+      warranty:'2-year workmanship warranty', timeline:'3–4 weeks',
+      rate:95, mk:[.40,.30,.20], round:25, target:20},
+    quotes:[
+      mk({client:'Sarah Henderson', job:'Main bathroom gut', addr:'1418 Ridgewood Ave', type:'bathroom', status:'draft', when:'Started yesterday'}),
+      mk({client:'Pete Kowalski', job:'Backyard deck', addr:'22 Linden Ct', type:'deck', status:'draft', when:'2 sections left'}),
+      mk({client:'Ana Ruiz', job:'Kitchen remodel', addr:'908 Foster St', type:'kitchen', status:'ready', when:'Priced Tuesday'}),
+      mk({client:'Ray Whitfield', job:'Deck rebuild', addr:'71 Palmer Rd', type:'deck', status:'sent', when:'Sent 6 days ago', days:6}),
+      mk({client:'Ivan Petrov', job:'Basement framing', addr:'340 Chestnut Ave', type:'framing', status:'sent', when:'Sent 2 days ago', days:2}),
+      mk({client:'Marie Dubois', job:'Ensuite refresh', addr:'55 Aldergrove', type:'bathroom', status:'accepted', when:'Accepted Monday · starts Sep 8'}),
+      mk({client:'Kenji Nakamura', job:'Kitchen remodel', addr:'12 Harborview', type:'kitchen', status:'lost', when:'Went with a low bid'}),
+    ],
+    seq:431,
   };
 }
+let DB = (()=>{ try{ const d=JSON.parse(localStorage.getItem(KEY)); if(d&&d.profile&&d.quotes) return d; }catch(e){} return seed(); })();
+const save=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(DB)); }catch(e){} };
 
 /* ---------- money ---------- */
-const money = n => '$' + Math.round(n).toLocaleString('en-US');
-const markup = b => b<100 ? (DB.profile.mk?.[0]??.40) : b<=1000 ? (DB.profile.mk?.[1]??.30) : (DB.profile.mk?.[2]??.20);
-// Client-facing totals land on a deliberate increment. Research says precise
-// beats round for trust, but to-the-dollar reads machine-generated — so we
-// round to a step that still looks calculated ($25 by default).
-const roundTo = n => { const s=DB.profile.round||25; return s<=1 ? Math.round(n) : Math.round(n/s)*s; };
-function calc(e){
-  e = e || E;
-  const labor = e.labor.reduce((s,l)=>s+l.hours*e.rate,0);
-  const hours = e.labor.reduce((s,l)=>s+l.hours,0);
-  let mats=0, base=0;
-  e.mats.forEach(m=>{ mats += m.base*(1+markup(m.base)); base += m.base; });
-  const sub = labor+mats;
-  const cxAdd = sub*(e.cx-1);
-  const pct = 15 + (e.buffer?10:0);
-  const cont = (sub+cxAdd)*pct/100;
-  const raw = sub+cxAdd+cont;
-  const total = roundTo(raw);
-  const cushion = (mats-base)+cxAdd+cont + (total-raw);
-  return {labor,hours,mats,cxAdd,pct,cont,raw,total,cushion,pctCushion:total?Math.round(cushion/total*100):0};
+const money=n=>'$'+Math.round(n).toLocaleString('en-US');
+const mkFor=b=>b<100?DB.profile.mk[0]:b<=1000?DB.profile.mk[1]:DB.profile.mk[2];
+const roundTo=n=>{const s=DB.profile.round||25;return s<=1?Math.round(n):Math.round(n/s)*s;};
+function calc(q){
+  let labor=0,hours=0,matCost=0,matSell=0;
+  q.groups.forEach(g=>{
+    g.labor.forEach(([,h])=>{hours+=h;labor+=h*q.rate;});
+    g.mats.forEach(([,c])=>{matCost+=c;matSell+=c*(1+mkFor(c));});
+  });
+  const sub=labor+matSell;
+  const cxAdd=sub*(q.cx-1);
+  const pct=15+(q.buffer?10:0);
+  const cont=(sub+cxAdd)*pct/100;
+  const raw=sub+cxAdd+cont;
+  const total=roundTo(raw);
+  const cost=labor*0.62+matCost;            // rough demo cost basis for margin
+  const profit=total-cost;
+  return {labor,hours,matCost,matSell,sub,cxAdd,pct,cont,raw,total,cost,profit,
+    margin:total?Math.round(profit/total*100):0, markup:cost?Math.round(profit/cost*100):0};
+}
+function groupTotal(q,g){
+  let v=0;
+  g.labor.forEach(([,h])=>v+=h*q.rate);
+  g.mats.forEach(([,c])=>v+=c*(1+mkFor(c)));
+  return v;
+}
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pill=s=>`<span class="pill p-${s}"><span class="d"></span>${STATUS[s].l}</span>`;
+
+/* ---------- TODAY ---------- */
+function renderToday(){
+  const h=new Date().getHours();
+  document.getElementById('greet').textContent=(h<12?'Morning':h<17?'Afternoon':'Evening')+', '+DB.profile.name.split(' ')[0]+'.';
+  const qs=DB.quotes;
+  const drafts=qs.filter(q=>q.status==='draft');
+  const ready=qs.filter(q=>q.status==='ready');
+  const waiting=qs.filter(q=>q.status==='sent');
+  const won=qs.filter(q=>q.status==='accepted');
+  const todo=drafts.length+ready.length+waiting.length;
+  document.getElementById('todayLede').textContent =
+    todo ? `${todo} thing${todo>1?'s':''} need you. ${ready.length?ready.length+' ready to go out.':''}` : 'Nothing outstanding. Good spot to be in.';
+
+  const grp=(title,items,tone)=>{
+    if(!items.length) return '';
+    return `<div class="sec">
+      <div class="sec-hd"><span class="eyebrow">${title}</span><span class="n">${items.length}</span></div>
+      <div class="list">${items.map(q=>rowHTML(q,tone)).join('')}</div></div>`;
+  };
+  document.getElementById('todayGroups').innerHTML =
+    grp('Finish these drafts',drafts) + grp('Ready to send',ready) +
+    grp('Waiting on a reply',waiting) + grp('Recently accepted',won) ||
+    `<div class="empty"><svg class="i" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>All clear. Start a new quote when you're ready.</div>`;
+
+  const out=ready.concat(waiting).reduce((s,q)=>s+calc(q).total,0);
+  const wonV=won.reduce((s,q)=>s+calc(q).total,0);
+  const decided=won.length+qs.filter(q=>q.status==='lost').length;
+  document.getElementById('todayStats').innerHTML=`
+    <div class="st"><div class="k">Out for bid</div><div class="v">${money(out)}</div></div>
+    <div class="st"><div class="k">Accepted</div><div class="v">${money(wonV)}</div></div>
+    <div class="st"><div class="k">Win rate</div><div class="v">${decided?Math.round(won.length/decided*100):0}%</div></div>`;
+}
+function rowHTML(q,tone){
+  const c=calc(q), s=STATUS[q.status];
+  return `<button class="row" onclick="openQuote('${q.id}')">
+    <span class="rm">
+      <span class="r1"><span class="cl">${esc(q.client)}</span>${pill(q.status)}</span>
+      <span class="jb">${esc(q.job)}${q.addr?' · '+esc(q.addr):''}</span>
+    </span>
+    <span class="rr">
+      <span class="amt ${q.status==='lost'?'dim':''}">${money(c.total)}</span>
+      <span class="act">${s.act}<svg class="i i-s" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M9 5l7 7-7 7"/></svg></span>
+    </span></button>`;
 }
 
-/* ---------- render: home ---------- */
-function renderHome(){
-  document.getElementById('rate').value = DB.profile.rate;
-  const jobs = DB.jobs;
-  const sent = jobs.filter(x=>x.status==='sent');
-  const won  = jobs.filter(x=>x.status==='won');
-  const withC = jobs.filter(x=>x.cushion&&x.total);
-  const avg = withC.length ? Math.round(withC.reduce((s,x)=>s+x.cushion/x.total,0)/withC.length*100) : 0;
-  document.getElementById('stats').innerHTML = `
-    <div class="stat"><div class="k">Out for bid</div><div class="v">${money(sent.reduce((s,x)=>s+x.total,0))}</div></div>
-    <div class="stat"><div class="k">Won</div><div class="v">${won.length}<span class="u">/${jobs.length}</span></div></div>
-    <div class="stat"><div class="k">Avg cushion</div><div class="v">${avg}<span class="u">%</span></div></div>`;
-  document.getElementById('jobCount').textContent = jobs.length ? jobs.length+' total' : '';
-  document.getElementById('jobs').innerHTML = jobs.length ? jobs.map(x=>`
-    <button class="job" onclick="openJob('${x.id}')">
-      <span class="jm">
-        <span class="jn">${esc(x.title)}</span>
-        <span class="js"><i class="dot d-${x.status}"></i><span class="txt">${esc(x.note||statusText(x))}</span></span>
-      </span>
-      <span class="ja ${x.status==='lost'?'dim':''}">${money(x.total)}</span>
-    </button>`).join('') : '<div class="empty">No jobs yet. Start an estimate above.</div>';
+/* ---------- QUOTES ---------- */
+let filter='all';
+function renderQuotes(){
+  const counts={all:DB.quotes.length};
+  Object.keys(STATUS).forEach(k=>counts[k]=DB.quotes.filter(q=>q.status===k).length);
+  document.getElementById('filters').innerHTML=
+    [['all','All']].concat(Object.keys(STATUS).map(k=>[k,STATUS[k].l]))
+    .map(([k,l])=>`<button class="fc ${filter===k?'on':''}" onclick="setFilter('${k}')">${l}<span class="c">${counts[k]||0}</span></button>`).join('');
+  const term=(document.getElementById('q').value||'').toLowerCase();
+  let list=DB.quotes.filter(q=>filter==='all'||q.status===filter);
+  if(term) list=list.filter(q=>(q.client+' '+q.job+' '+(q.addr||'')).toLowerCase().includes(term));
+  document.getElementById('quoteList').innerHTML = list.length
+    ? `<div class="list">${list.map(q=>{
+        const c=calc(q),s=STATUS[q.status];
+        return `<button class="row" onclick="openQuote('${q.id}')">
+          <span class="rm">
+            <span class="r1"><span class="cl">${esc(q.client)}</span>${pill(q.status)}</span>
+            <span class="jb">${esc(q.job)}${q.addr?' · '+esc(q.addr):''}</span>
+          </span>
+          <span class="rr">
+            <span class="amt ${q.status==='lost'?'dim':''}">${money(c.total)}</span>
+            <span class="meta">${esc(q.when||'')}</span>
+          </span></button>`;}).join('')}</div>`
+    : `<div class="empty"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg>Nothing matches that.</div>`;
 }
-const statusText = x => ({draft:'Draft',sent:'Sent',won:'Won',lost:'Lost'})[x.status]||'Draft';
-const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function setFilter(f){ filter=f; renderQuotes(); }
 
-/* ---------- render: type ---------- */
-function renderTypes(){
-  document.getElementById('types').innerHTML = Object.keys(T).map(id=>{
-    const t=T[id];
-    return `<button class="type" onclick="pick('${id}')">
-      <span class="emo">${t.emoji}</span>
-      <span class="tx"><span class="tn">${t.name}</span><span class="td">${t.desc}${t.checks?` · ${t.checks} checks`:''}</span></span>
-      <span class="chev">›</span>
-    </button>`;
-  }).join('');
+/* ---------- NEW ---------- */
+let newType='bathroom';
+function startNew(){
+  newType='bathroom';
+  ['n-client','n-job','n-addr','n-notes'].forEach(id=>document.getElementById(id).value='');
+  renderTypeGrid();
+  go('new');
+}
+function renderTypeGrid(){
+  document.getElementById('typeGrid').innerHTML=Object.keys(T).map(k=>{
+    const t=T[k];
+    return `<button class="tsel ${newType===k?'on':''}" onclick="pickType('${k}')">
+      <svg class="i i-l" viewBox="0 0 24 24">${ICON[t.icon]}</svg>
+      <span><span class="tn">${t.name}</span>${t.checks?`<span class="tc">${t.checks} checks</span>`:''}</span>
+    </button>`;}).join('');
+}
+function pickType(k){ newType=k; renderTypeGrid(); }
+function dictate(){
+  const n=document.getElementById('n-notes');
+  n.value=T[newType].ex; n.focus(); toast('Dictated — edit anything');
+}
+function createQuote(){
+  const g=id=>document.getElementById(id).value.trim();
+  if(!g('n-client')){ document.getElementById('n-client').focus(); toast('Who is it for?'); return; }
+  const t=T[newType];
+  const q={id:'q'+Math.random().toString(36).slice(2,9), client:g('n-client'),
+    job:g('n-job')||t.name+' job', addr:g('n-addr'), type:newType, notes:g('n-notes'),
+    status:'draft', when:'Started just now', rate:DB.profile.rate, cx:t.cx, buffer:true,
+    groups:JSON.parse(JSON.stringify(t.groups))};
+  DB.quotes.unshift(q); save();
+  openQuote(q.id);
 }
 
-/* ---------- render: flow screens ---------- */
-function renderConfirm(){
-  document.getElementById('confirm').innerHTML = T[E.type].confirm
-    .map(h=>`<div class="conf"><span class="ck">✓</span><span>${h}</span></div>`).join('');
+/* ---------- WORKSPACE ---------- */
+let cur=null, curTab='scope';
+function openQuote(id){
+  cur=DB.quotes.find(q=>q.id===id); if(!cur) return;
+  curTab='scope'; go('ws');
 }
-function renderQ(){
-  const q=T[E.type].q;
-  document.getElementById('qT').textContent=q.t;
-  document.getElementById('qH').textContent=q.h;
-  document.getElementById('qC').innerHTML=q.c.map(([l,s])=>
-    `<button class="chip" onclick="nav('s-prices')"><span class="cl">${l}</span><span class="cs">${s}</span></button>`).join('');
+function tab(t){
+  curTab=t;
+  document.querySelectorAll('.wt').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
+  document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.dataset.pane===t));
+  renderWs();
 }
-function renderPrices(){
-  document.getElementById('prices').innerHTML = E.mats.map((m,i)=>`
-    <div class="price">
-      <span class="px">
-        <span class="pn">${esc(m.name)}</span>
-        <span class="ps"><span class="src">${esc(m.src)}</span>${esc(m.when||'')}</span>
-      </span>
-      <input class="num" type="number" inputmode="decimal" value="${m.base}" onchange="setMat(${i},this.value)" aria-label="${esc(m.name)} price">
-    </div>`).join('');
-}
-function renderEst(){
-  const c=calc();
-  document.getElementById('estT').textContent = E.title || T[E.type].name;
-  document.getElementById('guardT').innerHTML = T[E.type].guard;
-  const g=document.getElementById('guard');
-  g.classList.toggle('off', !E.buffer);
-  document.getElementById('guardB').textContent = E.buffer?'Remove the buffer':'Add the buffer back';
+function renderWs(){
+  const q=cur, c=calc(q);
+  document.getElementById('wsTitle').textContent=q.client;
+  document.getElementById('wsSub').textContent=`${q.job}${q.addr?' · '+q.addr:''}`;
+  document.getElementById('tbTitle').textContent=q.client;
 
-  document.getElementById('laborK').textContent = `Labor · ${c.hours} hrs @ $${E.rate}`;
-  document.getElementById('laborV').textContent = money(c.labor);
-  document.getElementById('labor').innerHTML = E.labor.map((l,i)=>`
-    <div class="row">
-      <span class="l">${esc(l.name)}</span>
-      <span style="display:flex;align-items:center;gap:9px">
-        <input class="num sm" type="number" inputmode="numeric" value="${l.hours}" onchange="setHrs(${i},this.value)" aria-label="${esc(l.name)} hours">
-        <span class="a" style="width:66px;text-align:right">${money(l.hours*E.rate)}</span>
-      </span>
-    </div>`).join('');
+  /* --- SCOPE --- */
+  document.getElementById('paneScope').innerHTML =
+    (q.notes?`<div class="grp"><div class="grp-hd"><span class="t">Site visit notes</span></div>
+      <div style="padding:13px 15px;font:400 14px/1.55 'Archivo';color:var(--muted)">${esc(q.notes)}</div></div>`:'')
+    + q.groups.map((g,gi)=>`
+      <div class="grp">
+        <div class="grp-hd"><span class="t">${esc(g.n)}</span><span class="v">${money(groupTotal(q,g))}</span></div>
+        <div style="padding:11px 15px 4px"><span class="eyebrow">Labour</span></div>
+        ${g.labor.map(([n,h],i)=>`
+          <div class="li">
+            <span class="nm"><input value="${esc(n)}" onchange="editLabel(${gi},'labor',${i},this.value)" aria-label="Task name"></span>
+            <input class="num" type="number" inputmode="numeric" value="${h}" onchange="editHours(${gi},${i},this.value)" aria-label="Hours">
+            <span class="u">hrs</span>
+            <span class="amt">${money(h*q.rate)}</span>
+            <button class="x" onclick="delLine(${gi},'labor',${i})" aria-label="Remove"><svg class="i i-s" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          </div>`).join('')}
+        <button class="addline" onclick="addLine(${gi},'labor')"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add labour line</button>
+        <div style="padding:11px 15px 4px;border-top:1px solid var(--line)"><span class="eyebrow">Materials</span></div>
+        ${g.mats.map(([n,cst,src],i)=>`
+          <div class="li">
+            <span class="nm"><input value="${esc(n)}" onchange="editLabel(${gi},'mats',${i},this.value)" aria-label="Material name">
+              <span style="display:block;font:400 11.5px/1 'Archivo';color:var(--ghost);margin-top:5px">${esc(src||'')}</span></span>
+            <input class="num" type="number" inputmode="decimal" value="${cst}" onchange="editCost(${gi},${i},this.value)" aria-label="Cost">
+            <span class="amt">${money(cst*(1+mkFor(cst)))}</span>
+            <button class="x" onclick="delLine(${gi},'mats',${i})" aria-label="Remove"><svg class="i i-s" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
+          </div>`).join('')}
+        <button class="addline" onclick="addLine(${gi},'mats')"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add material</button>
+      </div>`).join('')
+    + `<button class="btn gh full" style="margin-top:4px" onclick="addGroup()">
+        <svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add a section</button>`;
 
-  document.getElementById('matV').textContent = money(c.mats);
-  document.getElementById('mats').innerHTML = E.mats.map(m=>{
-    const k=markup(m.base);
-    return `<div class="row"><span class="l">${esc(m.name)}</span>
-      <span class="a">${money(m.base*(1+k))}<span class="s">${money(m.base)} +${Math.round(k*100)}%</span></span></div>`;
-  }).join('');
+  /* --- COSTS --- */
+  const marginOff = c.margin < DB.profile.target;
+  document.getElementById('paneCosts').innerHTML=`
+    ${q.buffer?`<div class="flag"><svg class="i" viewBox="0 0 24 24"><path d="M12 9v5M12 17.5v.01"/><path d="M10.3 3.9L2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+      <span class="ft"><b>Buffer on.</b> Older place with unknowns behind the walls — contingency is at <b>25%</b>.
+      <button class="mini" style="padding:6px 0;margin-top:4px;display:block" onclick="toggleBuffer()">Take the buffer off</button></span></div>`
+    :`<div class="flag off"><svg class="i" viewBox="0 0 24 24"><path d="M12 9v5M12 17.5v.01"/><path d="M10.3 3.9L2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+      <span class="ft">Buffer off — contingency <b>15%</b>. Surprises come out of your pocket.
+      <button class="mini" style="padding:6px 0;margin-top:4px;display:block" onclick="toggleBuffer()">Put it back on</button></span></div>`}
 
-  document.getElementById('cx').innerHTML = CX.map(([v,n])=>
-    `<button class="cx ${E.cx===v?'on':''}" onclick="setCx(${v})"><span class="cn">${n}</span><span class="cv">×${v}</span></button>`).join('');
-  document.getElementById('cxA').textContent = money(c.cxAdd);
-  document.getElementById('cP').textContent = c.pct;
-  document.getElementById('cA').textContent = money(c.cont);
-  bar(c);
-  draftSave();
+    <div class="grp"><div class="grp-hd"><span class="t">Labour</span><span class="v">${money(c.labor)}</span></div>
+      <div style="padding:4px 15px 13px">
+        <div class="kv"><span class="k">${c.hours} hrs @ $${q.rate}/hr</span><span class="v">${money(c.labor)}</span></div>
+      </div></div>
+
+    <div class="grp"><div class="grp-hd"><span class="t">Materials</span><span class="v">${money(c.matSell)}</span></div>
+      <div style="padding:4px 15px 13px">
+        <div class="kv"><span class="k">What you pay</span><span class="v">${money(c.matCost)}</span></div>
+        <div class="kv"><span class="k">Markup added<span class="sub">under $100 +${Math.round(DB.profile.mk[0]*100)}% · to $1k +${Math.round(DB.profile.mk[1]*100)}% · over +${Math.round(DB.profile.mk[2]*100)}%</span></span>
+          <span class="v">${money(c.matSell-c.matCost)}</span></div>
+      </div></div>
+
+    <div class="grp"><div class="grp-hd"><span class="t">Protection</span><span class="v">${money(c.cxAdd+c.cont)}</span></div>
+      <div style="padding:12px 15px 15px">
+        <span class="eyebrow">How complex is this job?</span>
+        <div class="seg">${CX.map(([v,n])=>`<button class="sg ${q.cx===v?'on':''}" onclick="setCx(${v})"><span class="a">${n}</span><span class="b">×${v}</span></button>`).join('')}</div>
+        <div style="margin-top:14px">
+          <div class="kv"><span class="k">Complexity uplift</span><span class="v">${money(c.cxAdd)}</span></div>
+          <div class="kv"><span class="k">Contingency ${c.pct}%<span class="sub">shown to the client · unused portion returned</span></span><span class="v">${money(c.cont)}</span></div>
+        </div>
+      </div></div>
+
+    <div class="grp"><div class="grp-hd"><span class="t">Where you land</span></div>
+      <div style="padding:4px 15px 15px">
+        <div class="kv"><span class="k">Your cost</span><span class="v">${money(c.cost)}</span></div>
+        <div class="kv big"><span class="k">Client pays</span><span class="v">${money(c.total)}</span></div>
+        <div class="kv"><span class="k">Your profit</span><span class="v">${money(c.profit)}</span></div>
+        <div class="kv"><span class="k"><b>Margin</b> — profit ÷ price<span class="sub">the number that decides if you eat</span></span>
+          <span class="v" style="color:${marginOff?'var(--warn)':'var(--ok-ink)'}">${c.margin}%</span></div>
+        <div class="kv"><span class="k">Markup — profit ÷ cost<span class="sub">the number you punch in</span></span>
+          <span class="v" style="color:var(--muted)">${c.markup}%</span></div>
+      </div></div>
+
+    ${marginOff?`<div class="flag"><svg class="i" viewBox="0 0 24 24"><path d="M12 9v5M12 17.5v.01"/><path d="M10.3 3.9L2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+      <span class="ft"><b>${c.margin}% margin</b> — under your ${DB.profile.target}% target. A ${Math.round(DB.profile.target)}% margin needs about a ${Math.round(DB.profile.target/(1-DB.profile.target/100))}% markup. One bad week and this one is underwater.</span></div>`
+    :`<div class="flag ok"><svg class="i" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+      <span class="ft"><b>${c.margin}% margin</b> — at or above your ${DB.profile.target}% target. This one holds up if it runs over.</span></div>`}`;
+
+  /* --- CLIENT (mobile pane) --- */
+  document.getElementById('paneClientM').innerHTML=sheetHTML(q)+
+    `<div class="madeby">Prepared with QuoteRight</div>`;
+
+  /* --- SIDE (desktop) --- */
+  document.getElementById('wsSide').innerHTML=`
+    <div class="grp" style="margin-bottom:12px">
+      <div class="grp-hd"><span class="t">Client pays</span>${pill(q.status)}</div>
+      <div style="padding:14px 15px">
+        <div style="font:600 30px/1 var(--mono);letter-spacing:-.03em">${money(c.total)}</div>
+        <div style="font:400 12.5px/1.5 'Archivo';color:var(--faint);margin-top:8px">
+          ${money(c.profit)} profit · <span style="color:${marginOff?'var(--warn)':'var(--ok-ink)'};font-weight:600">${c.margin}% margin</span></div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button class="btn org" style="flex:1" onclick="preview()">Preview &amp; send</button>
+        </div>
+        <button class="mini dn" style="margin-top:6px" onclick="saveDraft()">Save draft</button>
+      </div>
+    </div>
+    <div class="grp">
+      <div class="grp-hd"><span class="t">What they'll see</span>
+        <button class="mini" onclick="preview()">Full page</button></div>
+      <div style="padding:14px 15px">
+        ${clientItems(q).map(i=>`<div class="kv"><span class="k">${esc(i.n)}</span><span class="v">${money(i.a)}</span></div>`).join('')}
+        <div class="kv"><span class="k">Contingency</span><span class="v">${money(c.cont)}</span></div>
+        <div class="kv big"><span class="k">Total</span><span class="v">${money(c.total)}</span></div>
+      </div>
+    </div>`;
+
+  /* --- sticky bar (mobile) --- */
+  document.getElementById('abTotal').textContent=money(c.total);
+  document.getElementById('abSub').textContent=`${c.margin}% margin · ${money(c.profit)} profit`;
+  document.getElementById('abBtn').textContent = curTab==='client' ? 'Send quote' : 'Preview & send';
+  document.getElementById('abBtn').onclick = curTab==='client' ? sendQuote : preview;
 }
-function renderGates(){
-  const c=calc();
-  document.getElementById('gates').innerHTML = GATES.map(([p,s],i)=>`
-    <div class="gate"><div class="box" onclick="gate(this)" role="checkbox" aria-checked="false" tabindex="0"></div>
-    <div><span class="gp">${p}</span><span class="gs">${s(c)}</span></div></div>`).join('');
-  document.getElementById('sendB').disabled = true;
-  bar(c);
+
+/* ---------- scope editing ---------- */
+function touch(){ cur.when='Edited just now'; save(); renderWs(); }
+function editLabel(gi,kind,i,v){ cur.groups[gi][kind][i][0]=v.trim()||'Untitled'; touch(); }
+function editHours(gi,i,v){ cur.groups[gi].labor[i][1]=Math.max(0,parseFloat(v)||0); touch(); }
+function editCost(gi,i,v){ cur.groups[gi].mats[i][1]=Math.max(0,parseFloat(v)||0); touch(); }
+function delLine(gi,kind,i){ cur.groups[gi][kind].splice(i,1); touch(); toast('Line removed'); }
+function addLine(gi,kind){
+  if(kind==='labor') cur.groups[gi].labor.push(['New task',4]);
+  else cur.groups[gi].mats.push(['New material',100,'Your price']);
+  touch();
 }
+function addGroup(){ cur.groups.push({n:'New section',d:'',labor:[['New task',4]],mats:[]}); touch(); }
+function setCx(v){ cur.cx=v; touch(); }
+function toggleBuffer(){ cur.buffer=!cur.buffer; touch(); }
 
 /* ---------- client sheet ---------- */
-function renderSheet(e){
-  const c=calc(e), p=DB.profile, t=T[e.type];
-  const rate=e.rate;
-  // group labor into client-facing deliverables, with materials spread proportionally
-  const laborByName = Object.fromEntries(e.labor.map(l=>[l.name,l.hours*rate]));
-  const totalLabor = c.labor || 1;
-  let matsWithMarkup = 0; e.mats.forEach(m=>matsWithMarkup += m.base*(1+markup(m.base)));
-  const uplift = (c.cxAdd)/(c.labor+c.mats||1); // spread complexity across the work
-  const items = t.groups.map(([name,desc,names])=>{
-    const lab = names.reduce((s,n)=>s+(laborByName[n]||0),0);
-    const share = lab/totalLabor;
-    const amt = (lab + matsWithMarkup*share) * (1+uplift);
-    return {name,desc,amt};
-  });
-  const itemsSum = items.reduce((s,i)=>s+i.amt,0);
-  const scale = (c.total - c.cont)/(itemsSum||1);
-  items.forEach(i=>i.amt*=scale);
-  // The client reads this sheet — displayed lines must add up to the displayed
-  // total exactly, so round each line and absorb the remainder in the largest.
-  items.forEach(i=>i.amt=Math.round(i.amt));
-  const target = Math.round(c.total) - Math.round(c.cont);
-  const drift = target - items.reduce((s,i)=>s+i.amt,0);
-  if(drift && items.length){
-    const big = items.reduce((a,b)=>b.amt>a.amt?b:a, items[0]);
-    big.amt += drift;
-  }
-
-  const num = e.num || ('2026-' + String(DB.seq).padStart(4,'0'));
-  const today = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  document.getElementById('sheet').innerHTML = `
+// Single source of truth for the client-facing breakdown. Displayed lines are
+// rounded and must add up to the displayed total exactly — a quote that doesn't
+// foot looks amateur, so any drift is absorbed by the largest line.
+function clientItems(q){
+  const c=calc(q);
+  const uplift = c.sub ? c.cxAdd/c.sub : 0;
+  const items=q.groups.map(g=>({n:g.n, d:g.d||'', a:groupTotal(q,g)*(1+uplift)}));
+  const target=Math.round(c.total)-Math.round(c.cont);
+  const sum=items.reduce((s,i)=>s+i.a,0)||1;
+  items.forEach(i=>i.a=Math.round(i.a*target/sum));
+  const drift=target-items.reduce((s,i)=>s+i.a,0);
+  if(drift&&items.length) items.reduce((a,b)=>b.a>a.a?b:a,items[0]).a+=drift;
+  return items;
+}
+function sheetHTML(q){
+  const c=calc(q), p=DB.profile, t=T[q.type];
+  const items=clientItems(q);
+  const num=q.num||('2026-'+String(DB.seq).padStart(4,'0'));
+  const today=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  return `<div class="sheet">
     <div class="sh-top">
       <div><div class="biz">${esc(p.biz)}</div>
-        <div class="bizl">Lic. #${esc(p.lic)} · ${esc(p.phone)}<br>${esc(p.email)}</div></div>
-      <div><div class="est-k">ESTIMATE</div><div class="est-n">#${esc(num)}</div><div class="est-n" style="color:var(--faint)">${today}</div></div>
+        <div class="sm">Lic. #${esc(p.lic)} · ${esc(p.phone)}<br>${esc(p.email)}</div></div>
+      <div class="rt"><div class="k">ESTIMATE</div><div class="v">#${esc(num)}</div>
+        <div class="v" style="color:var(--faint)">${today}</div></div>
     </div>
-    <div class="blk"><div class="blk-k">PREPARED FOR</div>
-      <div class="blk-v">${e.client?`<b>${esc(e.client)}</b>`:'<span style="color:var(--site-ink);font-weight:600">Add a client name →</span>'}${e.addr?'<br>'+esc(e.addr):''}</div></div>
-    <div class="blk"><div class="blk-k">THE WORK</div><div class="blk-v">${esc(e.desc||t.scope)}</div></div>
-    <div class="blk"><div class="blk-k">WHAT'S INCLUDED</div>
-      ${items.map(i=>`<div class="item"><div><div class="it-n">${esc(i.name)}</div><div class="it-d">${esc(i.desc)}</div></div><div class="it-a">${money(i.amt)}</div></div>`).join('')}
-      <div class="item"><div><div class="it-n">Contingency allowance</div>
-        <div class="it-d">Covers surprises behind the walls. <b>Any unused portion comes back to you.</b></div></div>
-        <div class="it-a">${money(c.cont)}</div></div>
+    <div class="sh-blk"><div class="k">PREPARED FOR</div>
+      <div class="v"><b>${esc(q.client)}</b>${q.addr?'<br>'+esc(q.addr):''}</div></div>
+    <div class="sh-blk"><div class="k">THE WORK</div><div class="v">${esc(q.notes||t.scope)}</div></div>
+    <div class="sh-blk"><div class="k">WHAT'S INCLUDED</div>
+      ${items.map(i=>`<div class="sh-it"><div><div class="n">${esc(i.n)}</div>${i.d?`<div class="d">${esc(i.d)}</div>`:''}</div><div class="a">${money(i.a)}</div></div>`).join('')}
+      <div class="sh-it"><div><div class="n">Contingency allowance</div>
+        <div class="d">Covers surprises behind the walls. <b>Any unused portion comes back to you.</b></div></div>
+        <div class="a">${money(c.cont)}</div></div>
     </div>
-    <div class="tot"><span class="tot-k">TOTAL</span><span class="tot-v">${money(c.total)}</span></div>
-    <div class="terms">Valid 30 days · 30% deposit to schedule</div>
+    <div class="sh-tot"><span class="k">TOTAL</span><span class="v">${money(c.total)}</span></div>
+    <div class="sh-terms">Valid 30 days · 30% deposit to schedule</div>
     <div style="margin-top:16px">
-      <div class="vprop"><span class="vi">✓</span><div><div class="vn">${esc(p.warranty)}</div><div class="vd">In writing, on top of manufacturer coverage.</div></div></div>
-      <div class="vprop"><span class="vi">✓</span><div><div class="vn">Timeline: 3–4 weeks</div><div class="vd">One crew, start to finish. Photo updates as we go.</div></div></div>
-      <div class="vprop"><span class="vi">✓</span><div><div class="vn">Licensed &amp; insured</div><div class="vd">$2M liability. Certificate on request.</div></div></div>
-    </div>`;
+      <div class="vp"><svg class="i i-s" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><div><div class="n">${esc(p.warranty)}</div><div class="d">In writing, on top of manufacturer coverage.</div></div></div>
+      <div class="vp"><svg class="i i-s" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><div><div class="n">Timeline: ${esc(p.timeline)}</div><div class="d">One crew, start to finish. Photo updates as we go.</div></div></div>
+      <div class="vp"><svg class="i i-s" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><div><div class="n">Licensed &amp; insured</div><div class="d">$2M liability. Certificate on request.</div></div></div>
+    </div>
+  </div>`;
+}
+function preview(){
+  document.getElementById('prevSub').textContent=`${cur.client} · ${cur.job}`;
+  document.getElementById('prevSheet').innerHTML=sheetHTML(cur);
+  go('preview');
+}
+function saveDraft(){ cur.status='draft'; cur.when='Saved just now'; save(); toast('Saved as a draft'); go('today'); }
+function sendQuote(){
+  DB.seq++; cur.num='2026-'+String(DB.seq).padStart(4,'0');
+  cur.status='sent'; cur.when='Sent just now'; cur.days=0; save();
+  toast('Sent to '+cur.client); go('today');
 }
 
-/* ---------- job detail ---------- */
-let viewingJob = null;
-function openJob(id){
-  const x = DB.jobs.find(j=>j.id===id); if(!x) return;
-  viewingJob = x;
-  document.getElementById('jobT').textContent = x.title;
-  document.getElementById('jobS').textContent = (x.client?x.client+' · ':'') + (T[x.type]?T[x.type].name:'Job');
-  document.getElementById('jobSum').innerHTML = `
-    <div class="row"><span class="l">Client pays</span><span class="a">${money(x.total)}</span></div>
-    <div class="row"><span class="l" style="color:var(--ok-ink)">Built-in cushion</span><span class="a" style="color:var(--ok-ink)">${money(x.cushion||0)}</span></div>`;
-  const opts=[['draft','Still a draft'],['sent','Sent to client'],['won','Won it'],['lost','Lost it']];
-  document.getElementById('jobStatus').innerHTML = opts.map(([k,l])=>`
-    <button class="chip" onclick="setStatus('${x.id}','${k}')" style="margin-bottom:8px">
-      <span class="cl" style="display:flex;align-items:center;gap:9px"><i class="dot d-${k}" style="width:8px;height:8px;border-radius:50%"></i>${l}</span>
-      <span class="cs">${x.status===k?'✓ current':''}</span></button>`).join('');
-  document.getElementById('resumeB').hidden = !x.est;
-  nav('s-job');
-}
-function setStatus(id,st){
-  const x=DB.jobs.find(j=>j.id===id); if(!x) return;
-  undoState={type:'status',id,prev:x.status,prevNote:x.note};
-  x.status=st; x.note=statusText(x); save(); openJob(id); toast('Marked '+statusText(x));
-}
-function resume(){
-  if(!viewingJob||!viewingJob.est) return;
-  E = JSON.parse(JSON.stringify(viewingJob.est));
-  nav('s-est');
-}
-function openSheet(){
-  const e = E || (viewingJob && viewingJob.est);
-  if(!e){ toast('No estimate on this one yet'); return; }
-  renderSheet(e); nav('s-sheet');
-}
-function shareQuote(){
-  const e = E || (viewingJob && viewingJob.est); if(!e) return;
-  const c=calc(e), p=DB.profile;
-  const text = `${e.title||'Estimate'} — ${p.biz}\n`
-    + `Prepared for ${e.client||'you'}\n\n`
-    + `Total: ${money(c.total)}\n`
-    + `Includes a ${money(c.cont)} contingency allowance — any unused portion comes back to you.\n\n`
-    + `${p.warranty}. Valid 30 days.\n${p.phone} · ${p.email}`;
-  if(navigator.share){ navigator.share({title:e.title||'Estimate', text}).catch(()=>{}); return; }
-  if(navigator.clipboard){ navigator.clipboard.writeText(text).then(()=>toast('Quote copied — paste it in a text')).catch(()=>toast('Could not copy')); return; }
-  toast('Sharing not supported here');
-}
-
-/* ---------- setup screen ---------- */
-const ROUND=[[1,'Exact','$19,495 — every dollar shown'],[25,'Nearest $25','$19,500 — calculated, not robotic'],[100,'Nearest $100','$19,500 — clean and confident']];
-function renderSet(){
+/* ---------- settings ---------- */
+function renderSettings(){
   const p=DB.profile;
-  document.getElementById('setRate').value=p.rate;
-  document.getElementById('setBiz').value=p.biz;
-  document.getElementById('setLic').value=p.lic;
-  document.getElementById('setPhone').value=p.phone;
-  document.getElementById('setEmail').value=p.email;
-  document.getElementById('setWarranty').value=p.warranty;
-  const mk=p.mk||[.40,.30,.20];
-  const bands=[['Under $100',0],['$100 – $1,000',1],['Over $1,000',2]];
-  document.getElementById('setMarkup').innerHTML=bands.map(([l,i])=>`
-    <div class="row"><span class="l">${l}</span>
-      <span style="display:flex;align-items:center;gap:7px">
-        <span style="font:400 14px/1 var(--mono);color:var(--faint)">+</span>
-        <input class="num sm" type="number" inputmode="numeric" value="${Math.round(mk[i]*100)}" onchange="setMk(${i},this.value)" aria-label="${l} markup">
-        <span style="font:400 14px/1 var(--mono);color:var(--faint)">%</span>
-      </span></div>`).join('');
-  document.getElementById('setRound').innerHTML=ROUND.map(([v,l])=>`
-    <button class="chip" onclick="setRound(${v})" style="margin-bottom:8px">
-      <span class="cl">${l}</span><span class="cs">${(p.round||25)===v?'✓ using':''}</span></button>`).join('');
-  const cur=ROUND.find(r=>r[0]===(p.round||25));
-  document.getElementById('roundHint').textContent = cur?cur[2]:'';
+  document.getElementById('s-rate').value=p.rate;
+  document.getElementById('s-target').value=p.target;
+  ['biz','lic','phone','email','warranty','timeline'].forEach(k=>document.getElementById('s-'+k).value=p[k]);
+  document.getElementById('s-markup').innerHTML=[['Under $100',0],['$100 – $1,000',1],['Over $1,000',2]]
+    .map(([l,i])=>`<div class="kv"><span class="k">${l}</span>
+      <span style="display:flex;align-items:center;gap:7px"><span class="k">+</span>
+      <input class="num" type="number" inputmode="numeric" value="${Math.round(p.mk[i]*100)}" onchange="setMk(${i},this.value)" aria-label="${l} markup"><span class="k">%</span></span></div>`).join('');
+  document.getElementById('s-round').innerHTML=ROUND.map(([v,l,eg])=>`
+    <button class="kv" style="width:100%;text-align:left" onclick="setRound(${v})">
+      <span class="k">${l}<span class="sub">${eg}</span></span>
+      <span class="v">${(p.round||25)===v?'<span style="color:var(--ok-ink)">✓</span>':''}</span></button>`).join('');
+  document.getElementById('railName').textContent=p.name.split(' ')[0]+' '+(p.name.split(' ')[1]||'')[0]+'.';
+  document.getElementById('menuName').textContent=p.name;
+  document.getElementById('menuBiz').textContent=p.biz;
 }
-function setMk(i,v){ const mk=(DB.profile.mk||[.40,.30,.20]).slice(); mk[i]=Math.max(0,parseFloat(v)||0)/100; DB.profile.mk=mk; save(); renderSet(); }
-function setRound(v){ DB.profile.round=v; save(); renderSet(); toast('Totals show '+(v===1?'exact':'to the nearest $'+v)); }
-function setProfile(){
-  const g=id=>document.getElementById(id).value.trim();
-  Object.assign(DB.profile,{biz:g('setBiz'),lic:g('setLic'),phone:g('setPhone'),email:g('setEmail'),warranty:g('setWarranty')});
-  save();
-}
-function resetDemo(){
-  undoState={type:'reset',prev:JSON.parse(JSON.stringify(DB))};
-  DB=seed(); save(); renderHome(); renderSet(); toast('Demo data reset');
-}
+function setRate(v){ DB.profile.rate=Math.max(0,parseFloat(v)||0);
+  DB.quotes.forEach(q=>{ if(q.status==='draft'||q.status==='ready') q.rate=DB.profile.rate; });
+  if(cur) cur.rate=DB.profile.rate; save(); renderSettings(); toast('Rate updated on open quotes'); }
+function setTarget(v){ DB.profile.target=Math.max(0,parseFloat(v)||0); save(); }
+function setMk(i,v){ DB.profile.mk[i]=Math.max(0,parseFloat(v)||0)/100; save(); renderSettings(); }
+function setRound(v){ DB.profile.round=v; save(); renderSettings(); toast('Totals show '+(v===1?'exact':'to the nearest $'+v)); }
+function setProfile(){ const g=id=>document.getElementById('s-'+id).value.trim();
+  ['biz','lic','phone','email','warranty','timeline'].forEach(k=>DB.profile[k]=g(k)); save(); renderSettings(); }
+function resetDemo(){ DB=seed(); save(); renderSettings(); toast('Demo data reset'); go('today'); }
 
-/* ---------- edits ---------- */
-function setRate(v){
-  DB.profile.rate = Math.max(0,parseFloat(v)||0);
-  if(E) E.rate=DB.profile.rate;
-  save();
-  const a=document.getElementById('rate'), b=document.getElementById('setRate');
-  if(a) a.value=DB.profile.rate; if(b) b.value=DB.profile.rate;
-  renderHome();
-}
-function setHrs(i,v){ E.labor[i].hours = Math.max(0,parseFloat(v)||0); renderEst(); }
-function setMat(i,v){ E.mats[i].base = Math.max(0,parseFloat(v)||0); renderPrices(); draftSave(); }
-function setCx(v){ E.cx=v; renderEst(); }
-function toggleBuffer(){ E.buffer=!E.buffer; renderEst(); }
-function note(id){ document.getElementById(id).classList.toggle('show'); }
-function gate(box){
-  const on = box.classList.toggle('on');
-  box.textContent = on?'✓':''; box.setAttribute('aria-checked',on);
-  const all=[...document.querySelectorAll('#gates .box')].every(b=>b.classList.contains('on'));
-  document.getElementById('sendB').disabled=!all;
-}
+/* ---------- chrome ---------- */
+let toastT=null;
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.classList.add('on');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),2600); }
+function openMenu(){ document.getElementById('menu').classList.add('on'); }
+function closeMenu(){ document.getElementById('menu').classList.remove('on'); }
 
-/* ---------- flow ---------- */
-function newEstimate(){ renderTypes(); nav('s-type'); }
-function pick(id){
-  E = blank(id);
-  document.getElementById('f-client').value='';
-  document.getElementById('f-title').value=T[id].name;
-  document.getElementById('f-addr').value='';
-  document.getElementById('f-desc').value='';
-  E.title=T[id].name;
-  nav('s-talk');
+/* ---------- router ---------- */
+const VIEWS=['today','quotes','new','ws','preview','settings'];
+const TITLES={new:'New quote',preview:'Preview',settings:'Settings',quotes:'Quotes'};
+const ROOT=['today','quotes'];
+let view='today', trail=[];
+function go(v,noPush){
+  if(!noPush && view!==v){ if(ROOT.includes(v)) trail=[]; else trail.push(view); }
+  view=v;
+  VIEWS.forEach(k=>document.getElementById('v-'+k).hidden = k!==v);
+  const isRoot=ROOT.includes(v);
+  document.getElementById('backBtn').hidden=isRoot;
+  document.getElementById('tbBrand').hidden=!isRoot;
+  const h2=document.getElementById('tbTitle');
+  h2.hidden=isRoot; if(!isRoot) h2.textContent=TITLES[v]||(cur?cur.client:'');
+  document.getElementById('tb-today').classList.toggle('on',v==='today');
+  document.getElementById('tb-quotes').classList.toggle('on',v==='quotes');
+  document.getElementById('nv-today').classList.toggle('on',v==='today');
+  document.getElementById('nv-quotes').classList.toggle('on',v==='quotes');
+  document.getElementById('tabbar').style.display = (v==='ws')?'none':'';
+  document.getElementById('actbar').classList.toggle('on', v==='ws');
+  if(v==='today') renderToday();
+  if(v==='quotes') renderQuotes();
+  if(v==='ws'){ tab(curTab); }
+  if(v==='settings') renderSettings();
+  window.scrollTo(0,0);
 }
-function dictate(){ const d=document.getElementById('f-desc'); d.value=T[E.type].ex; draftSave(); d.focus(); }
-function grabFields(){
-  if(!E) return;
-  E.client=document.getElementById('f-client').value.trim();
-  E.title =document.getElementById('f-title').value.trim()||T[E.type].name;
-  E.addr  =document.getElementById('f-addr').value.trim();
-  E.desc  =document.getElementById('f-desc').value.trim();
-}
-function draftSave(){
-  if(!E) return;
-  grabFields();
-  const c=calc();
-  let x = DB.jobs.find(j=>j.id===E.id);
-  const title = E.client ? `${E.client.split(' ').slice(-1)[0]} — ${T[E.type].name.replace(' reno','').toLowerCase()}` : E.title;
-  if(!x){ x={id:E.id}; DB.jobs.unshift(x); }
-  Object.assign(x,{title, client:E.client, type:E.type, status:E.status,
-    total:c.total, cushion:c.cushion, note:E.status==='draft'?'Draft · in progress':statusText(x), est:JSON.parse(JSON.stringify(E)), num:E.num});
-  save();
-}
-function send(){
-  grabFields();
-  const c=calc();
-  DB.seq++;
-  E.num = '2026-'+String(DB.seq).padStart(4,'0');
-  E.status='sent';
-  draftSave();
-  const x=DB.jobs.find(j=>j.id===E.id); if(x){ x.status='sent'; x.note='Sent just now'; }
-  save();
-  document.getElementById('sentT').textContent = 'Sent to ' + (E.client||'your client') + '.';
-  nav('s-sent');
-}
-function home(){ E=null; viewingJob=null; renderHome(); nav('s-home'); }
-
-/* ---------- toast / undo ---------- */
-let toastTimer=null;
-function toast(msg,undoable){
-  const t=document.getElementById('toast');
-  document.getElementById('toastT').textContent=msg;
-  document.getElementById('toastB').hidden = !undoState;
-  t.classList.add('show');
-  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),4000);
-}
-function undo(){
-  if(!undoState) return;
-  if(undoState.type==='status'){
-    const x=DB.jobs.find(j=>j.id===undoState.id);
-    if(x){ x.status=undoState.prev; x.note=undoState.prevNote; save(); openJob(x.id); }
-  }
-  if(undoState.type==='reset'){ DB=undoState.prev; save(); renderHome(); renderSet(); }
-  undoState=null;
-  document.getElementById('toast').classList.remove('show');
-}
-
-/* ---------- nav ---------- */
-const STEPS={'s-type':1,'s-talk':2,'s-confirm':3,'s-q':4,'s-prices':5,'s-est':6};
-const BACK={'s-type':'s-home','s-talk':'s-type','s-confirm':'s-talk','s-q':'s-confirm','s-prices':'s-q','s-est':'s-prices','s-check':'s-est','s-sent':'s-home','s-job':'s-home','s-set':'s-home','s-sheet':null};
-const BAR=['s-est','s-check'];
-const TABS=['s-home','s-set'];              // top-level screens show the tab bar
-let cur='s-home', sheetFrom=null;
-
-function nav(id){
-  if(cur==='s-talk') draftSave();
-  if(id==='s-sheet') sheetFrom=cur;
-  document.getElementById(cur).classList.remove('active');
-  document.getElementById(id).classList.add('active');
-  cur=id;
-  document.getElementById('backBtn').hidden = TABS.includes(id);
-  const dot=document.getElementById('stepDot');
-  if(STEPS[id]){ dot.hidden=false; dot.textContent=STEPS[id]+'/6'; } else dot.hidden=true;
-  document.getElementById('bar').classList.toggle('show', BAR.includes(id));
-  // tab bar and the money bar never share the bottom
-  document.getElementById('tabs').classList.toggle('show', TABS.includes(id));
-  document.getElementById('tab-home').classList.toggle('on', id==='s-home');
-  document.getElementById('tab-set').classList.toggle('on', id==='s-set');
-  document.body.classList.toggle('has-bottom', TABS.includes(id)||BAR.includes(id));
-  if(id==='s-confirm') renderConfirm();
-  if(id==='s-q') renderQ();
-  if(id==='s-prices') renderPrices();
-  if(id==='s-est') renderEst();
-  if(id==='s-check') renderGates();
-  if(id==='s-home') renderHome();
-  if(id==='s-set') renderSet();
-  document.querySelector('main').scrollTop=0; window.scrollTo(0,0);
-}
-function tabTo(id){ if(id==='s-home'){ E=null; viewingJob=null; } nav(id); }
-function back(){
-  if(cur==='s-sheet'){ nav(sheetFrom||'s-home'); return; }
-  const b=BACK[cur]; if(b) nav(b); else home();
-}
-function bar(c){
-  document.getElementById('barV').textContent=money(c.total);
-  document.getElementById('barC').textContent=money(c.cushion)+' · '+c.pctCushion+'%';
-}
+function back(){ const p=trail.pop(); go(p||'today',true); }
 
 /* ---------- boot ---------- */
-(function boot(){
-  const h=new Date().getHours();
-  document.getElementById('greet').textContent = (h<12?'Morning':h<17?'Afternoon':'Evening')+', Dave.';
-  renderHome();
-  document.getElementById('s-home').classList.add('active');
-  document.getElementById('tabs').classList.add('show');
-  document.getElementById('tab-home').classList.add('on');
-})();
+renderSettings();
+go('today',true);
 </script>
 </body>
 </html>
