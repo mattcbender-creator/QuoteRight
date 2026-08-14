@@ -759,7 +759,10 @@ const STATUS = {
 };
 const CX = [[1,'Standard','New build, easy access'],[1.25,'Medium','80s–2000s, some tight spots'],
             [1.5,'High','Pre-1980, hidden-issue risk'],[1.75,'Extreme','Heritage or structural unknowns']];
-const ROUND=[[100,'Nearest $100','$19,500'],[10,'Nearest $10','$19,500']];
+// Round finer on a small job (a $50 swing matters at $1,200) and coarser on
+// a big one (a $50 swing is noise at $50,000) — a quote isn't a bill.
+const ROUND=[['auto','Smart (recommended)','nearest $10 under $2k, nearest $100 above'],
+             [100,'Always nearest $100','$19,500'],[10,'Always nearest $10','$19,500']];
 
 /* ---------- store ---------- */
 const KEY='quoteright_poc_v4';
@@ -780,7 +783,7 @@ function seed(){
     profile:{name:'Dave Kowalczyk', biz:'Kowalczyk Contracting', lic:'CB-448192',
       phone:'(216) 555-0148', email:'dave@kowalczykcontracting.com',
       warranty:'2-year workmanship warranty', timeline:'3–4 weeks',
-      rate:95, mk:[.40,.30,.20], round:100, target:20},
+      rate:95, mk:[.40,.30,.20], round:'auto', target:20},
     quotes:[
       mk({client:'Sarah Henderson', job:'Main bathroom gut', addr:'1418 Ridgewood Ave', type:'bathroom', status:'draft', when:'Started yesterday'}),
       mk({client:'Pete Kowalski', job:'Backyard deck', addr:'22 Linden Ct', type:'deck', status:'draft', when:'2 sections left'}),
@@ -799,7 +802,11 @@ const save=()=>{ try{ localStorage.setItem(KEY,JSON.stringify(DB)); }catch(e){} 
 /* ---------- money ---------- */
 const money=n=>'$'+Math.round(n).toLocaleString('en-US');
 const mkFor=b=>b<100?DB.profile.mk[0]:b<=1000?DB.profile.mk[1]:DB.profile.mk[2];
-const roundTo=n=>{const s=DB.profile.round||25;return s<=1?Math.round(n):Math.round(n/s)*s;};
+const roundTo=n=>{
+  const s=DB.profile.round||'auto';
+  const step = s==='auto' ? (n<2000?10:100) : s;
+  return Math.round(n/step)*step;
+};
 function calc(q){
   let labor=0,hours=0,matCost=0,matSell=0;
   q.groups.forEach(g=>{
@@ -1275,9 +1282,9 @@ function renderSettings(){
       <span style="display:flex;align-items:center;gap:7px"><span class="k">+</span>
       <input class="num" type="number" inputmode="numeric" value="${Math.round(p.mk[i]*100)}" onchange="setMk(${i},this.value)" aria-label="${l} markup"><span class="k">%</span></span></div>`).join('');
   document.getElementById('s-round').innerHTML=ROUND.map(([v,l,eg])=>`
-    <button class="kv" style="width:100%;text-align:left" onclick="setRound(${v})">
+    <button class="kv" style="width:100%;text-align:left" onclick="setRound('${v}')">
       <span class="k">${l}<span class="sub">${eg}</span></span>
-      <span class="v">${(p.round||25)===v?'<span style="color:var(--ok-ink)">✓</span>':''}</span></button>`).join('');
+      <span class="v">${(p.round||'auto')===v?'<span style="color:var(--ok-ink)">✓</span>':''}</span></button>`).join('');
   document.getElementById('railName').textContent=p.name.split(' ')[0]+' '+(p.name.split(' ')[1]||'')[0]+'.';
   document.getElementById('menuName').textContent=p.name;
   document.getElementById('menuBiz').textContent=p.biz;
@@ -1287,7 +1294,11 @@ function setRate(v){ DB.profile.rate=Math.max(0,parseFloat(v)||0);
   if(cur) cur.rate=DB.profile.rate; save(); renderSettings(); toast('Rate updated on open quotes'); }
 function setTarget(v){ DB.profile.target=Math.max(0,parseFloat(v)||0); save(); }
 function setMk(i,v){ DB.profile.mk[i]=Math.max(0,parseFloat(v)||0)/100; save(); renderSettings(); }
-function setRound(v){ DB.profile.round=v; save(); renderSettings(); toast('Totals show '+(v===1?'exact':'to the nearest $'+v)); }
+function setRound(v){
+  DB.profile.round = v==='auto' ? 'auto' : Number(v);
+  save(); renderSettings();
+  toast('Totals '+(v==='auto'?'use smart rounding':'round to the nearest $'+v));
+}
 function setProfile(){ const g=id=>document.getElementById('s-'+id).value.trim();
   ['biz','lic','phone','email','warranty','timeline'].forEach(k=>DB.profile[k]=g(k)); save(); renderSettings(); }
 function resetDemo(){ DB=seed(); save(); renderSettings(); toast('Demo data reset'); go('today'); }
