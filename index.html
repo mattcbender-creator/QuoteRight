@@ -301,6 +301,13 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
   display:flex;align-items:center;justify-content:center;margin:-4px -4px 0 0}
 .aibanner .x:hover{background:rgba(255,255,255,.55)}
 
+.qty{display:flex;align-items:center;gap:2px;flex-shrink:0;background:var(--panel);
+  border:1.5px solid var(--line);border-radius:var(--r-s)}
+.qty button{width:34px;height:42px;font:600 17px/1 'Archivo';color:var(--muted);
+  display:flex;align-items:center;justify-content:center}
+.qty button:active{background:var(--line)}
+.qty b{min-width:24px;text-align:center;font:600 14.5px/1 var(--mono)}
+
 .ai-note{display:flex;align-items:center;gap:6px;font:600 11.5px/1 'Archivo';color:var(--blue);margin-bottom:14px}
 .ai-note svg{width:13px;height:13px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
@@ -605,6 +612,11 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
           <div class="eyebrow" style="margin-bottom:14px">Totals are shown</div>
           <div id="s-round"></div>
         </div>
+        <div class="form" style="margin-bottom:12px">
+          <div class="eyebrow" style="margin-bottom:14px">Your price list</div>
+          <div id="s-book"></div>
+          <input type="file" id="bookFile" accept=".xlsx" hidden onchange="importBook(this)">
+        </div>
         <div class="form">
           <div class="eyebrow" style="margin-bottom:14px">On every client quote</div>
           <div class="fld"><label for="s-biz">Business name</label><input id="s-biz" onchange="setProfile()"></div>
@@ -808,28 +820,169 @@ const roundTo=n=>{
   return Math.round(n/step)*step;
 };
 function calc(q){
-  let labor=0,hours=0,matCost=0,matSell=0;
+  let labor=0,hours=0,matCost=0,matSell=0,units=0,unitCount=0;
   q.groups.forEach(g=>{
     g.labor.forEach(([,h])=>{hours+=h;labor+=h*q.rate;});
     g.mats.forEach(([,c])=>{matCost+=c;matSell+=c*(1+mkFor(c));});
+    // Unit-price items come from an imported price list: the number is an
+    // all-in installed price the contractor already set, so no markup or
+    // hourly rate is applied on top of it.
+    (g.units||[]).forEach(([,qty,p])=>{units+=qty*p;unitCount+=qty;});
   });
-  const sub=labor+matSell;
+  const sub=labor+matSell+units;
   const cxAdd=sub*(q.cx-1);
   const pct=15+(q.buffer?10:0);
   const cont=(sub+cxAdd)*pct/100;
   const raw=sub+cxAdd+cont;
   const total=roundTo(raw);
-  const cost=labor*0.62+matCost;            // rough demo cost basis for margin
+  // demo cost basis: ~62% of labour, materials at cost, ~60% of unit prices
+  const cost=labor*0.62+matCost+units*0.60;
   const profit=total-cost;
-  return {labor,hours,matCost,matSell,sub,cxAdd,pct,cont,raw,total,cost,profit,
+  return {labor,hours,matCost,matSell,units,unitCount,sub,cxAdd,pct,cont,raw,total,cost,profit,
     margin:total?Math.round(profit/total*100):0, markup:cost?Math.round(profit/cost*100):0};
 }
 function groupTotal(q,g){
   let v=0;
   g.labor.forEach(([,h])=>v+=h*q.rate);
   g.mats.forEach(([,c])=>v+=c*(1+mkFor(c)));
+  (g.units||[]).forEach(([,qty,p])=>v+=qty*p);
   return v;
 }
+/* ==========================================================
+   SPREADSHEET IMPORT — reads a real .xlsx in the browser with
+   no library. An .xlsx is a ZIP of XML; DecompressionStream
+   ('deflate-raw') is now built into browsers, so we can unzip
+   and parse it locally. Nothing is uploaded anywhere.
+   ========================================================== */
+async function unzip(buf){
+  const dv=new DataView(buf), u8=new Uint8Array(buf);
+  // locate End Of Central Directory (scan back; comment is usually empty)
+  let eocd=-1;
+  for(let i=u8.length-22;i>=0 && i>u8.length-66000;i--){
+    if(dv.getUint32(i,true)===0x06054b50){eocd=i;break;}
+  }
+  if(eocd<0) throw new Error('Not a valid .xlsx file');
+  const count=dv.getUint16(eocd+10,true);
+  let p=dv.getUint32(eocd+16,true);
+  const files={};
+  for(let n=0;n<count;n++){
+    if(dv.getUint32(p,true)!==0x02014b50) break;
+    const method=dv.getUint16(p+10,true);
+    const csize=dv.getUint32(p+20,true);
+    const nameLen=dv.getUint16(p+28,true);
+    const extraLen=dv.getUint16(p+30,true);
+    const cmtLen=dv.getUint16(p+32,true);
+    const lho=dv.getUint32(p+42,true);
+    const name=new TextDecoder().decode(u8.subarray(p+46,p+46+nameLen));
+    // local header: 30 fixed bytes + its own name/extra lengths
+    const lNameLen=dv.getUint16(lho+26,true), lExtraLen=dv.getUint16(lho+28,true);
+    const start=lho+30+lNameLen+lExtraLen;
+    const raw=u8.subarray(start,start+csize);
+    files[name]={method,raw};
+    p+=46+nameLen+extraLen+cmtLen;
+  }
+  const out={};
+  for(const name of Object.keys(files)){
+    if(!/^xl\/(worksheets\/sheet1\.xml|sharedStrings\.xml)$/.test(name)) continue;
+    const {method,raw}=files[name];
+    if(method===0){ out[name]=new TextDecoder().decode(raw); continue; }
+    const ds=new DecompressionStream('deflate-raw');
+    const buf2=await new Response(new Blob([raw]).stream().pipeThrough(ds)).arrayBuffer();
+    out[name]=new TextDecoder().decode(buf2);
+  }
+  return out;
+}
+const colIndex=ref=>{ let n=0; for(const ch of ref.replace(/\d+/g,'')) n=n*26+(ch.charCodeAt(0)-64); return n-1; };
+function sheetToGrid(sheetXml, shared){
+  const rows=[];
+  const rowRe=/<row[^>]*r="(\d+)"[^>]*>([\s\S]*?)<\/row>/g;
+  // Empty cells are written self-closing (<c r="B11" s="9"/>). Matching the
+  // two forms separately matters: a single optional-body pattern lets a
+  // self-closing cell swallow the NEXT cell's <v>, silently shifting every
+  // price one column left.
+  const cellRe=/<c\b([^>]*?)(?:\/>|>([\s\S]*?)<\/c>)/g;
+  let rm;
+  while((rm=rowRe.exec(sheetXml))){
+    const cells=[]; let cm;
+    cellRe.lastIndex=0;
+    while((cm=cellRe.exec(rm[2]))){
+      const attrs=cm[1]||'', body=cm[2]||'';
+      const ref=(attrs.match(/r="([A-Z]+\d+)"/)||[])[1];
+      if(!ref) continue;
+      const ci=colIndex(ref);
+      const t=(attrs.match(/t="([^"]+)"/)||[])[1];
+      let v=null;
+      if(t==='s'){ const i=+((body.match(/<v>([\s\S]*?)<\/v>/)||[])[1]); v=shared[i]!=null?shared[i]:null; }
+      else if(t==='inlineStr'){ v=(body.match(/<t[^>]*>([\s\S]*?)<\/t>/)||[])[1]||null; }
+      else { const raw=(body.match(/<v>([\s\S]*?)<\/v>/)||[])[1]; v=raw!=null&&raw!==''?parseFloat(raw):null; }
+      if(v!=null&&v!=='') cells[ci]=typeof v==='string'?decodeXml(v):v;
+    }
+    if(cells.length) rows.push(cells);
+  }
+  return rows;
+}
+const decodeXml=s=>s.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,'&');
+function sharedStrings(xml){
+  if(!xml) return [];
+  return [...xml.matchAll(/<si>([\s\S]*?)<\/si>/g)].map(m=>
+    decodeXml([...m[1].matchAll(/<t[^>]*>([\s\S]*?)<\/t>/g)].map(t=>t[1]).join('')));
+}
+// Pick the description and price columns rather than assuming A and C, so
+// this works on somebody else's spreadsheet and not just one particular file.
+function detectColumns(rows){
+  const text={}, num={};
+  rows.forEach(r=>r.forEach((v,i)=>{
+    if(typeof v==='string'&&v.trim()) text[i]=(text[i]||0)+1;
+    else if(typeof v==='number'&&v>0) num[i]=(num[i]||0)+1;
+  }));
+  const desc=Object.keys(text).sort((a,b)=>text[b]-text[a])[0];
+  // the price column is the numeric column that's populated most often —
+  // qty and subtotal columns are typically left blank on a blank estimator
+  const price=Object.keys(num).sort((a,b)=>num[b]-num[a])[0];
+  return {desc:desc==null?0:+desc, price:price==null?-1:+price};
+}
+const STOP_RE=/^\s*(grand\s+total|total|notes?:?|hst|gst|pst|subtotal|tax)\s*:?\s*$/i;
+const SKIP_RE=/^\s*(job\s*name|date|description|item|qty|quantity|price|unit\s*price)\s*:?\s*$/i;
+const AREA_RE=/garage|outside|exterior|structured|cabling|service|panel|permit/i;
+function rowsToPriceBook(rows){
+  const {desc,price}=detectColumns(rows);
+  if(price<0) throw new Error("Couldn't find a price column in that sheet");
+  const seq=[];
+  for(const r of rows){
+    const d=r[desc]; if(typeof d!=='string'||!d.trim()) continue;
+    const name=d.trim();
+    if(STOP_RE.test(name)) break;            // stop at totals/notes
+    if(SKIP_RE.test(name)) continue;         // skip header labels
+    const p=r[price];
+    seq.push([name, typeof p==='number'?p:null]);
+  }
+  const sections=[]; let floor='', cur=null;
+  seq.forEach(([name,p],i)=>{
+    if(p==null){
+      const nxt = i+1<seq.length ? seq[i+1][1] : null;
+      if(nxt==null){ floor=name; cur=null; }   // header followed by header = area/floor
+      else{
+        if(AREA_RE.test(name)) floor='';
+        cur={section: floor?`${floor} · ${name}`:name, items:[]};
+        sections.push(cur);
+      }
+    } else {
+      if(!cur){ cur={section: floor||'General', items:[]}; sections.push(cur); }
+      cur.items.push({name, price:p});
+    }
+  });
+  return sections.filter(s=>s.items.length);
+}
+async function parseWorkbook(file){
+  const files=await unzip(await file.arrayBuffer());
+  const sheet=files['xl/worksheets/sheet1.xml'];
+  if(!sheet) throw new Error("Couldn't read the first sheet");
+  const rows=sheetToGrid(sheet, sharedStrings(files['xl/sharedStrings.xml']));
+  const book=rowsToPriceBook(rows);
+  if(!book.length) throw new Error('No priced lines found in that sheet');
+  return book;
+}
+
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pill=s=>`<span class="pill p-${s}"><span class="d"></span>${STATUS[s].l}</span>`;
 
@@ -922,7 +1075,10 @@ function startNew(){
   go('new');
 }
 function renderIntakeChips(){
-  document.getElementById('typeChips').innerHTML=Object.keys(T).map(k=>{
+  const own = DB.book ? `<button class="tchip ${newType==='book'?'on':''}" onclick="selectType('book')">
+      <svg class="i" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9.5 12h6M9.5 16h4"/></svg>
+      My price list</button>` : '';
+  document.getElementById('typeChips').innerHTML = own + Object.keys(T).map(k=>{
     const t=T[k], label=k==='custom'?'Other':t.name;
     return `<button class="tchip ${newType===k?'on':''}" onclick="selectType('${k}')">
       <svg class="i" viewBox="0 0 24 24">${ICON[t.icon]}</svg>${label}</button>`;
@@ -950,7 +1106,9 @@ function deriveTitle(text,type){
   return type && T[type] ? T[type].name+' quote' : 'New quote';
 }
 function createQuote(){
-  const chipUsed=!!newType, type=newType||'custom', t=T[type];
+  const chipUsed=!!newType;
+  const fromBook = newType==='book' && DB.book;
+  const type = fromBook ? 'custom' : (newType||'custom'), t=T[type];
   const desc=document.getElementById('n-desc').value.trim();
   const client=document.getElementById('n-client').value.trim();
   const addr=document.getElementById('n-addr').value.trim();
@@ -959,20 +1117,27 @@ function createQuote(){
   // contractor an assistant just did the work, rather than them wondering
   // whether they were supposed to type all of this themselves.
   const ov=document.getElementById('buildOv');
-  document.getElementById('buildOvSub').textContent = desc
-    ? 'Reading your description and drafting the scope…'
+  document.getElementById('buildOvSub').textContent = fromBook
+    ? `Opening your price list — ${bookItemCount()} items ready…`
+    : desc ? 'Reading your description and drafting the scope…'
     : `Loading the ${t.name} template and today's pricing…`;
   ov.classList.add('on');
 
   setTimeout(()=>{
     const q={id:'q'+Math.random().toString(36).slice(2,9),
-      client, job:deriveTitle(desc,type), addr, cPhone:'', cEmail:'',
+      client, job:deriveTitle(desc, fromBook?null:type) , addr, cPhone:'', cEmail:'',
       type, notes:desc, status:'draft', when:'Started just now',
       rate:DB.profile.rate, cx:t.cx, buffer:true,
-      autoBuilt:true, introSeen:false, chipUsed,
+      autoBuilt: !fromBook, introSeen:false, chipUsed,   // nothing was drafted for you when you start from your own list
       // tag each starting section as AI-drafted so sections added later
       // by hand (via "Add a section") can be told apart from these
-      groups:JSON.parse(JSON.stringify(t.groups)).map(g=>Object.assign(g,{auto:true}))};
+      fromBook: !!fromBook,
+      // Starting from an imported price list means the contractor picks the
+      // lines himself — begin with one empty section rather than pretending
+      // to have drafted a scope we know nothing about.
+      groups: fromBook
+        ? [{n:'The work', d:'', labor:[], mats:[], units:[], auto:false}]
+        : JSON.parse(JSON.stringify(t.groups)).map(g=>Object.assign(g,{auto:true}))};
     DB.quotes.unshift(q); save();
     // The intake screen is consumed once a quote exists — leaving it in the
     // back-stack would let Back land on stale, already-submitted fields and
@@ -984,6 +1149,7 @@ function createQuote(){
 }
 function buildSource(q){
   const t=T[q.type];
+  if(q.fromBook) return 'from your own price list';
   if(q.notes && q.chipUsed) return `from your notes, using the ${t.name} template`;
   if(q.notes) return 'from your description';
   return `using the ${t.name} template`;
@@ -1006,7 +1172,7 @@ function clientRowHTML(q){
     : `<span class="cx">No client attached</span><button onclick="openClientDrawer()">+ Add client</button>`;
 }
 function renderWorkPane(q){
-  const itemCount=q.groups.reduce((s,g)=>s+g.labor.length+g.mats.length,0);
+  const itemCount=q.groups.reduce((s,g)=>s+g.labor.length+g.mats.length+(g.units||[]).length,0);
   const banner = (q.autoBuilt && !q.introSeen) ? `<div class="aibanner">
       <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7.7-2z"/></svg></span>
       <span class="tx"><b>Built for you</b> ${esc(buildSource(q))} — ${q.groups.length} section${q.groups.length===1?'':'s'},
@@ -1016,7 +1182,7 @@ function renderWorkPane(q){
   const notes = q.notes ? `<div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">Site notes</span></div>
       <div style="padding:13px 15px;font:400 13.5px/1.5 'Archivo';color:var(--muted)">${esc(q.notes)}</div></div>` : '';
   const cards = q.groups.map((g,gi)=>{
-    const n=g.labor.length+g.mats.length;
+    const n=g.labor.length+g.mats.length+(g.units||[]).length;
     return `<button class="seccard" onclick="openSection(${gi})">
       <span class="seccard-ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>
       <span class="seccard-body">
@@ -1036,6 +1202,7 @@ function renderPricePane(q,c){
   return `<div class="pricecard">
       <div class="kv"><span class="k">Labour</span><span class="v">${money(c.labor)}</span></div>
       <div class="kv"><span class="k">Materials</span><span class="v">${money(c.matSell)}</span></div>
+      ${c.units?`<div class="kv"><span class="k">Priced items<span class="sub">${c.unitCount} from your price list</span></span><span class="v">${money(c.units)}</span></div>`:''}
       <div class="kv"><span class="k">Other / allowance</span><span class="v">${money(c.cxAdd+c.cont)}</span></div>
       <div class="kv big"><span class="k">Quote total</span><span class="v">${money(c.total)}</span></div>
     </div>
@@ -1106,6 +1273,7 @@ function closeDrawer(){ document.getElementById('drawerOv').classList.remove('on
 function refreshDrawer(){
   if(openDrawerType==='section' && openSectionGi!=null && cur.groups[openSectionGi]) document.getElementById('drawerBody').innerHTML=sectionDrawerHTML(openSectionGi);
   else if(openDrawerType==='price') document.getElementById('drawerBody').innerHTML=priceDrawerHTML();
+  // picker refreshes itself on search/pick so typing isn't interrupted
 }
 const xIcon='<svg class="i i-s" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>';
 function openSection(gi){ openSectionGi=gi; openDrawerType='section'; openDrawer(sectionDrawerHTML(gi)); }
@@ -1139,8 +1307,76 @@ function sectionDrawerHTML(gi){
         </div>`).join('') || `<div style="padding:12px 15px;color:var(--ghost);font:400 13.5px/1.4 'Archivo'">No materials yet.</div>`}
       <button class="addline" onclick="addLine(${gi},'mats')"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add material</button>
     </div>
+    ${(g.units&&g.units.length)?`
+    <div style="padding:2px 0 4px"><span class="eyebrow">From your price list</span></div>
+    <div class="grp" style="margin-bottom:16px">
+      ${g.units.map(([n,qty,pr],i)=>`
+        <div class="li">
+          <span class="nm">${esc(n)}<span style="display:block;font:400 11.5px/1 'Archivo';color:var(--ghost);margin-top:5px">${money(pr)} each</span></span>
+          <span class="qty">
+            <button onclick="bumpUnit(${gi},${i},-1)" aria-label="Fewer">–</button>
+            <b>${qty}</b>
+            <button onclick="bumpUnit(${gi},${i},1)" aria-label="More">+</button>
+          </span>
+          <span class="amt">${money(qty*pr)}</span>
+          <button class="x" onclick="delUnit(${gi},${i})" aria-label="Remove">${xIcon}</button>
+        </div>`).join('')}
+    </div>`:''}
+    ${DB.book?`<button class="addline" style="border:1.5px dashed var(--line-2);border-radius:var(--r);margin-bottom:16px"
+      onclick="openPicker(${gi})"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add from your price list</button>`:''}
     <button class="btn gh full" onclick="deleteSection(${gi})">Remove this section</button>`;
 }
+function bumpUnit(gi,i,d){
+  const u=cur.groups[gi].units[i];
+  u[1]=Math.max(1,u[1]+d); touch();
+}
+function delUnit(gi,i){ cur.groups[gi].units.splice(i,1); touch(); }
+
+/* ---------- price-list picker ---------- */
+let pickerGi=null, pickerQ='';
+function openPicker(gi){ pickerGi=gi; pickerQ=''; openDrawerType='picker'; openDrawer(pickerHTML()); }
+function pickerHTML(){
+  const term=pickerQ.toLowerCase();
+  const secs=DB.book.sections.map(s=>({
+    section:s.section,
+    items:s.items.filter(it=>!term||it.name.toLowerCase().includes(term)||s.section.toLowerCase().includes(term))
+  })).filter(s=>s.items.length);
+  const shown=secs.slice(0,term?12:4);
+  return `<div class="drawer-handle"></div>
+    <div class="drawer-hd"><h3>Your price list</h3><button class="drawer-x" onclick="backToSection()">${xIcon}</button></div>
+    <div class="search" style="margin-bottom:14px">
+      <svg class="i i-s" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+      <input id="pickQ" type="search" placeholder="Search ${bookItemCount()} priced items" value="${esc(pickerQ)}" oninput="pickerSearch(this.value)">
+    </div>
+    ${shown.map(s=>`
+      <div style="padding:2px 0 6px"><span class="eyebrow">${esc(s.section)}</span></div>
+      <div class="grp" style="margin-bottom:14px">
+        ${s.items.map(it=>`
+          <button class="li" style="width:100%;text-align:left" onclick="pickItem(${JSON.stringify(it.name).replace(/"/g,'&quot;')},${it.price})">
+            <span class="nm">${esc(it.name)}</span>
+            <span class="amt">${money(it.price)}</span>
+            <span class="x" aria-hidden="true"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>
+          </button>`).join('')}
+      </div>`).join('') || `<div class="empty">Nothing matches that.</div>`}
+    ${(!term&&secs.length>4)?`<p style="font:400 12.5px/1.5 'Archivo';color:var(--faint);text-align:center;padding:4px 0 12px">
+      Search to see the other ${secs.length-4} areas.</p>`:''}`;
+}
+function pickerSearch(v){
+  pickerQ=v;
+  const el=document.getElementById('drawerBody');
+  el.innerHTML=pickerHTML();
+  const inp=document.getElementById('pickQ');
+  if(inp){ inp.focus(); inp.setSelectionRange(inp.value.length,inp.value.length); }
+}
+function pickItem(name,price){
+  const g=cur.groups[pickerGi];
+  if(!g.units) g.units=[];
+  const ex=g.units.find(u=>u[0]===name&&u[2]===price);
+  if(ex) ex[1]++; else g.units.push([name,1,price]);
+  cur.when='Edited just now'; save(); renderWs();
+  toast(ex?`${name} ×${ex[1]}`:'Added');
+}
+function backToSection(){ openSection(pickerGi); }
 function openPriceDrawer(){ openDrawerType='price'; openDrawer(priceDrawerHTML()); }
 function priceDrawerHTML(){
   const q=cur, c=calc(q), marginOff=c.margin<DB.profile.target;
@@ -1285,10 +1521,44 @@ function renderSettings(){
     <button class="kv" style="width:100%;text-align:left" onclick="setRound('${v}')">
       <span class="k">${l}<span class="sub">${eg}</span></span>
       <span class="v">${(p.round||'auto')===v?'<span style="color:var(--ok-ink)">✓</span>':''}</span></button>`).join('');
+  renderBook();
   document.getElementById('railName').textContent=p.name.split(' ')[0]+' '+(p.name.split(' ')[1]||'')[0]+'.';
   document.getElementById('menuName').textContent=p.name;
   document.getElementById('menuBiz').textContent=p.biz;
 }
+/* ---------- price list (imported spreadsheet) ---------- */
+const bookItemCount=()=> (DB.book?DB.book.sections.reduce((s,x)=>s+x.items.length,0):0);
+function renderBook(){
+  const el=document.getElementById('s-book'); if(!el) return;
+  if(!DB.book){
+    el.innerHTML=`<p style="font:400 13.5px/1.5 'Archivo';color:var(--faint);margin-bottom:12px">
+        Already price your work in a spreadsheet? Bring it in and every line becomes
+        something you can drop straight into a quote. Stays on this device.</p>
+      <button class="btn gh full" onclick="document.getElementById('bookFile').click()">
+        <svg class="i i-s" viewBox="0 0 24 24"><path d="M12 16V4M7.5 8.5L12 4l4.5 4.5"/><path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"/></svg>
+        Import a spreadsheet</button>`;
+    return;
+  }
+  el.innerHTML=`<div class="kv"><span class="k">${esc(DB.book.name)}<span class="sub">${DB.book.sections.length} sections · imported ${esc(DB.book.when)}</span></span>
+      <span class="v">${bookItemCount()} items</span></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button class="btn gh" style="flex:1" onclick="document.getElementById('bookFile').click()">Replace</button>
+      <button class="btn gh" onclick="removeBook()">Remove</button>
+    </div>`;
+}
+async function importBook(input){
+  const f=input.files&&input.files[0]; if(!f) return;
+  input.value='';
+  toast('Reading your spreadsheet…');
+  try{
+    const sections=await parseWorkbook(f);
+    DB.book={name:f.name.replace(/\.xlsx$/i,''), when:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'}), sections};
+    save(); renderBook();
+    toast(`Imported ${bookItemCount()} priced items`);
+  }catch(e){ toast(e.message||'Could not read that file'); }
+}
+function removeBook(){ delete DB.book; save(); renderBook(); toast('Price list removed'); }
+
 function setRate(v){ DB.profile.rate=Math.max(0,parseFloat(v)||0);
   DB.quotes.forEach(q=>{ if(q.status==='draft'||q.status==='ready') q.rate=DB.profile.rate; });
   if(cur) cur.rate=DB.profile.rate; save(); renderSettings(); toast('Rate updated on open quotes'); }
