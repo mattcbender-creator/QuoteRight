@@ -759,7 +759,7 @@ const STATUS = {
 };
 const CX = [[1,'Standard','New build, easy access'],[1.25,'Medium','80s–2000s, some tight spots'],
             [1.5,'High','Pre-1980, hidden-issue risk'],[1.75,'Extreme','Heritage or structural unknowns']];
-const ROUND=[[1,'Exact','$19,495'],[25,'Nearest $25','$19,500'],[100,'Nearest $100','$19,500']];
+const ROUND=[[100,'Nearest $100','$19,500'],[10,'Nearest $10','$19,500']];
 
 /* ---------- store ---------- */
 const KEY='quoteright_poc_v4';
@@ -780,7 +780,7 @@ function seed(){
     profile:{name:'Dave Kowalczyk', biz:'Kowalczyk Contracting', lic:'CB-448192',
       phone:'(216) 555-0148', email:'dave@kowalczykcontracting.com',
       warranty:'2-year workmanship warranty', timeline:'3–4 weeks',
-      rate:95, mk:[.40,.30,.20], round:25, target:20},
+      rate:95, mk:[.40,.30,.20], round:100, target:20},
     quotes:[
       mk({client:'Sarah Henderson', job:'Main bathroom gut', addr:'1418 Ridgewood Ave', type:'bathroom', status:'draft', when:'Started yesterday'}),
       mk({client:'Pete Kowalski', job:'Backyard deck', addr:'22 Linden Ct', type:'deck', status:'draft', when:'2 sections left'}),
