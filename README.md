@@ -50,6 +50,7 @@ Everything that defines the product lives in [`docs/`](docs/):
 | --- | --- |
 | [`docs/contractor-estimator-app-spec.md`](docs/contractor-estimator-app-spec.md) | Product spec v1 — who it's for, MVP feature set, data model, roadmap, risks. |
 | [`docs/pricing-model.md`](docs/pricing-model.md) | **How pricing works** — typed line items (unit / labour / material / pass-through), where the risk layer applies, tax, and payment milestones. Written against a working electrician's real estimator, which prices off a unit catalogue rather than by build-up. |
+| [`docs/automated-pricing-data.md`](docs/automated-pricing-data.md) | **Where prices come from without a manual upload** — AI-drafted starter catalogue at signup, contractor edits as permanent source of truth, scheduled refresh, and pooled regional pricing as the long-term "live pricing" answer. |
 | [`docs/build-plan-v2-working-app.md`](docs/build-plan-v2-working-app.md) | Current build plan for the working app (Next.js + Railway + OpenRouter). "AI is the interface, code is the calculator." Phased P0–P8. |
 | [`docs/poc-build-plan-claude-code.md`](docs/poc-build-plan-claude-code.md) | POC build plan with milestone-by-milestone prompts for Claude Code. Encodes the exact pricing business logic. |
 | [`docs/confident-contractor-guide.pdf`](docs/confident-contractor-guide.pdf) | The "Confident Contractor" methodology guide — the source-of-truth "consult" document the pricing engine implements (rate calc, tiered markups, complexity multipliers, contingency, confidence check). |
