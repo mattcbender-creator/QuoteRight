@@ -217,7 +217,10 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 .num{font:500 14.5px/1.2 var(--mono);background:var(--panel);border:1.5px solid var(--line);
   border-radius:var(--r-s);padding:11px 8px;width:66px;text-align:right;outline:none;min-height:44px;flex-shrink:0}
 .num:focus{border-color:var(--blue);background:#fff}
-.num.w{width:96px}
+.num.w{width:96px;text-align:left}
+.msname{width:100%;min-width:0;border:none;background:none;font:400 14px/1.35 'Archivo';
+  color:var(--muted);outline:none;padding:2px 0;border-bottom:1.5px solid transparent}
+.msname:focus{border-bottom-color:var(--blue);color:var(--ink)}
 .li .u{font:400 12px/1.3 'Archivo';color:var(--ghost);flex-shrink:0}
 .li .amt{font:500 14.5px/1.2 var(--mono);min-width:64px;text-align:right;flex-shrink:0}
 .li .x{color:var(--ghost);padding:9px;border-radius:var(--r-s);min-height:40px;display:flex;align-items:center;flex-shrink:0}
@@ -411,6 +414,12 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 .sh-it .n{font:600 14px/1.35 'Archivo'}
 .sh-it .d{font:400 12.5px/1.45 'Archivo';color:var(--faint);margin-top:4px}
 .sh-it .a{font:500 14px/1 var(--mono);white-space:nowrap}
+.sh-sum{padding:12px 0 2px}
+.sh-sl{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:5px 0;
+  font:400 13px/1.45 'Archivo';color:var(--faint)}
+.sh-sl span:last-child{font:500 13px/1.45 var(--mono);white-space:nowrap;flex-shrink:0;color:var(--ink)}
+.sh-pay{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.sh-pay .k{font:500 9.5px/1.3 var(--mono);letter-spacing:.2em;color:var(--label);margin-bottom:8px}
 .sh-tot{display:flex;justify-content:space-between;align-items:baseline;padding-top:18px}
 .sh-tot .k{font:700 15px/1 'Archivo';letter-spacing:-.02em}
 .sh-tot .v{font:600 26px/1 var(--mono);letter-spacing:-.025em}
@@ -641,13 +650,27 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
             <input class="num" id="s-target" type="number" inputmode="numeric" onchange="setTarget(this.value)"><span class="k">%</span></span></div>
         </div>
         <div class="form" style="margin-bottom:12px">
+          <div class="eyebrow" style="margin-bottom:14px">Tax</div>
+          <div class="kv"><span class="k">Shown on quotes as</span>
+            <span style="display:flex;align-items:center;gap:7px">
+            <input class="num w" id="s-taxlabel" type="text" onchange="setTax()" aria-label="Tax name"></span></div>
+          <div class="kv"><span class="k">Rate<span class="sub">set to 0 if you don't charge tax</span></span>
+            <span style="display:flex;align-items:center;gap:7px">
+            <input class="num" id="s-taxrate" type="number" inputmode="decimal" onchange="setTax()" aria-label="Tax rate"><span class="k">%</span></span></div>
+        </div>
+        <div class="form" style="margin-bottom:12px">
           <div class="eyebrow" style="margin-bottom:14px">Totals are shown</div>
           <div id="s-round"></div>
+        </div>
+        <div class="form" style="margin-bottom:12px">
+          <div class="eyebrow" style="margin-bottom:14px">Payment schedule</div>
+          <div id="s-milestones"></div>
         </div>
         <div class="form" style="margin-bottom:12px">
           <div class="eyebrow" style="margin-bottom:14px">Your price list</div>
           <div id="s-book"></div>
           <input type="file" id="bookFile" accept=".xlsx" hidden onchange="importBook(this)">
+          <div id="s-unitcost"></div>
         </div>
         <div class="form">
           <div class="eyebrow" style="margin-bottom:14px">On every client quote</div>
@@ -859,7 +882,10 @@ const AI_CATALOGS = {
 };
 
 /* ---------- store ---------- */
-const KEY='quoteright_poc_v4';
+// v5: the profile gained tax, unitCost and milestones. Bumping the key
+// reseeds rather than leaving an old save half-migrated and computing
+// money against missing settings.
+const KEY='quoteright_poc_v5';
 function seed(){
   const mk=(o)=>{
     const t=T[o.type];
@@ -877,7 +903,13 @@ function seed(){
     profile:{name:'Dave Kowalczyk', biz:'Kowalczyk Contracting', lic:'CB-448192',
       phone:'(216) 555-0148', email:'dave@kowalczykcontracting.com',
       warranty:'2-year workmanship warranty', timeline:'3–4 weeks',
-      rate:95, mk:[.40,.30,.20], round:'auto', target:20},
+      rate:95, mk:[.40,.30,.20], round:'auto', target:20,
+      // unitCost:null means "he hasn't told us" — margin is then reported as
+      // unknown on any quote using price-list items rather than guessed at.
+      tax:{label:'HST', rate:13}, unitCost:null,
+      milestones:[{n:'Deposit to schedule',pct:30},
+                  {n:'At rough-in inspection',pct:40},
+                  {n:'On completion',pct:30}]},
     quotes:[
       mk({client:'Sarah Henderson', job:'Main bathroom gut', addr:'1418 Ridgewood Ave', type:'bathroom', status:'draft', when:'Started yesterday'}),
       mk({client:'Pete Kowalski', job:'Backyard deck', addr:'22 Linden Ct', type:'deck', status:'draft', when:'2 sections left'}),
@@ -901,35 +933,70 @@ const roundTo=n=>{
   const step = s==='auto' ? (n<2000?10:100) : s;
   return Math.round(n/step)*step;
 };
+// Implements docs/pricing-model.md. Every line has a kind and the kind decides
+// how money flows:
+//   labour / material  — "build-up" work. Carries markup, complexity, contingency.
+//   unit               — an all-in installed price from his own catalogue. It
+//                        already contains his margin and his own slop, so
+//                        multiplying it by complexity + contingency is double-
+//                        counting (it turned a real $5,010 electrical job into
+//                        $9,400). No risk layer.
+//   passthrough        — permits, dump fees, ESA/city charges. At cost, never
+//                        marked up, outside rounding: a permit is a specific
+//                        number and rounding it makes the line look invented.
 function calc(q){
-  let labor=0,hours=0,matCost=0,matSell=0,units=0,unitCount=0;
+  let labour=0,hours=0,matCost=0,matSell=0,units=0,unitCount=0,passT=0;
   q.groups.forEach(g=>{
-    g.labor.forEach(([,h])=>{hours+=h;labor+=h*q.rate;});
+    g.labor.forEach(([,h])=>{hours+=h;labour+=h*q.rate;});
     g.mats.forEach(([,c])=>{matCost+=c;matSell+=c*(1+mkFor(c));});
-    // Unit-price items come from an imported price list: the number is an
-    // all-in installed price the contractor already set, so no markup or
-    // hourly rate is applied on top of it.
     (g.units||[]).forEach(([,qty,p])=>{units+=qty*p;unitCount+=qty;});
+    (g.pass||[]).forEach(([,c])=>{passT+=c;});
   });
-  const sub=labor+matSell+units;
-  const cxAdd=sub*(q.cx-1);
-  const pct=15+(q.buffer?10:0);
-  const cont=(sub+cxAdd)*pct/100;
-  const raw=sub+cxAdd+cont;
-  const total=roundTo(raw);
-  // demo cost basis: ~62% of labour, materials at cost, ~60% of unit prices
-  const cost=labor*0.62+matCost+units*0.60;
-  const profit=total-cost;
-  return {labor,hours,matCost,matSell,units,unitCount,sub,cxAdd,pct,cont,raw,total,cost,profit,
-    margin:total?Math.round(profit/total*100):0, markup:cost?Math.round(profit/cost*100):0};
+  const buildUp=labour+matSell;
+  const cxAdd=buildUp*(q.cx-1);
+  // A job with no build-up work gets no contingency at all — which is exactly
+  // how a unit-price contractor works: he covers that risk with a contract
+  // term ("changes after rough-in are billed hourly"), not a padded line.
+  const pct=buildUp ? 15+(q.buffer?10:0) : 0;
+  const cont=(buildUp+cxAdd)*pct/100;
+  // Round the estimated part only. Unit prices and pass-throughs are exact
+  // numbers he already decided on — rounding a $4,560 catalogue sum up to
+  // $4,600 silently overstates his own price list, and rounding a permit
+  // makes the line look invented.
+  const preTax=roundTo(buildUp+cxAdd+cont)+units+passT;
+  const taxRate=(DB.profile.tax&&DB.profile.tax.rate||0)/100;
+  const tax=preTax*taxRate;
+  const total=preTax+tax;
+  // Cost basis. Labour and materials we know. A unit price's cost is knowable
+  // only if he told us what share of it is cost — if he hasn't, margin is
+  // reported as unknown rather than invented. Pass-throughs are pure cost.
+  const ucr=DB.profile.unitCost;
+  const costKnown = !units || ucr!=null;
+  const cost=labour*0.62+matCost+units*((ucr==null?60:ucr)/100)+passT;
+  const profit=preTax-cost;   // tax is collected for the government, not income
+  return {labour,hours,matCost,matSell,units,unitCount,passT,
+    buildUp,cxAdd,pct,cont,preTax,taxRate,tax,total,cost,profit,costKnown,
+    margin: costKnown&&preTax ? Math.round(profit/preTax*100) : null,
+    markup: costKnown&&cost ? Math.round(profit/cost*100) : null};
 }
+// Split a section into the part the risk layer touches and the part it doesn't.
+function groupParts(q,g){
+  let buildUp=0, fixed=0;
+  g.labor.forEach(([,h])=>buildUp+=h*q.rate);
+  g.mats.forEach(([,c])=>buildUp+=c*(1+mkFor(c)));
+  (g.units||[]).forEach(([,qty,p])=>fixed+=qty*p);
+  (g.pass||[]).forEach(([,c])=>fixed+=c);
+  return {buildUp,fixed};
+}
+// What the client sees against this section: build-up carries the complexity
+// uplift (×cx), unit prices and pass-throughs pass straight through.
 function groupTotal(q,g){
-  let v=0;
-  g.labor.forEach(([,h])=>v+=h*q.rate);
-  g.mats.forEach(([,c])=>v+=c*(1+mkFor(c)));
-  (g.units||[]).forEach(([,qty,p])=>v+=qty*p);
-  return v;
+  const {buildUp,fixed}=groupParts(q,g);
+  return buildUp*q.cx + fixed;
 }
+// Is a margin figure trustworthy enough to show? Only if we aren't guessing
+// the cost side of unit-priced work.
+const marginUnder=c=>c.margin!=null && c.margin<DB.profile.target;
 /* ==========================================================
    SPREADSHEET IMPORT — reads a real .xlsx in the browser with
    no library. An .xlsx is a ZIP of XML; DecompressionStream
@@ -1247,7 +1314,7 @@ function clientRowHTML(q){
     : `<span class="cx">No client attached</span><button onclick="openClientDrawer()">+ Add client</button>`;
 }
 function renderWorkPane(q){
-  const itemCount=q.groups.reduce((s,g)=>s+g.labor.length+g.mats.length+(g.units||[]).length,0);
+  const itemCount=q.groups.reduce((s,g)=>s+g.labor.length+g.mats.length+(g.units||[]).length+(g.pass||[]).length,0);
   const banner = (q.autoBuilt && !q.introSeen) ? `<div class="aibanner">
       <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7.7-2z"/></svg></span>
       <span class="tx"><b>Built for you</b> ${esc(buildSource(q))} — ${q.groups.length} section${q.groups.length===1?'':'s'},
@@ -1262,7 +1329,7 @@ function renderWorkPane(q){
   // quote he's about to send rather than to some pre-uplift number.
   const priced=clientItems(q);
   const cards = q.groups.map((g,gi)=>{
-    const n=g.labor.length+g.mats.length+(g.units||[]).length;
+    const n=g.labor.length+g.mats.length+(g.units||[]).length+(g.pass||[]).length;
     return `<button class="seccard" onclick="openSection(${gi})">
       <span class="seccard-ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>
       <span class="seccard-body">
@@ -1282,34 +1349,46 @@ function renderWorkPane(q){
   // it's already on screen a few pixels away.
   const c=calc(q);
   const foot=`<div class="secsum">
-      <div class="ss"><span>+ Contingency ${c.pct}%</span><span>${money(c.cont)}</span></div>
+      ${c.cont?`<div class="ss"><span>+ Contingency ${c.pct}%</span><span>${money(c.cont)}</span></div>`:''}
+      ${c.tax?`<div class="ss"><span>+ ${esc(DB.profile.tax.label)} ${DB.profile.tax.rate}%</span><span>${money(c.tax)}</span></div>`:''}
     </div>`;
   return banner+notes+cards+`<button class="addsection" onclick="addGroup()">
     <svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add a section</button>`+foot;
 }
 function renderPricePane(q,c){
-  const marginOff=c.margin<DB.profile.target;
+  const off=marginUnder(c);
   return `<div class="pricecard">
-      <div class="kv"><span class="k">Labour</span><span class="v">${money(c.labor)}</span></div>
-      <div class="kv"><span class="k">Materials</span><span class="v">${money(c.matSell)}</span></div>
-      ${c.units?`<div class="kv"><span class="k">Priced items<span class="sub">${c.unitCount} from your price list</span></span><span class="v">${money(c.units)}</span></div>`:''}
-      <div class="kv"><span class="k">Other / allowance</span><span class="v">${money(c.cxAdd+c.cont)}</span></div>
+      ${c.labour?`<div class="kv"><span class="k">Labour</span><span class="v">${money(c.labour)}</span></div>`:''}
+      ${c.matSell?`<div class="kv"><span class="k">Materials</span><span class="v">${money(c.matSell)}</span></div>`:''}
+      ${c.units?`<div class="kv"><span class="k">Priced items<span class="sub">${c.unitCount} from your price list · no markup added</span></span><span class="v">${money(c.units)}</span></div>`:''}
+      ${c.cxAdd+c.cont?`<div class="kv"><span class="k">Complexity &amp; contingency</span><span class="v">${money(c.cxAdd+c.cont)}</span></div>`:''}
+      ${c.passT?`<div class="kv"><span class="k">Permits &amp; fees<span class="sub">at cost, not marked up</span></span><span class="v">${money(c.passT)}</span></div>`:''}
+      <div class="kv"><span class="k">Subtotal</span><span class="v">${money(c.preTax)}</span></div>
+      ${c.tax?`<div class="kv"><span class="k">${esc(DB.profile.tax.label)} ${DB.profile.tax.rate}%</span><span class="v">${money(c.tax)}</span></div>`:''}
       <div class="kv big"><span class="k">Quote total</span><span class="v">${money(c.total)}</span></div>
     </div>
-    <div class="profitline" ${marginOff?'style="background:var(--warn-soft);color:var(--warn)"':''}>
-      Estimated profit: ${money(c.profit)} · ${c.margin}% margin${marginOff?` — under your ${DB.profile.target}% target`:''}
-    </div>
+    ${c.costKnown
+      ? `<div class="profitline" ${off?'style="background:var(--warn-soft);color:var(--warn)"':''}>
+          Estimated profit: ${money(c.profit)} · ${c.margin}% margin${off?` — under your ${DB.profile.target}% target`:''}
+        </div>`
+      : `<div class="profitline" style="background:var(--panel);color:var(--faint)">
+          Margin unknown — tell us roughly what a price-list item costs you and we'll work it out.
+          <button class="mini" style="padding:6px 0;display:block" onclick="go('settings')">Set it in Settings</button>
+        </div>`}
     <button class="viewdetails" onclick="openPriceDrawer()">View pricing details
       <svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>`;
 }
 function renderSide(q,c){
-  const marginOff=c.margin<DB.profile.target;
+  const off=marginUnder(c);
   return `<div class="grp">
       <div class="grp-hd"><span class="t">Quote total</span>${pill(q.status)}</div>
       <div style="padding:14px 15px">
         <div style="font:600 30px/1 var(--mono);letter-spacing:-.03em">${money(c.total)}</div>
         <div style="font:400 12.5px/1.5 'Archivo';color:var(--faint);margin-top:8px">
-          Estimated profit ${money(c.profit)} · <span style="color:${marginOff?'var(--warn)':'var(--ok-ink)'};font-weight:600">${c.margin}% margin</span></div>
+          ${c.tax?`Incl. ${esc(DB.profile.tax.label)} ${money(c.tax)}<br>`:''}
+          ${c.costKnown
+            ? `Estimated profit ${money(c.profit)} · <span style="color:${off?'var(--warn)':'var(--ok-ink)'};font-weight:600">${c.margin}% margin</span>`
+            : `Margin unknown until you set your unit cost`}</div>
         <div style="display:flex;gap:8px;margin-top:14px">
           <button class="btn org" style="flex:1" onclick="reviewQuote()">Review quote</button>
         </div>
@@ -1338,16 +1417,19 @@ function touch(){ cur.when='Edited just now'; save(); renderWs(); refreshDrawer(
 function editLabel(gi,kind,i,v){ cur.groups[gi][kind][i][0]=v.trim()||'Untitled'; touch(); }
 function editHours(gi,i,v){ cur.groups[gi].labor[i][1]=Math.max(0,parseFloat(v)||0); touch(); }
 function editCost(gi,i,v){ cur.groups[gi].mats[i][1]=Math.max(0,parseFloat(v)||0); touch(); }
+function editPass(gi,i,v){ cur.groups[gi].pass[i][1]=Math.max(0,parseFloat(v)||0); touch(); }
 function editGroupName(gi,v){ cur.groups[gi].n=v.trim()||'Untitled section'; touch(); }
 function delLine(gi,kind,i){ cur.groups[gi][kind].splice(i,1); touch(); }
 function addLine(gi,kind){
-  if(kind==='labor') cur.groups[gi].labor.push(['New task',4]);
-  else cur.groups[gi].mats.push(['New material',100,'Your price']);
+  const g=cur.groups[gi];
+  if(kind==='labor') g.labor.push(['New task',4]);
+  else if(kind==='pass'){ if(!g.pass) g.pass=[]; g.pass.push(['Permit',350]); }
+  else g.mats.push(['New material',100,'Your price']);
   touch();
 }
 function addGroup(){
   // auto:false — a section you add yourself is never mislabelled as AI-drafted
-  cur.groups.push({n:'New section',d:'',labor:[],mats:[],auto:false});
+  cur.groups.push({n:'New section',d:'',labor:[],mats:[],pass:[],auto:false});
   cur.when='Edited just now'; save(); renderWs();
   openSection(cur.groups.length-1);
 }
@@ -1405,6 +1487,23 @@ function sectionDrawerHTML(gi){
           </span>
         </div>`).join('') || `<div style="padding:12px 15px;color:var(--ghost);font:400 13.5px/1.4 'Archivo'">No materials yet.</div>`}
       <button class="addline" onclick="addLine(${gi},'mats')"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add material</button>
+    </div>
+    <div style="padding:2px 0 4px"><span class="eyebrow">Permits &amp; fees</span></div>
+    <div class="grp" style="margin-bottom:16px">
+      ${(g.pass||[]).map(([n,cst],i)=>`
+        <div class="li stack">
+          <span class="nm"><input value="${esc(n)}" onchange="editLabel(${gi},'pass',${i},this.value)" aria-label="Fee name">
+            <span class="src">passed through at cost</span></span>
+          <span class="ctl">
+            <span class="u">cost</span>
+            <input class="num" type="number" inputmode="decimal" value="${cst}" onchange="editPass(${gi},${i},this.value)" aria-label="Fee amount">
+            <span class="sp"></span>
+            <span class="u">client pays</span>
+            <span class="amt">${money(cst)}</span>
+            <button class="x" onclick="delLine(${gi},'pass',${i})" aria-label="Remove ${esc(n)}">${xIcon}</button>
+          </span>
+        </div>`).join('') || `<div style="padding:12px 15px;color:var(--ghost);font:400 13.5px/1.4 'Archivo'">Nothing passed through. Permits and dump fees go here — they're billed at cost, never marked up.</div>`}
+      <button class="addline" onclick="addLine(${gi},'pass')"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add a permit or fee</button>
     </div>
     ${(g.units&&g.units.length)?`
     <div style="padding:2px 0 4px"><span class="eyebrow">From your price list</span></div>
@@ -1481,44 +1580,67 @@ function pickItem(name,price,source){
 }
 function backToSection(){ openSection(pickerGi); }
 function openPriceDrawer(){ openDrawerType='price'; openDrawer(priceDrawerHTML()); }
+const warnIcon='<svg class="i" viewBox="0 0 24 24"><path d="M12 9v5M12 17.5v.01"/><path d="M10.3 3.9L2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>';
 function priceDrawerHTML(){
-  const q=cur, c=calc(q), marginOff=c.margin<DB.profile.target;
+  const q=cur, c=calc(q), off=marginUnder(c), tx=DB.profile.tax;
+  // Contingency only exists where there's build-up work to protect. On a job
+  // priced entirely off his catalogue there is nothing here to toggle, and
+  // saying so is more honest than showing a 25% control that does nothing.
+  const riskBlock = c.buildUp
+    ? (q.buffer?`<div class="flag">${warnIcon}
+        <span class="ft"><b>Buffer on.</b> Contingency is at <b>25%</b> of the labour and materials.
+        <button class="mini" style="padding:6px 0;margin-top:4px;display:block" onclick="toggleBuffer()">Take the buffer off</button></span></div>`
+      :`<div class="flag off">${warnIcon}
+        <span class="ft">Buffer off — contingency <b>15%</b> of the labour and materials.
+        <button class="mini" style="padding:6px 0;margin-top:4px;display:block" onclick="toggleBuffer()">Put it back on</button></span></div>`)
+    : `<div class="flag off">${warnIcon}
+        <span class="ft"><b>No contingency on this one.</b> It's priced entirely off your own list, and
+        those prices already carry your margin. Protect yourself with a change-order line instead:
+        anything found after rough-in gets billed separately.</span></div>`;
   return `<div class="drawer-handle"></div>
     <div class="drawer-hd"><h3>Pricing details</h3><button class="drawer-x" onclick="closeDrawer()">${xIcon}</button></div>
-    ${q.buffer?`<div class="flag"><svg class="i" viewBox="0 0 24 24"><path d="M12 9v5M12 17.5v.01"/><path d="M10.3 3.9L2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
-      <span class="ft"><b>Buffer on.</b> Contingency is at <b>25%</b>.
-      <button class="mini" style="padding:6px 0;margin-top:4px;display:block" onclick="toggleBuffer()">Take the buffer off</button></span></div>`
-    :`<div class="flag off"><svg class="i" viewBox="0 0 24 24"><path d="M12 9v5M12 17.5v.01"/><path d="M10.3 3.9L2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
-      <span class="ft">Buffer off — contingency <b>15%</b>.
-      <button class="mini" style="padding:6px 0;margin-top:4px;display:block" onclick="toggleBuffer()">Put it back on</button></span></div>`}
-    <div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">Labour</span><span class="v">${money(c.labor)}</span></div>
-      <div style="padding:4px 15px 13px"><div class="kv"><span class="k">${c.hours} hrs @ $${q.rate}/hr</span><span class="v">${money(c.labor)}</span></div></div></div>
-    <div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">Materials</span><span class="v">${money(c.matSell)}</span></div>
+    ${riskBlock}
+    ${c.labour?`<div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">Labour</span><span class="v">${money(c.labour)}</span></div>
+      <div style="padding:4px 15px 13px"><div class="kv"><span class="k">${c.hours} hrs @ $${q.rate}/hr</span><span class="v">${money(c.labour)}</span></div></div></div>`:''}
+    ${c.matSell?`<div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">Materials</span><span class="v">${money(c.matSell)}</span></div>
       <div style="padding:4px 15px 13px">
         <div class="kv"><span class="k">What you pay</span><span class="v">${money(c.matCost)}</span></div>
         <div class="kv"><span class="k">Markup added<span class="sub">under $100 +${Math.round(DB.profile.mk[0]*100)}% · to $1k +${Math.round(DB.profile.mk[1]*100)}% · over +${Math.round(DB.profile.mk[2]*100)}%</span></span>
           <span class="v">${money(c.matSell-c.matCost)}</span></div>
-      </div></div>
-    <div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">Complexity &amp; contingency</span><span class="v">${money(c.cxAdd+c.cont)}</span></div>
+      </div></div>`:''}
+    ${c.units?`<div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">From your price list</span><span class="v">${money(c.units)}</span></div>
+      <div style="padding:4px 15px 13px"><div class="kv"><span class="k">${c.unitCount} item${c.unitCount===1?'':'s'} at your own installed prices
+        <span class="sub">no markup, no complexity, no contingency — it's already in your number</span></span><span class="v">${money(c.units)}</span></div></div></div>`:''}
+    ${c.passT?`<div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">Permits &amp; fees</span><span class="v">${money(c.passT)}</span></div>
+      <div style="padding:4px 15px 13px"><div class="kv"><span class="k">Passed through at cost
+        <span class="sub">never marked up — a client can price-check these in ten seconds</span></span><span class="v">${money(c.passT)}</span></div></div></div>`:''}
+    ${c.buildUp?`<div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">Complexity &amp; contingency</span><span class="v">${money(c.cxAdd+c.cont)}</span></div>
       <div style="padding:12px 15px 15px">
         <span class="eyebrow">How complex is this job?</span>
         <div class="seg">${CX.map(([v,n])=>`<button class="sg ${q.cx===v?'on':''}" onclick="setCx(${v})"><span class="a">${n}</span><span class="b">×${v}</span></button>`).join('')}</div>
         <div style="margin-top:14px">
-          <div class="kv"><span class="k">Complexity uplift</span><span class="v">${money(c.cxAdd)}</span></div>
+          <div class="kv"><span class="k">Complexity uplift<span class="sub">on labour &amp; materials only</span></span><span class="v">${money(c.cxAdd)}</span></div>
           <div class="kv"><span class="k">Contingency ${c.pct}%<span class="sub">shown to the client · unused portion returned</span></span><span class="v">${money(c.cont)}</span></div>
         </div>
-      </div></div>
+      </div></div>`:''}
     <div class="grp"><div class="grp-hd"><span class="t">Where you land</span></div>
       <div style="padding:4px 15px 15px">
-        <div class="kv"><span class="k">Your cost</span><span class="v">${money(c.cost)}</span></div>
+        ${c.costKnown?`<div class="kv"><span class="k">Your cost</span><span class="v">${money(c.cost)}</span></div>`:''}
+        <div class="kv"><span class="k">Subtotal before tax</span><span class="v">${money(c.preTax)}</span></div>
+        ${c.tax?`<div class="kv"><span class="k">${esc(tx.label)} ${tx.rate}%<span class="sub">collected for the government — not your money</span></span><span class="v">${money(c.tax)}</span></div>`:''}
         <div class="kv big"><span class="k">Quote total</span><span class="v">${money(c.total)}</span></div>
+        ${c.costKnown?`
         <div class="kv"><span class="k">Your profit</span><span class="v">${money(c.profit)}</span></div>
         <div class="kv"><span class="k"><b>Margin</b> — profit ÷ price<span class="sub">the number that decides if you eat</span></span>
-          <span class="v" style="color:${marginOff?'var(--warn)':'var(--ok-ink)'}">${c.margin}%</span></div>
+          <span class="v" style="color:${off?'var(--warn)':'var(--ok-ink)'}">${c.margin}%</span></div>
         <div class="kv"><span class="k">Markup — profit ÷ cost<span class="sub">the number you punch in</span></span>
-          <span class="v" style="color:var(--muted)">${c.markup}%</span></div>
+          <span class="v" style="color:var(--muted)">${c.markup}%</span></div>`:''}
       </div></div>
-    ${marginOff?`<div class="flag" style="margin-top:12px"><svg class="i" viewBox="0 0 24 24"><path d="M12 9v5M12 17.5v.01"/><path d="M10.3 3.9L2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+    ${!c.costKnown?`<div class="flag off" style="margin-top:12px">${warnIcon}
+      <span class="ft"><b>Margin not shown.</b> This quote uses prices from your own list, and we don't know
+      what those cost you — so any margin we printed would be a guess. Tell us once and we'll do the maths.
+      <button class="mini" style="padding:6px 0;margin-top:4px;display:block" onclick="closeDrawer();go('settings')">Set your unit cost</button></span></div>`
+    : off?`<div class="flag" style="margin-top:12px">${warnIcon}
       <span class="ft"><b>${c.margin}% margin</b> — under your ${DB.profile.target}% target. One bad week and this one is underwater.</span></div>`
     :`<div class="flag ok" style="margin-top:12px"><svg class="i" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
       <span class="ft"><b>${c.margin}% margin</b> — at or above your ${DB.profile.target}% target.</span></div>`}`;
@@ -1556,14 +1678,24 @@ function saveClientDrawer(){
 // foot looks amateur, so any drift is absorbed by the largest line.
 function clientItems(q){
   const c=calc(q);
-  const uplift = c.sub ? c.cxAdd/c.sub : 0;
-  const items=q.groups.map(g=>({n:g.n, d:g.d||'', a:groupTotal(q,g)*(1+uplift)}));
-  const target=Math.round(c.total)-Math.round(c.cont);
+  const items=q.groups.map(g=>({n:g.n, d:g.d||'', a:groupTotal(q,g)}));
+  // Sections + contingency must equal the pre-tax subtotal exactly; tax is
+  // then applied to that. Rounding drift lands on the largest line.
+  const target=Math.round(c.preTax)-Math.round(c.cont);
   const sum=items.reduce((s,i)=>s+i.a,0)||1;
   items.forEach(i=>i.a=Math.round(i.a*target/sum));
   const drift=target-items.reduce((s,i)=>s+i.a,0);
   if(drift&&items.length) items.reduce((a,b)=>b.a>a.a?b:a,items[0]).a+=drift;
   return items;
+}
+// Milestone draws, computed off the pre-tax subtotal and shown with tax on
+// top, the way the reference estimator does it ("first payment plus HST").
+function milestoneRows(c){
+  const ms=DB.profile.milestones||[];
+  const rows=ms.map(m=>({n:m.n, pct:m.pct, a:Math.round(c.total*m.pct/100)}));
+  const drift=Math.round(c.total)-rows.reduce((s,r)=>s+r.a,0);
+  if(drift&&rows.length) rows[rows.length-1].a+=drift;
+  return rows;
 }
 function sheetHTML(q){
   const c=calc(q), p=DB.profile, t=T[q.type];
@@ -1584,12 +1716,20 @@ function sheetHTML(q){
     <div class="sh-blk"><div class="k">THE WORK</div><div class="v">${esc(q.notes||t.scope)}</div></div>
     <div class="sh-blk"><div class="k">WHAT'S INCLUDED</div>
       ${items.map(i=>`<div class="sh-it"><div><div class="n">${esc(i.n)}</div>${i.d?`<div class="d">${esc(i.d)}</div>`:''}</div><div class="a">${money(i.a)}</div></div>`).join('')}
-      <div class="sh-it"><div><div class="n">Contingency allowance</div>
+      ${c.cont?`<div class="sh-it"><div><div class="n">Contingency allowance</div>
         <div class="d">Covers surprises behind the walls. <b>Any unused portion comes back to you.</b></div></div>
-        <div class="a">${money(c.cont)}</div></div>
+        <div class="a">${money(c.cont)}</div></div>`:''}
     </div>
+    ${c.tax?`<div class="sh-sum">
+        <div class="sh-sl"><span>Subtotal</span><span>${money(c.preTax)}</span></div>
+        <div class="sh-sl"><span>${esc(DB.profile.tax.label)} ${DB.profile.tax.rate}%</span><span>${money(c.tax)}</span></div>
+      </div>`:''}
     <div class="sh-tot"><span class="k">TOTAL</span><span class="v">${money(c.total)}</span></div>
-    <div class="sh-terms">Valid 30 days · 30% deposit to schedule</div>
+    ${milestoneRows(c).length?`<div class="sh-pay">
+      <div class="k">PAYMENT SCHEDULE</div>
+      ${milestoneRows(c).map(r=>`<div class="sh-sl"><span>${esc(r.n)} · ${r.pct}%</span><span>${money(r.a)}</span></div>`).join('')}
+    </div>`:''}
+    <div class="sh-terms">Valid 30 days${c.cont?'':' · changes after rough-in billed separately at an agreed rate'}</div>
     <div style="margin-top:16px">
       <div class="vp"><svg class="i i-s" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><div><div class="n">${esc(p.warranty)}</div><div class="d">In writing, on top of manufacturer coverage.</div></div></div>
       <div class="vp"><svg class="i i-s" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg><div><div class="n">Timeline: ${esc(p.timeline)}</div><div class="d">One crew, start to finish. Photo updates as we go.</div></div></div>
@@ -1624,7 +1764,18 @@ function renderSettings(){
     <button class="kv" style="width:100%;text-align:left" onclick="setRound('${v}')">
       <span class="k">${l}<span class="sub">${eg}</span></span>
       <span class="v">${(p.round||'auto')===v?'<span style="color:var(--ok-ink)">✓</span>':''}</span></button>`).join('');
+  document.getElementById('s-taxlabel').value=p.tax.label;
+  document.getElementById('s-taxrate').value=p.tax.rate;
+  const msTotal=(p.milestones||[]).reduce((s,m)=>s+m.pct,0);
+  document.getElementById('s-milestones').innerHTML=
+    (p.milestones||[]).map((m,i)=>`<div class="kv">
+      <span class="k"><input class="msname" value="${esc(m.n)}" onchange="setMilestoneName(${i},this.value)" aria-label="Milestone name"></span>
+      <span style="display:flex;align-items:center;gap:7px">
+      <input class="num" type="number" inputmode="numeric" value="${m.pct}" onchange="setMilestonePct(${i},this.value)" aria-label="Percent"><span class="k">%</span></span></div>`).join('')
+    + `<div class="kv"><span class="k" style="color:${msTotal===100?'var(--ok-ink)':'var(--warn)'}">
+        ${msTotal===100?'Adds up to 100%':`Adds up to ${msTotal}% — should be 100%`}</span><span class="v"></span></div>`;
   renderBook();
+  renderUnitCost();
   document.getElementById('railName').textContent=p.name.split(' ')[0]+' '+(p.name.split(' ')[1]||'')[0]+'.';
   document.getElementById('menuName').textContent=p.name;
   document.getElementById('menuBiz').textContent=p.biz;
@@ -1666,7 +1817,34 @@ async function importBook(input){
     toast(`Imported ${bookItemCount()} priced items`);
   }catch(e){ toast(e.message||'Could not read that file'); }
 }
-function removeBook(){ delete DB.book; save(); renderBook(); toast('Price list removed'); }
+function removeBook(){ delete DB.book; save(); renderBook(); renderUnitCost(); toast('Price list removed'); }
+// The one number we cannot derive: what a price-list item costs him. Asked
+// once, here, rather than guessed at on every quote. Left unanswered, margin
+// is reported as unknown instead of invented. (docs/pricing-model.md)
+function renderUnitCost(){
+  const el=document.getElementById('s-unitcost'); if(!el) return;
+  if(!DB.book){ el.innerHTML=''; return; }
+  const u=DB.profile.unitCost;
+  el.innerHTML=`<div class="kv" style="margin-top:14px"><span class="k">Roughly what share of one of these prices is your cost?
+      <span class="sub">${u==null?'Not set — margin is hidden rather than guessed':'Used to work out margin on price-list work'}</span></span>
+    <span style="display:flex;align-items:center;gap:7px">
+      <input class="num" type="number" inputmode="numeric" placeholder="60" value="${u==null?'':u}"
+        onchange="setUnitCost(this.value)" aria-label="Unit cost share"><span class="k">%</span></span></div>`;
+}
+function setUnitCost(v){
+  const n=parseFloat(v);
+  DB.profile.unitCost = (v===''||isNaN(n)) ? null : Math.min(100,Math.max(0,n));
+  save(); renderSettings();
+  toast(DB.profile.unitCost==null?'Margin will stay hidden on price-list work':'Margin will now be worked out');
+}
+function setTax(){
+  const label=document.getElementById('s-taxlabel').value.trim()||'Tax';
+  const rate=Math.max(0,parseFloat(document.getElementById('s-taxrate').value)||0);
+  DB.profile.tax={label,rate}; save(); renderSettings();
+  toast(rate?`${label} ${rate}% on every quote`:'No tax shown on quotes');
+}
+function setMilestoneName(i,v){ DB.profile.milestones[i].n=v.trim()||'Payment'; save(); renderSettings(); }
+function setMilestonePct(i,v){ DB.profile.milestones[i].pct=Math.max(0,parseFloat(v)||0); save(); renderSettings(); }
 
 /* ---------- AI-drafted price list (onboarding without a spreadsheet) ---------- */
 // aiDraft is a working copy, separate from DB.book, so closing this drawer

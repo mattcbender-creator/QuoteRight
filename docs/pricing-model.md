@@ -90,14 +90,19 @@ fixed     = units + passthrough
 cxAdd     = buildUp × (cx − 1)
 cont      = (buildUp + cxAdd) × contPct
 
-preTax    = round(buildUp + cxAdd + cont + units) + passthrough
+preTax    = round(buildUp + cxAdd + cont) + units + passthrough
 tax       = preTax × taxRate
 total     = preTax + tax
 ```
 
-Unit lines and pass-throughs skip the risk layer entirely. `passthrough` also
-sits outside rounding — a permit is a specific number, and rounding it makes
-the line look invented.
+Unit lines and pass-throughs skip the risk layer entirely, **and they sit
+outside rounding too.** Rounding is a presentation choice that only makes
+sense for *estimated* work — a quote isn't a bill. But a catalogue price and
+a permit fee are exact numbers the contractor already decided on. An earlier
+version of this formula rounded the whole pre-tax figure and turned his exact
+$4,560 of unit lines into $4,600; silently overstating a contractor's own
+price list is precisely the kind of error that loses trust. Round the
+estimated part, add the exact parts on top.
 
 **Contingency defaults to off on a unit-priced job.** His sheet has no
 contingency because he controls that risk with a contract term instead:

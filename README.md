@@ -9,6 +9,9 @@ underquoting.
 > questions, applies his real rates and a proven pricing methodology, and hands him a quote he
 > trusts.
 
+> **Picking this up?** Start with [`HANDOFF.md`](HANDOFF.md) — current state,
+> what's real vs. mocked, and what to do next.
+
 ## Status
 
 Early proof-of-concept. What exists today:
@@ -35,6 +38,17 @@ open index.html            # macOS  (use `xdg-open index.html` on Linux)
 npx http-server -p 8080 -c-1
 # then visit http://localhost:8080
 ```
+
+## Test the pricing maths
+
+```bash
+node test/pricing.test.mjs
+```
+
+24 assertions against the real `calc()`, driven in a headless browser. The key
+fixture is five real lines from a working electrician's estimator, which must
+reconcile to his spreadsheet to the cent — see
+[`docs/pricing-model.md`](docs/pricing-model.md).
 
 ### Deploy the demo (Railway)
 
