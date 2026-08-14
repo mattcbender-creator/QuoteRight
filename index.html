@@ -191,17 +191,18 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
   border-bottom:1px solid var(--line);background:var(--panel)}
 .grp-hd .t{font:600 13.5px/1 'Archivo';letter-spacing:-.01em}
 .grp-hd .v{font:600 13.5px/1 var(--mono)}
-.li{display:flex;align-items:center;gap:11px;padding:11px 15px;border-top:1px solid var(--line)}
+.li{display:flex;align-items:center;gap:8px;padding:11px 15px;border-top:1px solid var(--line)}
 .li:first-of-type{border-top:none}
 .li .nm{flex:1;min-width:0;font:400 14.5px/1.35 'Archivo'}
-.li .nm input{width:100%;border:none;background:none;font:inherit;outline:none;padding:2px 0}
+.li .nm input{width:100%;border:none;background:none;font:inherit;outline:none;padding:2px 0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .li .nm input:focus{border-bottom:1.5px solid var(--blue)}
 .num{font:500 14.5px/1 var(--mono);background:var(--panel);border:1.5px solid var(--line);
-  border-radius:var(--r-s);padding:11px 10px;width:78px;text-align:right;outline:none;min-height:44px}
+  border-radius:var(--r-s);padding:11px 8px;width:66px;text-align:right;outline:none;min-height:44px;flex-shrink:0}
 .num:focus{border-color:var(--blue);background:#fff}
 .num.w{width:96px}
-.li .u{font:400 12px/1 'Archivo';color:var(--ghost);width:26px}
-.li .amt{font:500 14.5px/1 var(--mono);width:76px;text-align:right}
+.li .u{font:400 12px/1 'Archivo';color:var(--ghost);width:20px;flex-shrink:0}
+.li .amt{font:500 14.5px/1 var(--mono);width:64px;text-align:right;flex-shrink:0}
 .li .x{color:var(--ghost);padding:9px;border-radius:var(--r-s);min-height:40px;display:flex;align-items:center}
 .li .x:hover{color:#C0392B;background:#FBEDEB}
 .addline{display:flex;align-items:center;gap:7px;padding:12px 15px;border-top:1px dashed var(--line-2);
@@ -233,6 +234,89 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 .flag.ok .i{stroke:var(--ok-ink)} .flag.ok .ft{color:#1E4F2E} .flag.ok .ft b{color:var(--ok-ink)}
 .flag.off{background:var(--panel);border-color:var(--line)}
 .flag.off .i{stroke:var(--ghost)} .flag.off .ft{color:var(--faint)} .flag.off .ft b{color:var(--faint)}
+
+/* ============ NEW QUOTE — quick intake ============ */
+.talkbox{position:relative;margin-bottom:18px}
+.talkbox textarea{width:100%;min-height:118px;font:500 17px/1.45 'Archivo';color:var(--ink);
+  background:var(--card);border:1.5px solid var(--line-2);border-radius:var(--r-l);
+  padding:16px 54px 16px 16px;resize:vertical;outline:none}
+.talkbox textarea:focus{border-color:var(--blue)}
+.talkbox textarea::placeholder{color:var(--ghost);font-weight:400}
+.mic-fab{position:absolute;right:10px;bottom:10px;width:40px;height:40px;border-radius:50%;
+  background:var(--site);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(232,99,10,.35)}
+.mic-fab .i{stroke:#fff;width:18px;height:18px;stroke-width:2.1}
+.tmpl-label{display:block;font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--label);margin-bottom:10px}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.tchip{display:inline-flex;align-items:center;gap:7px;border:1.5px solid var(--line-2);background:var(--card);
+  border-radius:99px;padding:9px 15px 9px 12px;font:600 13.5px/1 'Archivo';color:var(--muted);min-height:42px}
+.tchip .i{width:16px;height:16px;stroke:var(--muted)}
+.tchip.on{border-color:var(--site);background:var(--site-soft);color:var(--ink)}
+.tchip.on .i{stroke:var(--site)}
+.addclient-link{display:inline-flex;align-items:center;gap:5px;font:600 13.5px/1 'Archivo';color:var(--blue);
+  padding:8px 2px;min-height:38px;margin-bottom:10px}
+.clientfields-inline{background:var(--card);border:1.5px solid var(--line);border-radius:var(--r);padding:14px;margin-bottom:18px}
+.clientfields-inline .fld{margin-bottom:11px}
+.clientfields-inline .fld:last-child{margin-bottom:0}
+
+/* ============ WORK — title, client row, section cards ============ */
+.titlefield{width:100%;border:none;background:none;font:700 24px/1.25 'Archivo';letter-spacing:-.03em;
+  padding:2px 0;outline:none;color:var(--ink)}
+.titlefield:focus{border-bottom:2px solid var(--blue)}
+.clientrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;margin-bottom:18px;font:500 13.5px/1.3 'Archivo'}
+.clientrow .cx{color:var(--faint)}
+.clientrow .nm{color:var(--ink);font-weight:600}
+.clientrow button{color:var(--blue);font:600 13.5px/1 'Archivo';padding:4px 2px}
+
+.seccard{display:flex;align-items:center;gap:13px;width:100%;text-align:left;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r-l);padding:15px;margin-bottom:9px;min-height:72px}
+.seccard:hover{border-color:var(--line-2)}
+.seccard-ic{width:38px;height:38px;border-radius:50%;background:var(--panel);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center}
+.seccard-ic .i{stroke:var(--muted);width:18px;height:18px}
+.seccard-body{flex:1;min-width:0}
+.seccard-name{display:block;font:600 15px/1.25 'Archivo';letter-spacing:-.01em}
+.seccard-desc{display:block;font:400 12.5px/1.4 'Archivo';color:var(--faint);margin-top:4px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.seccard-meta{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.seccard-count{font:500 11.5px/1 var(--mono);color:var(--ghost)}
+.seccard-meta .i{stroke:var(--ghost);width:17px;height:17px}
+.addsection{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;
+  border:1.5px dashed var(--line-2);border-radius:var(--r-l);padding:14px;margin-top:4px;
+  font:600 13.5px/1 'Archivo';color:var(--blue);min-height:52px}
+.addsection:hover{background:var(--panel);border-color:var(--site)}
+
+/* ============ PRICE — simplified summary ============ */
+.pricecard{background:var(--card);border:1px solid var(--line);border-radius:var(--r-l);padding:5px 16px}
+.pricecard .kv{padding:13px 0}
+.profitline{font:500 13.5px/1.4 'Archivo';color:var(--ok-ink);background:var(--ok-soft);
+  border-radius:var(--r);padding:12px 15px;margin:12px 0}
+.viewdetails{display:flex;align-items:center;gap:6px;font:600 13.5px/1 'Archivo';color:var(--blue);
+  padding:10px 2px;min-height:40px}
+.viewdetails .i{width:16px;height:16px}
+
+/* ============ DRAWER (bottom sheet on mobile, modal on desktop) ============ */
+.drawer-ov{position:fixed;inset:0;z-index:85;background:rgba(14,17,19,.4);
+  display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:opacity .18s}
+.drawer-ov.on{opacity:1;pointer-events:auto}
+.drawer{background:#fff;width:100%;max-height:88vh;overflow-y:auto;border-radius:20px 20px 0 0;
+  padding:10px 18px calc(22px + env(safe-area-inset-bottom));
+  transform:translateY(100%);transition:transform .22s ease}
+.drawer-ov.on .drawer{transform:translateY(0)}
+.drawer-handle{width:38px;height:4px;background:var(--line-2);border-radius:99px;margin:6px auto 16px}
+.drawer-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+.drawer-hd h3{font:700 18px/1.25 'Archivo';letter-spacing:-.02em}
+.drawer-x{width:34px;height:34px;border-radius:50%;background:var(--panel);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.drawer-x .i{width:16px;height:16px}
+.drawer-titlein{width:100%;border:none;border-bottom:1.5px solid var(--line);background:none;
+  font:600 15px/1.3 'Archivo';padding:6px 0 10px;outline:none;margin-bottom:14px}
+.drawer-titlein:focus{border-color:var(--blue)}
+@media (min-width:900px){
+  .drawer-ov{align-items:center;justify-content:center}
+  .drawer{width:520px;max-width:92vw;border-radius:16px;max-height:84vh;
+    transform:translateY(10px) scale(.98);opacity:0;transition:transform .18s ease,opacity .18s ease}
+  .drawer-ov.on .drawer{transform:translateY(0) scale(1);opacity:1}
+  .drawer-handle{display:none}
+}
 
 /* ============ CLIENT QUOTE SHEET ============ */
 .sheet{background:#fff;border:1px solid var(--line);border-radius:var(--r-l);padding:24px 22px}
@@ -328,8 +412,6 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
   .ws{display:grid;grid-template-columns:minmax(0,1fr) 372px;gap:24px;align-items:start}
   .side{display:block;position:sticky;top:88px}
   .wrap.ws{max-width:1180px}
-  .wt[data-tab="client"]{display:none}
-  .pane[data-pane="client"]{display:none!important}
   .tgrid{grid-template-columns:repeat(auto-fill,minmax(168px,1fr))}
   .row{padding:15px 18px}
   .stats{gap:26px}
@@ -402,59 +484,53 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
       </section>
 
       <!-- ===== NEW QUOTE ===== -->
-      <section class="wrap" id="v-new" hidden style="max-width:660px">
-        <div class="sec" style="margin-bottom:18px">
-          <h1>New quote</h1>
-          <p class="lede">Just the basics — you can change all of it later.</p>
+      <section class="wrap" id="v-new" hidden style="max-width:600px">
+        <div class="sec" style="margin-bottom:20px">
+          <h1>What are you quoting today?</h1>
         </div>
-        <div class="form">
-          <div class="fld"><label for="n-client">Client</label>
+        <div class="talkbox">
+          <textarea id="n-desc" placeholder="Small main-floor bathroom. Replace tub, tile, vanity, and flooring."></textarea>
+          <button class="mic-fab" onclick="dictate()" aria-label="Talk it out">
+            <svg class="i" viewBox="0 0 24 24"><path d="M12 14.5a3.2 3.2 0 0 0 3.2-3.2V6a3.2 3.2 0 1 0-6.4 0v5.3a3.2 3.2 0 0 0 3.2 3.2z"/><path d="M18 11.3a6 6 0 0 1-12 0M12 17.3V21"/></svg>
+          </button>
+        </div>
+        <span class="tmpl-label">Or start from a template</span>
+        <div class="chiprow" id="typeChips"></div>
+        <button class="addclient-link" onclick="toggleClientFieldsIntake()">
+          <span id="addClientLinkTxt">+ Add client details later</span></button>
+        <div class="clientfields-inline" id="clientFieldsInline" hidden>
+          <div class="fld"><label for="n-client">Client name</label>
             <input id="n-client" type="text" placeholder="Sarah Henderson" autocomplete="off"></div>
-          <div class="fld"><label for="n-job">Job name</label>
-            <input id="n-job" type="text" placeholder="Main bathroom gut" autocomplete="off"></div>
-          <div class="fld"><label for="n-addr">Address</label>
+          <div class="fld" style="margin-bottom:0"><label for="n-addr">Address</label>
             <input id="n-addr" type="text" placeholder="1418 Ridgewood Ave" autocomplete="off"></div>
-          <div class="fld"><label>Job type</label><div class="tgrid" id="typeGrid"></div></div>
-          <div class="fld"><label for="n-notes">Notes from the site visit</label>
-            <textarea id="n-notes" placeholder="What you saw on the walk-through…"></textarea>
-            <div class="afford">
-              <button class="aff" onclick="dictate()"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 14.5a3.2 3.2 0 0 0 3.2-3.2V6a3.2 3.2 0 1 0-6.4 0v5.3a3.2 3.2 0 0 0 3.2 3.2z"/><path d="M18 11.3a6 6 0 0 1-12 0M12 17.3V21"/></svg> Talk it out</button>
-              <button class="aff" onclick="toast('Photos land in the site-visit notes')"><svg class="i i-s" viewBox="0 0 24 24"><path d="M3 8.6h3.4L8.2 6h7.6l1.8 2.6H21V19H3z"/><circle cx="12" cy="13.2" r="3.2"/></svg> Add photos</button>
-            </div>
-          </div>
         </div>
-        <div style="display:flex;gap:10px;margin-top:16px">
-          <button class="btn org" style="flex:1" onclick="createQuote()">Start the quote</button>
-          <button class="btn gh" onclick="back()">Cancel</button>
-        </div>
+        <button class="btn org full" style="min-height:54px;font-size:16px" onclick="createQuote()">Build my quote</button>
       </section>
 
       <!-- ===== WORKSPACE ===== -->
       <section class="wrap ws" id="v-ws" hidden>
         <div>
-          <div class="sec" style="margin-bottom:14px">
-            <h1 id="wsTitle">Quote</h1>
-            <p class="lede" id="wsSub"></p>
+          <div class="sec" style="margin-bottom:6px">
+            <input class="titlefield" id="wsTitle" onchange="renameQuote(this.value)" aria-label="Quote title">
+            <div class="clientrow" id="clientRow"></div>
           </div>
           <div class="wstabs">
-            <button class="wt on" data-tab="scope" onclick="tab('scope')">Scope</button>
-            <button class="wt" data-tab="costs" onclick="tab('costs')">Costs</button>
-            <button class="wt" data-tab="client" onclick="tab('client')">Client quote</button>
+            <button class="wt on" data-tab="work" onclick="tab('work')">Work</button>
+            <button class="wt" data-tab="price" onclick="tab('price')">Price</button>
           </div>
 
-          <div class="pane on" data-pane="scope" id="paneScope"></div>
-          <div class="pane" data-pane="costs" id="paneCosts"></div>
-          <div class="pane" data-pane="client" id="paneClientM"></div>
+          <div class="pane on" data-pane="work" id="paneWork"></div>
+          <div class="pane" data-pane="price" id="panePrice"></div>
         </div>
 
         <!-- desktop right column -->
         <aside class="side" id="wsSide"></aside>
       </section>
 
-      <!-- ===== PREVIEW / SEND ===== -->
+      <!-- ===== REVIEW / SEND ===== -->
       <section class="wrap" id="v-preview" hidden style="max-width:720px">
         <div class="sec" style="margin-bottom:16px">
-          <h1>What they'll get</h1>
+          <h1>Review quote</h1>
           <p class="lede" id="prevSub"></p>
         </div>
         <div id="prevSheet"></div>
@@ -513,11 +589,16 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 
 <!-- ===== STICKY WORKSPACE BAR (mobile) ===== -->
 <div class="actbar" id="actbar">
-  <div class="lt"><div class="k">Client pays</div><div class="v" id="abTotal">$0</div><div class="s" id="abSub"></div></div>
-  <button class="btn" id="abBtn" onclick="preview()">Preview</button>
+  <div class="lt"><div class="k">Quote total</div><div class="v" id="abTotal">$0</div></div>
+  <button class="btn" id="abBtn" onclick="reviewQuote()">Review quote</button>
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- ===== DRAWER (section editor / pricing details / client) ===== -->
+<div class="drawer-ov" id="drawerOv" onclick="if(event.target===this)closeDrawer()">
+  <div class="drawer" id="drawerBody"></div>
+</div>
 
 <div class="menu" id="menu" onclick="if(event.target===this)closeMenu()">
   <div class="sheet-m">
@@ -723,12 +804,16 @@ function renderToday(){
     <div class="st"><div class="k">Accepted</div><div class="v">${money(wonV)}</div></div>
     <div class="st"><div class="k">Win rate</div><div class="v">${decided?Math.round(won.length/decided*100):0}%</div></div>`;
 }
-function rowHTML(q,tone){
+// Client is optional now — fall back to the quote's own title when there
+// isn't one, and say so plainly rather than leaving the row looking broken.
+const primaryLabel=q=>q.client||q.job;
+const subLabel=q=>q.client ? (q.job+(q.addr?' · '+q.addr:'')) : 'No client attached';
+function rowHTML(q){
   const c=calc(q), s=STATUS[q.status];
   return `<button class="row" onclick="openQuote('${q.id}')">
     <span class="rm">
-      <span class="r1"><span class="cl">${esc(q.client)}</span>${pill(q.status)}</span>
-      <span class="jb">${esc(q.job)}${q.addr?' · '+esc(q.addr):''}</span>
+      <span class="r1"><span class="cl">${esc(primaryLabel(q))}</span>${pill(q.status)}</span>
+      <span class="jb">${esc(subLabel(q))}</span>
     </span>
     <span class="rr">
       <span class="amt ${q.status==='lost'?'dim':''}">${money(c.total)}</span>
@@ -749,11 +834,11 @@ function renderQuotes(){
   if(term) list=list.filter(q=>(q.client+' '+q.job+' '+(q.addr||'')).toLowerCase().includes(term));
   document.getElementById('quoteList').innerHTML = list.length
     ? `<div class="list">${list.map(q=>{
-        const c=calc(q),s=STATUS[q.status];
+        const c=calc(q);
         return `<button class="row" onclick="openQuote('${q.id}')">
           <span class="rm">
-            <span class="r1"><span class="cl">${esc(q.client)}</span>${pill(q.status)}</span>
-            <span class="jb">${esc(q.job)}${q.addr?' · '+esc(q.addr):''}</span>
+            <span class="r1"><span class="cl">${esc(primaryLabel(q))}</span>${pill(q.status)}</span>
+            <span class="jb">${esc(subLabel(q))}</span>
           </span>
           <span class="rr">
             <span class="amt ${q.status==='lost'?'dim':''}">${money(c.total)}</span>
@@ -763,111 +848,222 @@ function renderQuotes(){
 }
 function setFilter(f){ filter=f; renderQuotes(); }
 
-/* ---------- NEW ---------- */
-let newType='bathroom';
+/* ---------- NEW QUOTE — one screen, nothing required but the job itself ---------- */
+let newType='', clientFieldsOpen=false;
 function startNew(){
-  newType='bathroom';
-  ['n-client','n-job','n-addr','n-notes'].forEach(id=>document.getElementById(id).value='');
-  renderTypeGrid();
+  newType=''; clientFieldsOpen=false;
+  document.getElementById('n-desc').value='';
+  document.getElementById('n-client').value='';
+  document.getElementById('n-addr').value='';
+  document.getElementById('clientFieldsInline').hidden=true;
+  document.getElementById('addClientLinkTxt').textContent='+ Add client details later';
+  renderIntakeChips();
   go('new');
 }
-function renderTypeGrid(){
-  document.getElementById('typeGrid').innerHTML=Object.keys(T).map(k=>{
-    const t=T[k];
-    return `<button class="tsel ${newType===k?'on':''}" onclick="pickType('${k}')">
-      <svg class="i i-l" viewBox="0 0 24 24">${ICON[t.icon]}</svg>
-      <span><span class="tn">${t.name}</span>${t.checks?`<span class="tc">${t.checks} checks</span>`:''}</span>
-    </button>`;}).join('');
+function renderIntakeChips(){
+  document.getElementById('typeChips').innerHTML=Object.keys(T).map(k=>{
+    const t=T[k], label=k==='custom'?'Other':t.name;
+    return `<button class="tchip ${newType===k?'on':''}" onclick="selectType('${k}')">
+      <svg class="i" viewBox="0 0 24 24">${ICON[t.icon]}</svg>${label}</button>`;
+  }).join('');
 }
-function pickType(k){ newType=k; renderTypeGrid(); }
+function selectType(k){ newType=(newType===k)?'':k; renderIntakeChips(); }
+function toggleClientFieldsIntake(){
+  clientFieldsOpen=!clientFieldsOpen;
+  document.getElementById('clientFieldsInline').hidden=!clientFieldsOpen;
+  document.getElementById('addClientLinkTxt').textContent = clientFieldsOpen ? '– Hide client details' : '+ Add client details later';
+}
 function dictate(){
-  const n=document.getElementById('n-notes');
-  n.value=T[newType].ex; n.focus(); toast('Dictated — edit anything');
+  const n=document.getElementById('n-desc');
+  n.value=(newType?T[newType]:T.custom).ex; n.focus(); toast('Dictated — edit anything');
+}
+// No text and no template picked yet? Fall back to a plain title so the
+// quote still has a name — a contractor should never be blocked by this.
+function deriveTitle(text,type){
+  const t=(text||'').trim();
+  if(t){
+    let s=t.split(/[.\n]/)[0].trim();
+    if(s.length>54) s=s.slice(0,51).trim()+'…';
+    return s.charAt(0).toUpperCase()+s.slice(1);
+  }
+  return type && T[type] ? T[type].name+' quote' : 'New quote';
 }
 function createQuote(){
-  const g=id=>document.getElementById(id).value.trim();
-  if(!g('n-client')){ document.getElementById('n-client').focus(); toast('Who is it for?'); return; }
-  const t=T[newType];
-  const q={id:'q'+Math.random().toString(36).slice(2,9), client:g('n-client'),
-    job:g('n-job')||t.name+' job', addr:g('n-addr'), type:newType, notes:g('n-notes'),
-    status:'draft', when:'Started just now', rate:DB.profile.rate, cx:t.cx, buffer:true,
+  const type=newType||'custom', t=T[type];
+  const desc=document.getElementById('n-desc').value.trim();
+  const client=document.getElementById('n-client').value.trim();
+  const addr=document.getElementById('n-addr').value.trim();
+  const q={id:'q'+Math.random().toString(36).slice(2,9),
+    client, job:deriveTitle(desc,type), addr, cPhone:'', cEmail:'',
+    type, notes:desc, status:'draft', when:'Started just now',
+    rate:DB.profile.rate, cx:t.cx, buffer:true,
     groups:JSON.parse(JSON.stringify(t.groups))};
   DB.quotes.unshift(q); save();
   openQuote(q.id);
 }
 
 /* ---------- WORKSPACE ---------- */
-let cur=null, curTab='scope';
+let cur=null, curTab='work';
 function openQuote(id){
   cur=DB.quotes.find(q=>q.id===id); if(!cur) return;
-  curTab='scope'; go('ws');
+  curTab='work'; go('ws');
 }
 function tab(t){
   curTab=t;
   document.querySelectorAll('.wt').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));
   document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.dataset.pane===t));
-  renderWs();
+}
+function clientRowHTML(q){
+  return q.client
+    ? `<span class="cx">For</span><span class="nm">${esc(q.client)}</span><button onclick="openClientDrawer()">Edit</button>`
+    : `<span class="cx">No client attached</span><button onclick="openClientDrawer()">+ Add client</button>`;
+}
+function renderWorkPane(q){
+  const notes = q.notes ? `<div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">Site notes</span></div>
+      <div style="padding:13px 15px;font:400 13.5px/1.5 'Archivo';color:var(--muted)">${esc(q.notes)}</div></div>` : '';
+  const cards = q.groups.map((g,gi)=>{
+    const n=g.labor.length+g.mats.length;
+    return `<button class="seccard" onclick="openSection(${gi})">
+      <span class="seccard-ic"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></span>
+      <span class="seccard-body">
+        <span class="seccard-name">${esc(g.n)}</span>
+        <span class="seccard-desc">${esc(g.d||'Tap to add labour and materials')}</span>
+      </span>
+      <span class="seccard-meta">
+        <span class="seccard-count">${n} item${n===1?'':'s'}</span>
+        <svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </span></button>`;
+  }).join('');
+  return notes+cards+`<button class="addsection" onclick="addGroup()">
+    <svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add a section</button>`;
+}
+function renderPricePane(q,c){
+  const marginOff=c.margin<DB.profile.target;
+  return `<div class="pricecard">
+      <div class="kv"><span class="k">Labour</span><span class="v">${money(c.labor)}</span></div>
+      <div class="kv"><span class="k">Materials</span><span class="v">${money(c.matSell)}</span></div>
+      <div class="kv"><span class="k">Other / allowance</span><span class="v">${money(c.cxAdd+c.cont)}</span></div>
+      <div class="kv big"><span class="k">Quote total</span><span class="v">${money(c.total)}</span></div>
+    </div>
+    <div class="profitline" ${marginOff?'style="background:var(--warn-soft);color:var(--warn)"':''}>
+      Estimated profit: ${money(c.profit)} · ${c.margin}% margin${marginOff?` — under your ${DB.profile.target}% target`:''}
+    </div>
+    <button class="viewdetails" onclick="openPriceDrawer()">View pricing details
+      <svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>`;
+}
+function renderSide(q,c){
+  const marginOff=c.margin<DB.profile.target;
+  return `<div class="grp">
+      <div class="grp-hd"><span class="t">Quote total</span>${pill(q.status)}</div>
+      <div style="padding:14px 15px">
+        <div style="font:600 30px/1 var(--mono);letter-spacing:-.03em">${money(c.total)}</div>
+        <div style="font:400 12.5px/1.5 'Archivo';color:var(--faint);margin-top:8px">
+          Estimated profit ${money(c.profit)} · <span style="color:${marginOff?'var(--warn)':'var(--ok-ink)'};font-weight:600">${c.margin}% margin</span></div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button class="btn org" style="flex:1" onclick="reviewQuote()">Review quote</button>
+        </div>
+        <button class="mini dn" style="margin-top:6px" onclick="saveDraft()">Save draft</button>
+        <button class="mini" style="margin-top:2px" onclick="openPriceDrawer()">View pricing details</button>
+      </div>
+    </div>`;
 }
 function renderWs(){
   const q=cur, c=calc(q);
-  document.getElementById('wsTitle').textContent=q.client;
-  document.getElementById('wsSub').textContent=`${q.job}${q.addr?' · '+q.addr:''}`;
-  document.getElementById('tbTitle').textContent=q.client;
+  document.getElementById('wsTitle').value=q.job;
+  document.getElementById('clientRow').innerHTML=clientRowHTML(q);
+  document.getElementById('tbTitle').textContent=q.job;
+  document.getElementById('paneWork').innerHTML=renderWorkPane(q);
+  document.getElementById('panePrice').innerHTML=renderPricePane(q,c);
+  document.getElementById('wsSide').innerHTML=renderSide(q,c);
+  document.getElementById('abTotal').textContent=money(c.total);
+}
+function renameQuote(v){
+  cur.job=v.trim()||cur.job; cur.when='Edited just now'; save();
+  document.getElementById('tbTitle').textContent=cur.job;
+}
 
-  /* --- SCOPE --- */
-  document.getElementById('paneScope').innerHTML =
-    (q.notes?`<div class="grp"><div class="grp-hd"><span class="t">Site visit notes</span></div>
-      <div style="padding:13px 15px;font:400 14px/1.55 'Archivo';color:var(--muted)">${esc(q.notes)}</div></div>`:'')
-    + q.groups.map((g,gi)=>`
-      <div class="grp">
-        <div class="grp-hd"><span class="t">${esc(g.n)}</span><span class="v">${money(groupTotal(q,g))}</span></div>
-        <div style="padding:11px 15px 4px"><span class="eyebrow">Labour</span></div>
-        ${g.labor.map(([n,h],i)=>`
-          <div class="li">
-            <span class="nm"><input value="${esc(n)}" onchange="editLabel(${gi},'labor',${i},this.value)" aria-label="Task name"></span>
-            <input class="num" type="number" inputmode="numeric" value="${h}" onchange="editHours(${gi},${i},this.value)" aria-label="Hours">
-            <span class="u">hrs</span>
-            <span class="amt">${money(h*q.rate)}</span>
-            <button class="x" onclick="delLine(${gi},'labor',${i})" aria-label="Remove"><svg class="i i-s" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-          </div>`).join('')}
-        <button class="addline" onclick="addLine(${gi},'labor')"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add labour line</button>
-        <div style="padding:11px 15px 4px;border-top:1px solid var(--line)"><span class="eyebrow">Materials</span></div>
-        ${g.mats.map(([n,cst,src],i)=>`
-          <div class="li">
-            <span class="nm"><input value="${esc(n)}" onchange="editLabel(${gi},'mats',${i},this.value)" aria-label="Material name">
-              <span style="display:block;font:400 11.5px/1 'Archivo';color:var(--ghost);margin-top:5px">${esc(src||'')}</span></span>
-            <input class="num" type="number" inputmode="decimal" value="${cst}" onchange="editCost(${gi},${i},this.value)" aria-label="Cost">
-            <span class="amt">${money(cst*(1+mkFor(cst)))}</span>
-            <button class="x" onclick="delLine(${gi},'mats',${i})" aria-label="Remove"><svg class="i i-s" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg></button>
-          </div>`).join('')}
-        <button class="addline" onclick="addLine(${gi},'mats')"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add material</button>
-      </div>`).join('')
-    + `<button class="btn gh full" style="margin-top:4px" onclick="addGroup()">
-        <svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add a section</button>`;
+/* ---------- scope editing (lives inside the section drawer) ---------- */
+function touch(){ cur.when='Edited just now'; save(); renderWs(); refreshDrawer(); }
+function editLabel(gi,kind,i,v){ cur.groups[gi][kind][i][0]=v.trim()||'Untitled'; touch(); }
+function editHours(gi,i,v){ cur.groups[gi].labor[i][1]=Math.max(0,parseFloat(v)||0); touch(); }
+function editCost(gi,i,v){ cur.groups[gi].mats[i][1]=Math.max(0,parseFloat(v)||0); touch(); }
+function editGroupName(gi,v){ cur.groups[gi].n=v.trim()||'Untitled section'; touch(); }
+function delLine(gi,kind,i){ cur.groups[gi][kind].splice(i,1); touch(); }
+function addLine(gi,kind){
+  if(kind==='labor') cur.groups[gi].labor.push(['New task',4]);
+  else cur.groups[gi].mats.push(['New material',100,'Your price']);
+  touch();
+}
+function addGroup(){
+  cur.groups.push({n:'New section',d:'',labor:[],mats:[]});
+  cur.when='Edited just now'; save(); renderWs();
+  openSection(cur.groups.length-1);
+}
+function deleteSection(gi){ cur.groups.splice(gi,1); closeDrawer(); touch(); toast('Section removed'); }
+function setCx(v){ cur.cx=v; touch(); }
+function toggleBuffer(){ cur.buffer=!cur.buffer; touch(); }
 
-  /* --- COSTS --- */
-  const marginOff = c.margin < DB.profile.target;
-  document.getElementById('paneCosts').innerHTML=`
+/* ---------- drawer (bottom sheet / modal) ---------- */
+let openDrawerType=null, openSectionGi=null, pendingSendAfterClient=false;
+function openDrawer(html){ document.getElementById('drawerBody').innerHTML=html; document.getElementById('drawerOv').classList.add('on'); }
+function closeDrawer(){ document.getElementById('drawerOv').classList.remove('on'); openDrawerType=null; openSectionGi=null; }
+function refreshDrawer(){
+  if(openDrawerType==='section' && openSectionGi!=null && cur.groups[openSectionGi]) document.getElementById('drawerBody').innerHTML=sectionDrawerHTML(openSectionGi);
+  else if(openDrawerType==='price') document.getElementById('drawerBody').innerHTML=priceDrawerHTML();
+}
+const xIcon='<svg class="i i-s" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>';
+function openSection(gi){ openSectionGi=gi; openDrawerType='section'; openDrawer(sectionDrawerHTML(gi)); }
+function sectionDrawerHTML(gi){
+  const q=cur, g=q.groups[gi];
+  return `<div class="drawer-handle"></div>
+    <div class="drawer-hd"><h3>Section</h3><button class="drawer-x" onclick="closeDrawer()">${xIcon}</button></div>
+    <input class="drawer-titlein" value="${esc(g.n)}" onchange="editGroupName(${gi},this.value)" aria-label="Section name">
+    <div style="padding:2px 0 4px"><span class="eyebrow">Labour</span></div>
+    <div class="grp" style="margin-bottom:14px">
+      ${g.labor.map(([n,h],i)=>`
+        <div class="li">
+          <span class="nm"><input value="${esc(n)}" onchange="editLabel(${gi},'labor',${i},this.value)" aria-label="Task name"></span>
+          <input class="num" type="number" inputmode="numeric" value="${h}" onchange="editHours(${gi},${i},this.value)" aria-label="Hours">
+          <span class="u">hrs</span>
+          <span class="amt">${money(h*q.rate)}</span>
+          <button class="x" onclick="delLine(${gi},'labor',${i})" aria-label="Remove">${xIcon}</button>
+        </div>`).join('') || `<div style="padding:12px 15px;color:var(--ghost);font:400 13.5px/1.4 'Archivo'">No labour lines yet.</div>`}
+      <button class="addline" onclick="addLine(${gi},'labor')"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add labour line</button>
+    </div>
+    <div style="padding:2px 0 4px"><span class="eyebrow">Materials</span></div>
+    <div class="grp" style="margin-bottom:16px">
+      ${g.mats.map(([n,cst,src],i)=>`
+        <div class="li">
+          <span class="nm"><input value="${esc(n)}" onchange="editLabel(${gi},'mats',${i},this.value)" aria-label="Material name">
+            <span style="display:block;font:400 11.5px/1 'Archivo';color:var(--ghost);margin-top:5px">${esc(src||'')}</span></span>
+          <input class="num" type="number" inputmode="decimal" value="${cst}" onchange="editCost(${gi},${i},this.value)" aria-label="Cost">
+          <span class="amt">${money(cst*(1+mkFor(cst)))}</span>
+          <button class="x" onclick="delLine(${gi},'mats',${i})" aria-label="Remove">${xIcon}</button>
+        </div>`).join('') || `<div style="padding:12px 15px;color:var(--ghost);font:400 13.5px/1.4 'Archivo'">No materials yet.</div>`}
+      <button class="addline" onclick="addLine(${gi},'mats')"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add material</button>
+    </div>
+    <button class="btn gh full" onclick="deleteSection(${gi})">Remove this section</button>`;
+}
+function openPriceDrawer(){ openDrawerType='price'; openDrawer(priceDrawerHTML()); }
+function priceDrawerHTML(){
+  const q=cur, c=calc(q), marginOff=c.margin<DB.profile.target;
+  return `<div class="drawer-handle"></div>
+    <div class="drawer-hd"><h3>Pricing details</h3><button class="drawer-x" onclick="closeDrawer()">${xIcon}</button></div>
     ${q.buffer?`<div class="flag"><svg class="i" viewBox="0 0 24 24"><path d="M12 9v5M12 17.5v.01"/><path d="M10.3 3.9L2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
-      <span class="ft"><b>Buffer on.</b> Older place with unknowns behind the walls — contingency is at <b>25%</b>.
+      <span class="ft"><b>Buffer on.</b> Contingency is at <b>25%</b>.
       <button class="mini" style="padding:6px 0;margin-top:4px;display:block" onclick="toggleBuffer()">Take the buffer off</button></span></div>`
     :`<div class="flag off"><svg class="i" viewBox="0 0 24 24"><path d="M12 9v5M12 17.5v.01"/><path d="M10.3 3.9L2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
-      <span class="ft">Buffer off — contingency <b>15%</b>. Surprises come out of your pocket.
+      <span class="ft">Buffer off — contingency <b>15%</b>.
       <button class="mini" style="padding:6px 0;margin-top:4px;display:block" onclick="toggleBuffer()">Put it back on</button></span></div>`}
-
-    <div class="grp"><div class="grp-hd"><span class="t">Labour</span><span class="v">${money(c.labor)}</span></div>
-      <div style="padding:4px 15px 13px">
-        <div class="kv"><span class="k">${c.hours} hrs @ $${q.rate}/hr</span><span class="v">${money(c.labor)}</span></div>
-      </div></div>
-
-    <div class="grp"><div class="grp-hd"><span class="t">Materials</span><span class="v">${money(c.matSell)}</span></div>
+    <div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">Labour</span><span class="v">${money(c.labor)}</span></div>
+      <div style="padding:4px 15px 13px"><div class="kv"><span class="k">${c.hours} hrs @ $${q.rate}/hr</span><span class="v">${money(c.labor)}</span></div></div></div>
+    <div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">Materials</span><span class="v">${money(c.matSell)}</span></div>
       <div style="padding:4px 15px 13px">
         <div class="kv"><span class="k">What you pay</span><span class="v">${money(c.matCost)}</span></div>
         <div class="kv"><span class="k">Markup added<span class="sub">under $100 +${Math.round(DB.profile.mk[0]*100)}% · to $1k +${Math.round(DB.profile.mk[1]*100)}% · over +${Math.round(DB.profile.mk[2]*100)}%</span></span>
           <span class="v">${money(c.matSell-c.matCost)}</span></div>
       </div></div>
-
-    <div class="grp"><div class="grp-hd"><span class="t">Protection</span><span class="v">${money(c.cxAdd+c.cont)}</span></div>
+    <div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">Complexity &amp; contingency</span><span class="v">${money(c.cxAdd+c.cont)}</span></div>
       <div style="padding:12px 15px 15px">
         <span class="eyebrow">How complex is this job?</span>
         <div class="seg">${CX.map(([v,n])=>`<button class="sg ${q.cx===v?'on':''}" onclick="setCx(${v})"><span class="a">${n}</span><span class="b">×${v}</span></button>`).join('')}</div>
@@ -876,74 +1072,49 @@ function renderWs(){
           <div class="kv"><span class="k">Contingency ${c.pct}%<span class="sub">shown to the client · unused portion returned</span></span><span class="v">${money(c.cont)}</span></div>
         </div>
       </div></div>
-
     <div class="grp"><div class="grp-hd"><span class="t">Where you land</span></div>
       <div style="padding:4px 15px 15px">
         <div class="kv"><span class="k">Your cost</span><span class="v">${money(c.cost)}</span></div>
-        <div class="kv big"><span class="k">Client pays</span><span class="v">${money(c.total)}</span></div>
+        <div class="kv big"><span class="k">Quote total</span><span class="v">${money(c.total)}</span></div>
         <div class="kv"><span class="k">Your profit</span><span class="v">${money(c.profit)}</span></div>
         <div class="kv"><span class="k"><b>Margin</b> — profit ÷ price<span class="sub">the number that decides if you eat</span></span>
           <span class="v" style="color:${marginOff?'var(--warn)':'var(--ok-ink)'}">${c.margin}%</span></div>
         <div class="kv"><span class="k">Markup — profit ÷ cost<span class="sub">the number you punch in</span></span>
           <span class="v" style="color:var(--muted)">${c.markup}%</span></div>
       </div></div>
-
-    ${marginOff?`<div class="flag"><svg class="i" viewBox="0 0 24 24"><path d="M12 9v5M12 17.5v.01"/><path d="M10.3 3.9L2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
-      <span class="ft"><b>${c.margin}% margin</b> — under your ${DB.profile.target}% target. A ${Math.round(DB.profile.target)}% margin needs about a ${Math.round(DB.profile.target/(1-DB.profile.target/100))}% markup. One bad week and this one is underwater.</span></div>`
-    :`<div class="flag ok"><svg class="i" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
-      <span class="ft"><b>${c.margin}% margin</b> — at or above your ${DB.profile.target}% target. This one holds up if it runs over.</span></div>`}`;
-
-  /* --- CLIENT (mobile pane) --- */
-  document.getElementById('paneClientM').innerHTML=sheetHTML(q)+
-    `<div class="madeby">Prepared with QuoteRight</div>`;
-
-  /* --- SIDE (desktop) --- */
-  document.getElementById('wsSide').innerHTML=`
-    <div class="grp" style="margin-bottom:12px">
-      <div class="grp-hd"><span class="t">Client pays</span>${pill(q.status)}</div>
-      <div style="padding:14px 15px">
-        <div style="font:600 30px/1 var(--mono);letter-spacing:-.03em">${money(c.total)}</div>
-        <div style="font:400 12.5px/1.5 'Archivo';color:var(--faint);margin-top:8px">
-          ${money(c.profit)} profit · <span style="color:${marginOff?'var(--warn)':'var(--ok-ink)'};font-weight:600">${c.margin}% margin</span></div>
-        <div style="display:flex;gap:8px;margin-top:14px">
-          <button class="btn org" style="flex:1" onclick="preview()">Preview &amp; send</button>
-        </div>
-        <button class="mini dn" style="margin-top:6px" onclick="saveDraft()">Save draft</button>
-      </div>
-    </div>
-    <div class="grp">
-      <div class="grp-hd"><span class="t">What they'll see</span>
-        <button class="mini" onclick="preview()">Full page</button></div>
-      <div style="padding:14px 15px">
-        ${clientItems(q).map(i=>`<div class="kv"><span class="k">${esc(i.n)}</span><span class="v">${money(i.a)}</span></div>`).join('')}
-        <div class="kv"><span class="k">Contingency</span><span class="v">${money(c.cont)}</span></div>
-        <div class="kv big"><span class="k">Total</span><span class="v">${money(c.total)}</span></div>
-      </div>
-    </div>`;
-
-  /* --- sticky bar (mobile) --- */
-  document.getElementById('abTotal').textContent=money(c.total);
-  document.getElementById('abSub').textContent=`${c.margin}% margin · ${money(c.profit)} profit`;
-  document.getElementById('abBtn').textContent = curTab==='client' ? 'Send quote' : 'Preview & send';
-  document.getElementById('abBtn').onclick = curTab==='client' ? sendQuote : preview;
+    ${marginOff?`<div class="flag" style="margin-top:12px"><svg class="i" viewBox="0 0 24 24"><path d="M12 9v5M12 17.5v.01"/><path d="M10.3 3.9L2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+      <span class="ft"><b>${c.margin}% margin</b> — under your ${DB.profile.target}% target. One bad week and this one is underwater.</span></div>`
+    :`<div class="flag ok" style="margin-top:12px"><svg class="i" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+      <span class="ft"><b>${c.margin}% margin</b> — at or above your ${DB.profile.target}% target.</span></div>`}`;
+}
+function openClientDrawer(forSend){ pendingSendAfterClient=!!forSend; openDrawerType='client'; openDrawer(clientDrawerHTML()); }
+function clientDrawerHTML(){
+  const q=cur;
+  return `<div class="drawer-handle"></div>
+    <div class="drawer-hd"><h3>${q.client?'Edit client':'Add client'}</h3><button class="drawer-x" onclick="closeDrawer()">${xIcon}</button></div>
+    ${pendingSendAfterClient?`<div class="flag off" style="margin-bottom:14px"><svg class="i" viewBox="0 0 24 24"><path d="M12 9v5M12 17.5v.01"/><path d="M10.3 3.9L2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg><span class="ft">Add who this is for before sending.</span></div>`:''}
+    <div class="fld"><label for="d-cname">Client name</label><input id="d-cname" value="${esc(q.client)}" placeholder="Sarah Henderson"></div>
+    <div class="fld"><label for="d-caddr">Address</label><input id="d-caddr" value="${esc(q.addr)}" placeholder="1418 Ridgewood Ave"></div>
+    <div class="fld"><label for="d-cphone">Phone</label><input id="d-cphone" value="${esc(q.cPhone||'')}" placeholder="(216) 555-0148"></div>
+    <div class="fld" style="margin-bottom:0"><label for="d-cemail">Email</label><input id="d-cemail" value="${esc(q.cEmail||'')}" placeholder="name@email.com"></div>
+    <button class="btn org full" style="margin-top:16px" onclick="saveClientDrawer()">Save</button>`;
+}
+function saveClientDrawer(){
+  const g=id=>document.getElementById(id).value.trim();
+  cur.client=g('d-cname'); cur.addr=g('d-caddr'); cur.cPhone=g('d-cphone'); cur.cEmail=g('d-cemail');
+  save(); closeDrawer();
+  if(view==='ws') renderWs();
+  if(view==='preview'){
+    document.getElementById('prevSub').textContent = cur.client?`For ${cur.client}`:'No client attached yet';
+    document.getElementById('prevSheet').innerHTML=sheetHTML(cur);
+  }
+  if(pendingSendAfterClient){
+    pendingSendAfterClient=false;
+    if(cur.client) doSend(); else toast('Add a name to send this quote');
+  } else toast(cur.client?'Client saved':'Client removed');
 }
 
-/* ---------- scope editing ---------- */
-function touch(){ cur.when='Edited just now'; save(); renderWs(); }
-function editLabel(gi,kind,i,v){ cur.groups[gi][kind][i][0]=v.trim()||'Untitled'; touch(); }
-function editHours(gi,i,v){ cur.groups[gi].labor[i][1]=Math.max(0,parseFloat(v)||0); touch(); }
-function editCost(gi,i,v){ cur.groups[gi].mats[i][1]=Math.max(0,parseFloat(v)||0); touch(); }
-function delLine(gi,kind,i){ cur.groups[gi][kind].splice(i,1); touch(); toast('Line removed'); }
-function addLine(gi,kind){
-  if(kind==='labor') cur.groups[gi].labor.push(['New task',4]);
-  else cur.groups[gi].mats.push(['New material',100,'Your price']);
-  touch();
-}
-function addGroup(){ cur.groups.push({n:'New section',d:'',labor:[['New task',4]],mats:[]}); touch(); }
-function setCx(v){ cur.cx=v; touch(); }
-function toggleBuffer(){ cur.buffer=!cur.buffer; touch(); }
-
-/* ---------- client sheet ---------- */
+/* ---------- client-facing quote sheet ---------- */
 // Single source of truth for the client-facing breakdown. Displayed lines are
 // rounded and must add up to the displayed total exactly — a quote that doesn't
 // foot looks amateur, so any drift is absorbed by the largest line.
@@ -971,7 +1142,9 @@ function sheetHTML(q){
         <div class="v" style="color:var(--faint)">${today}</div></div>
     </div>
     <div class="sh-blk"><div class="k">PREPARED FOR</div>
-      <div class="v"><b>${esc(q.client)}</b>${q.addr?'<br>'+esc(q.addr):''}</div></div>
+      <div class="v">${q.client
+        ? `<b>${esc(q.client)}</b>${q.addr?'<br>'+esc(q.addr):''} <button class="mini" style="padding:2px 6px;display:inline-flex" onclick="openClientDrawer()">Edit</button>`
+        : `<button class="mini" style="padding:2px 0;color:var(--site-ink)" onclick="openClientDrawer()">No client attached — Add client</button>`}</div></div>
     <div class="sh-blk"><div class="k">THE WORK</div><div class="v">${esc(q.notes||t.scope)}</div></div>
     <div class="sh-blk"><div class="k">WHAT'S INCLUDED</div>
       ${items.map(i=>`<div class="sh-it"><div><div class="n">${esc(i.n)}</div>${i.d?`<div class="d">${esc(i.d)}</div>`:''}</div><div class="a">${money(i.a)}</div></div>`).join('')}
@@ -988,13 +1161,14 @@ function sheetHTML(q){
     </div>
   </div>`;
 }
-function preview(){
-  document.getElementById('prevSub').textContent=`${cur.client} · ${cur.job}`;
+function reviewQuote(){
+  document.getElementById('prevSub').textContent = cur.client?`For ${cur.client}`:'No client attached yet';
   document.getElementById('prevSheet').innerHTML=sheetHTML(cur);
   go('preview');
 }
 function saveDraft(){ cur.status='draft'; cur.when='Saved just now'; save(); toast('Saved as a draft'); go('today'); }
-function sendQuote(){
+function sendQuote(){ if(!cur.client){ openClientDrawer(true); return; } doSend(); }
+function doSend(){
   DB.seq++; cur.num='2026-'+String(DB.seq).padStart(4,'0');
   cur.status='sent'; cur.when='Sent just now'; cur.days=0; save();
   toast('Sent to '+cur.client); go('today');
@@ -1037,27 +1211,28 @@ function closeMenu(){ document.getElementById('menu').classList.remove('on'); }
 
 /* ---------- router ---------- */
 const VIEWS=['today','quotes','new','ws','preview','settings'];
-const TITLES={new:'New quote',preview:'Preview',settings:'Settings',quotes:'Quotes'};
+const TITLES={new:'New quote',preview:'Review',settings:'Settings',quotes:'Quotes'};
 const ROOT=['today','quotes'];
 let view='today', trail=[];
 function go(v,noPush){
   if(!noPush && view!==v){ if(ROOT.includes(v)) trail=[]; else trail.push(view); }
   view=v;
+  closeDrawer();
   VIEWS.forEach(k=>document.getElementById('v-'+k).hidden = k!==v);
   const isRoot=ROOT.includes(v);
   document.getElementById('backBtn').hidden=isRoot;
   document.getElementById('tbBrand').hidden=!isRoot;
   const h2=document.getElementById('tbTitle');
-  h2.hidden=isRoot; if(!isRoot) h2.textContent=TITLES[v]||(cur?cur.client:'');
+  h2.hidden=isRoot; if(!isRoot) h2.textContent=TITLES[v]||(cur?cur.job:'');
   document.getElementById('tb-today').classList.toggle('on',v==='today');
   document.getElementById('tb-quotes').classList.toggle('on',v==='quotes');
   document.getElementById('nv-today').classList.toggle('on',v==='today');
   document.getElementById('nv-quotes').classList.toggle('on',v==='quotes');
-  document.getElementById('tabbar').style.display = (v==='ws')?'none':'';
+  document.getElementById('tabbar').style.display = isRoot ? '' : 'none';
   document.getElementById('actbar').classList.toggle('on', v==='ws');
   if(v==='today') renderToday();
   if(v==='quotes') renderQuotes();
-  if(v==='ws'){ tab(curTab); }
+  if(v==='ws'){ renderWs(); tab(curTab); }
   if(v==='settings') renderSettings();
   window.scrollTo(0,0);
 }
