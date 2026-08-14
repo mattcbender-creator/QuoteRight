@@ -277,6 +277,33 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 .num::-webkit-outer-spin-button,.num::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 .num{-moz-appearance:textfield}
 
+/* ============ "AI built this" — build transition, banner, inline note ============ */
+.buildov{position:fixed;inset:0;z-index:95;background:var(--page);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:14px;opacity:0;pointer-events:none;transition:opacity .2s;padding:0 40px}
+.buildov.on{opacity:1;pointer-events:auto}
+.buildov .spark{width:52px;height:52px;border-radius:50%;background:var(--blue-soft);
+  display:flex;align-items:center;justify-content:center}
+.buildov .spark svg{width:25px;height:25px;stroke:var(--blue);fill:none;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round;animation:sparkpulse 1s ease-in-out infinite}
+@keyframes sparkpulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.14);opacity:.7}}
+@media (prefers-reduced-motion:reduce){.buildov .spark svg{animation:none}}
+.buildov .bt{font:600 16px/1.3 'Archivo';color:var(--ink);text-align:center}
+.buildov .bs{font:400 13.5px/1.45 'Archivo';color:var(--faint);text-align:center;max-width:260px}
+
+.aibanner{display:flex;gap:11px;align-items:flex-start;background:var(--blue-soft);border:1px solid #C6D6E4;
+  border-radius:var(--r-l);padding:14px 14px 14px 15px;margin-bottom:14px}
+.aibanner .ic{width:28px;height:28px;border-radius:50%;background:#fff;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;margin-top:1px}
+.aibanner .ic svg{width:15px;height:15px;stroke:var(--blue);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.aibanner .tx{flex:1;font:400 13.5px/1.5 'Archivo';color:#1F4E70}
+.aibanner .tx b{font-weight:700}
+.aibanner .x{flex-shrink:0;width:28px;height:28px;border-radius:50%;color:#4E7BA0;
+  display:flex;align-items:center;justify-content:center;margin:-4px -4px 0 0}
+.aibanner .x:hover{background:rgba(255,255,255,.55)}
+
+.ai-note{display:flex;align-items:center;gap:6px;font:600 11.5px/1 'Archivo';color:var(--blue);margin-bottom:14px}
+.ai-note svg{width:13px;height:13px;stroke:var(--blue);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
 .seccard{display:flex;align-items:center;gap:13px;width:100%;text-align:left;
   background:var(--card);border:1px solid var(--line);border-radius:var(--r-l);padding:15px;margin-bottom:9px;min-height:72px}
 .seccard:hover{border-color:var(--line-2)}
@@ -497,6 +524,7 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
       <section class="wrap" id="v-new" hidden style="max-width:600px">
         <div class="sec" style="margin-bottom:20px">
           <h1>What are you quoting today?</h1>
+          <p class="lede">Give me the job or pick a template — I'll draft the labour, materials and pricing. You just review and adjust.</p>
         </div>
         <div class="talkbox">
           <textarea id="n-desc" placeholder="Small main-floor bathroom. Replace tub, tile, vanity, and flooring."></textarea>
@@ -609,6 +637,13 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- ===== "AI is building your quote" transition ===== -->
+<div class="buildov" id="buildOv">
+  <div class="spark"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7.7-2z"/></svg></div>
+  <div class="bt">Building your quote</div>
+  <div class="bs" id="buildOvSub">Drafting the labour, materials and pricing…</div>
+</div>
 
 <!-- ===== DRAWER (section editor / pricing details / client) ===== -->
 <div class="drawer-ov" id="drawerOv" onclick="if(event.target===this)closeDrawer()">
@@ -733,8 +768,12 @@ function seed(){
     const t=T[o.type];
     return Object.assign({
       id:'q'+Math.random().toString(36).slice(2,9),
-      rate:95, cx:t.cx, buffer:true, notes:'',
-      groups:JSON.parse(JSON.stringify(t.groups)),
+      rate:95, cx:t.cx, buffer:true, notes:'', cPhone:'', cEmail:'',
+      // These are existing/historical demo quotes, not ones you're about to
+      // create — mark the intro seen so the "built for you" banner only
+      // ever appears on a quote you actually just built.
+      autoBuilt:true, introSeen:true, chipUsed:true,
+      groups:JSON.parse(JSON.stringify(t.groups)).map(g=>Object.assign(g,{auto:true})),
     }, o);
   };
   return {
@@ -904,21 +943,43 @@ function deriveTitle(text,type){
   return type && T[type] ? T[type].name+' quote' : 'New quote';
 }
 function createQuote(){
-  const type=newType||'custom', t=T[type];
+  const chipUsed=!!newType, type=newType||'custom', t=T[type];
   const desc=document.getElementById('n-desc').value.trim();
   const client=document.getElementById('n-client').value.trim();
   const addr=document.getElementById('n-addr').value.trim();
-  const q={id:'q'+Math.random().toString(36).slice(2,9),
-    client, job:deriveTitle(desc,type), addr, cPhone:'', cEmail:'',
-    type, notes:desc, status:'draft', when:'Started just now',
-    rate:DB.profile.rate, cx:t.cx, buffer:true,
-    groups:JSON.parse(JSON.stringify(t.groups))};
-  DB.quotes.unshift(q); save();
-  // The intake screen is consumed once a quote exists — leaving it in the
-  // back-stack would let Back land on stale, already-submitted fields and
-  // invite a duplicate quote if "Build my quote" gets tapped again.
-  cur=q; curTab='work'; trail=[];
-  go('ws',true);
+
+  // A brief, honest "building" moment — this is what actually tells a
+  // contractor an assistant just did the work, rather than them wondering
+  // whether they were supposed to type all of this themselves.
+  const ov=document.getElementById('buildOv');
+  document.getElementById('buildOvSub').textContent = desc
+    ? 'Reading your description and drafting the scope…'
+    : `Loading the ${t.name} template and today's pricing…`;
+  ov.classList.add('on');
+
+  setTimeout(()=>{
+    const q={id:'q'+Math.random().toString(36).slice(2,9),
+      client, job:deriveTitle(desc,type), addr, cPhone:'', cEmail:'',
+      type, notes:desc, status:'draft', when:'Started just now',
+      rate:DB.profile.rate, cx:t.cx, buffer:true,
+      autoBuilt:true, introSeen:false, chipUsed,
+      // tag each starting section as AI-drafted so sections added later
+      // by hand (via "Add a section") can be told apart from these
+      groups:JSON.parse(JSON.stringify(t.groups)).map(g=>Object.assign(g,{auto:true}))};
+    DB.quotes.unshift(q); save();
+    // The intake screen is consumed once a quote exists — leaving it in the
+    // back-stack would let Back land on stale, already-submitted fields and
+    // invite a duplicate quote if "Build my quote" gets tapped again.
+    cur=q; curTab='work'; trail=[];
+    go('ws',true);
+    ov.classList.remove('on');
+  }, 650);
+}
+function buildSource(q){
+  const t=T[q.type];
+  if(q.notes && q.chipUsed) return `from your notes, using the ${t.name} template`;
+  if(q.notes) return 'from your description';
+  return `using the ${t.name} template`;
 }
 
 /* ---------- WORKSPACE ---------- */
@@ -938,6 +999,13 @@ function clientRowHTML(q){
     : `<span class="cx">No client attached</span><button onclick="openClientDrawer()">+ Add client</button>`;
 }
 function renderWorkPane(q){
+  const itemCount=q.groups.reduce((s,g)=>s+g.labor.length+g.mats.length,0);
+  const banner = (q.autoBuilt && !q.introSeen) ? `<div class="aibanner">
+      <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z"/><path d="M19 15l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7.7-2z"/></svg></span>
+      <span class="tx"><b>Built for you</b> ${esc(buildSource(q))} — ${q.groups.length} section${q.groups.length===1?'':'s'},
+        ${itemCount} item${itemCount===1?'':'s'} priced. Nothing here is final — tap any section to change it.</span>
+      <button class="x" onclick="dismissAiBanner()" aria-label="Dismiss">${xIcon}</button>
+    </div>` : '';
   const notes = q.notes ? `<div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">Site notes</span></div>
       <div style="padding:13px 15px;font:400 13.5px/1.5 'Archivo';color:var(--muted)">${esc(q.notes)}</div></div>` : '';
   const cards = q.groups.map((g,gi)=>{
@@ -953,7 +1021,7 @@ function renderWorkPane(q){
         <svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
       </span></button>`;
   }).join('');
-  return notes+cards+`<button class="addsection" onclick="addGroup()">
+  return banner+notes+cards+`<button class="addsection" onclick="addGroup()">
     <svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add a section</button>`;
 }
 function renderPricePane(q,c){
@@ -1014,13 +1082,15 @@ function addLine(gi,kind){
   touch();
 }
 function addGroup(){
-  cur.groups.push({n:'New section',d:'',labor:[],mats:[]});
+  // auto:false — a section you add yourself is never mislabelled as AI-drafted
+  cur.groups.push({n:'New section',d:'',labor:[],mats:[],auto:false});
   cur.when='Edited just now'; save(); renderWs();
   openSection(cur.groups.length-1);
 }
 function deleteSection(gi){ cur.groups.splice(gi,1); closeDrawer(); touch(); toast('Section removed'); }
 function setCx(v){ cur.cx=v; touch(); }
 function toggleBuffer(){ cur.buffer=!cur.buffer; touch(); }
+function dismissAiBanner(){ cur.introSeen=true; save(); renderWs(); }
 
 /* ---------- drawer (bottom sheet / modal) ---------- */
 let openDrawerType=null, openSectionGi=null, pendingSendAfterClient=false;
@@ -1037,6 +1107,7 @@ function sectionDrawerHTML(gi){
   return `<div class="drawer-handle"></div>
     <div class="drawer-hd"><h3>Section</h3><button class="drawer-x" onclick="closeDrawer()">${xIcon}</button></div>
     <input class="drawer-titlein" value="${esc(g.n)}" onchange="editGroupName(${gi},this.value)" aria-label="Section name">
+    ${g.auto?`<div class="ai-note"><svg viewBox="0 0 24 24"><path d="M12 3l1.6 4.4L18 9l-4.4 1.6L12 15l-1.6-4.4L6 9l4.4-1.6L12 3z"/></svg>AI-drafted hours &amp; prices — change anything below</div>`:''}
     <div style="padding:2px 0 4px"><span class="eyebrow">Labour</span></div>
     <div class="grp" style="margin-bottom:14px">
       ${g.labor.map(([n,h],i)=>`
