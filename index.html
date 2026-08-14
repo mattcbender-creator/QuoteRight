@@ -41,7 +41,7 @@
   }
   .logo{display:flex;align-items:center;gap:8px;font-family:'Archivo Black';font-size:19px;letter-spacing:-.01em}
   .logo svg{display:block;flex-shrink:0}
-  .logo span{color:var(--site)}
+  .logo .wm span{color:var(--site)}
   .back{
     font-size:14px;font-weight:600;color:var(--chalk);background:none;border:none;
     padding:8px 10px 8px 0;cursor:pointer;visibility:hidden;
@@ -66,7 +66,7 @@
   .big-btn.primary{background:var(--site)}
   .big-btn.ghost{background:var(--card);color:var(--ink);border:2px solid var(--line)}
   .big-btn:active{transform:scale(.985)}
-  .big-btn:focus-visible,.chip:focus-visible,.why:focus-visible,.price-line:focus-visible{outline:3px solid var(--chalk);outline-offset:2px}
+  .big-btn:focus-visible,.chip:focus-visible,.why:focus-visible,.type-btn:focus-visible{outline:3px solid var(--chalk);outline-offset:2px}
 
   .card{
     background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
@@ -82,6 +82,17 @@
   .draft-row .amt{font-family:'IBM Plex Mono';font-weight:600}
   .tag{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;background:var(--paper);color:var(--ink-soft);text-transform:uppercase;letter-spacing:.05em}
   .tag.sent{background:#E4EDF5;color:var(--chalk)}
+
+  /* job type picker */
+  .type-btn{
+    width:100%;display:flex;align-items:center;gap:14px;text-align:left;cursor:pointer;
+    background:var(--card);border:2px solid var(--line);border-radius:var(--radius);
+    padding:16px;margin-bottom:12px;font-family:'Archivo';min-height:74px;
+  }
+  .type-btn:active{border-color:var(--site)}
+  .type-btn .emo{font-size:28px;flex-shrink:0;line-height:1}
+  .type-btn .t-name{font-weight:700;font-size:18px}
+  .type-btn .t-desc{color:var(--ink-soft);font-size:13.5px;font-weight:600;margin-top:2px}
 
   /* editable fields */
   .field{display:block;width:100%;margin-bottom:12px}
@@ -105,19 +116,14 @@
   }
   .rate-edit:focus{outline:none;border-color:var(--chalk);background:#fff}
 
-  .mic-wrap{display:flex;flex-direction:column;align-items:center;margin:22px 0 8px}
+  .mic-wrap{display:flex;flex-direction:column;align-items:center;margin:8px 0}
   .mic{
-    width:118px;height:118px;border-radius:50%;border:none;cursor:pointer;
+    width:104px;height:104px;border-radius:50%;border:none;cursor:pointer;
     background:var(--site);display:flex;align-items:center;justify-content:center;
     box-shadow:0 0 0 10px rgba(232,99,10,.14);
   }
-  .mic svg{width:44px;height:44px;fill:#fff}
-  .mic-label{margin-top:14px;font-weight:700;font-size:16px}
-  .transcript{
-    background:var(--card);border:2px dashed var(--line);border-radius:var(--radius);
-    padding:16px;font-size:16px;line-height:1.5;color:var(--ink);min-height:96px;margin-top:18px;
-  }
-  .transcript em{color:var(--ink-soft);font-style:normal}
+  .mic svg{width:40px;height:40px;fill:#fff}
+  .mic-label{margin-top:12px;font-weight:700;font-size:15px}
 
   .confirm-item{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line);font-size:16px;line-height:1.35}
   .confirm-item:first-of-type{border-top:none}
@@ -131,11 +137,11 @@
   .chip{
     width:100%;padding:18px;border-radius:var(--radius);border:2px solid var(--line);
     background:var(--card);font-family:'Archivo';font-weight:700;font-size:17px;
-    margin-bottom:10px;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;
+    margin-bottom:10px;cursor:pointer;text-align:left;display:flex;justify-content:space-between;align-items:center;gap:10px;
     min-height:60px;
   }
   .chip:active{border-color:var(--site)}
-  .chip small{font-weight:600;color:var(--ink-soft);font-size:13px}
+  .chip small{font-weight:600;color:var(--ink-soft);font-size:13px;text-align:right}
 
   /* AI pricing screen */
   .scanning{
@@ -146,7 +152,7 @@
   @keyframes pulse{0%,100%{opacity:.25}50%{opacity:1}}
   @media (prefers-reduced-motion:reduce){.dot{animation:none}}
   .price-line{
-    width:100%;text-align:left;background:none;border:none;
+    width:100%;text-align:left;
     display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
     padding:12px 0;border-top:1px solid var(--line);font-family:'Archivo';
   }
@@ -180,7 +186,7 @@
     display:inline-block;margin-top:8px;background:var(--card);border:1.5px solid #E0A878;color:var(--site);
     font-family:'Archivo';font-weight:700;font-size:13px;border-radius:8px;padding:7px 12px;cursor:pointer;
   }
-  .guardian.off{background:var(--card);border-color:var(--line);color:var(--ink-soft)}
+  .guardian.off{background:var(--card);border-color:var(--line)}
   .guardian.off b{color:var(--ink-soft)}
   .guardian.off button{border-color:var(--line);color:var(--chalk)}
   .totals .line{font-weight:700}
@@ -233,7 +239,7 @@
       <rect x="2" y="2" width="20" height="20" rx="6" fill="var(--ink)"/>
       <path d="M6.8 12.4l3.3 3.3L17.2 8.6" fill="none" stroke="var(--site)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
-    <span style="color:var(--ink)">Quote<span>Right</span></span>
+    <span class="wm">Quote<span>Right</span></span>
   </div>
   <div style="width:52px"></div>
 </header>
@@ -260,7 +266,14 @@
     </div>
   </section>
 
-  <!-- 2 TALK -->
+  <!-- 2 JOB TYPE -->
+  <section class="screen" id="s-type">
+    <h1>What are we quoting?</h1>
+    <p class="sub">Pick the job. I'll load the checklist and your prices for it.</p>
+    <div id="typeList"></div>
+  </section>
+
+  <!-- 3 TALK -->
   <section class="screen" id="s-talk">
     <h1>Tell me about the job.</h1>
     <p class="sub">Talk like you'd talk to a buddy. I'll sort it out.</p>
@@ -270,63 +283,55 @@
       </button>
       <div class="mic-label">Tap &amp; talk</div>
     </div>
-    <div class="field" style="margin-top:20px">
+    <div class="field" style="margin-top:16px">
       <label for="clientName">Who's it for?</label>
-      <input id="clientName" type="text" placeholder="Client name" value="Sarah Henderson">
+      <input id="clientName" type="text" placeholder="Client name">
     </div>
     <div class="field">
       <label for="jobTitle">The job</label>
-      <input id="jobTitle" type="text" placeholder="e.g. Henderson bathroom" value="Henderson bathroom">
+      <input id="jobTitle" type="text" placeholder="e.g. Henderson bathroom">
     </div>
     <div class="field">
       <label for="jobDesc">In your words</label>
-      <textarea id="jobDesc" placeholder="Full bathroom gut, 1970s house, tub to shower, client's own vanity, tight second-floor access…"></textarea>
+      <textarea id="jobDesc" placeholder="Say what you saw on the walk-through…"></textarea>
     </div>
     <button class="big-btn primary" onclick="go('s-confirm')">Got it — keep going</button>
     <p class="foot-hint">Rather type? The mic just fills an example — type over it anytime.</p>
   </section>
 
-  <!-- 3 CONFIRM -->
+  <!-- 4 CONFIRM -->
   <section class="screen" id="s-confirm">
     <h1>Got it. Sound right?</h1>
     <p class="sub">Tap anything that's wrong.</p>
-    <div class="card">
-      <div class="confirm-item"><span class="check">✓</span><span><b>Bathroom — full gut</b>, approx. 5×9 ft</span></div>
-      <div class="confirm-item"><span class="check">✓</span><span>House built in the <b>1970s</b></span></div>
-      <div class="confirm-item"><span class="check">✓</span><span><b>Tub → shower</b> conversion</span></div>
-      <div class="confirm-item"><span class="check">✓</span><span>Client supplies the <b>vanity</b></span></div>
-      <div class="confirm-item"><span class="check">✓</span><span><b>Second floor</b>, tight access</span></div>
-    </div>
+    <div class="card" id="confirmItems"></div>
     <button class="big-btn primary" onclick="go('s-q1')">Looks right — keep going</button>
     <button class="big-btn ghost" onclick="go('s-talk')">Fix something</button>
   </section>
 
-  <!-- 4 QUESTION -->
+  <!-- 5 QUESTION -->
   <section class="screen" id="s-q1">
     <div class="progress"><i class="done"></i><i class="done"></i><i class="done"></i><i></i><i></i></div>
-    <div class="q">Any signs of water damage on the floor?</div>
-    <p class="q-help">Soft spots, stains, that smell. Old houses love to hide it.</p>
-    <button class="chip" onclick="go('s-prices')">Yes <small>saw some staining</small></button>
-    <button class="chip" onclick="go('s-prices')">No <small>floor feels solid</small></button>
-    <button class="chip" onclick="go('s-prices')">Not sure <small>I'll buffer for it</small></button>
+    <div class="q" id="qText"></div>
+    <p class="q-help" id="qHelp"></p>
+    <div id="qChips"></div>
   </section>
 
-  <!-- 5 AI PRICES -->
+  <!-- 6 AI PRICES -->
   <section class="screen" id="s-prices">
     <h1>I priced your materials.</h1>
     <div class="scanning"><span class="dot"></span> Checked today's prices near you — Home Depot, Lowe's, local averages</div>
-    <div class="card" id="priceCard"><!-- rendered --></div>
+    <div class="card" id="priceCard"></div>
     <p class="ai-note">These are today's shelf prices. Your markup gets added automatically on the next screen — small stuff +40%, mid +30%, big-ticket +20%. The client never sees this screen.</p>
     <button class="big-btn primary" onclick="go('s-est')">Use these prices</button>
   </section>
 
-  <!-- 6 ESTIMATE -->
+  <!-- 7 ESTIMATE -->
   <section class="screen" id="s-est">
-    <h1 id="estTitle">Henderson bathroom</h1>
+    <h1 id="estTitle">Estimate</h1>
     <p class="sub">Your rates. Today's prices. Tap any number to change it.</p>
 
     <div class="guardian" id="guardian">
-      <b>Hold up.</b> 1970s house and no “unknowns behind walls” buffer? Last time that cost you a weekend. I added <b>+10%</b> — tap to remove it if you're sure.
+      <span id="guardianText"></span>
       <br><button id="guardianBtn" onclick="toggleUnknowns()">Remove the buffer</button>
     </div>
 
@@ -344,17 +349,15 @@
 
     <div class="card">
       <div class="eyebrow">Protection</div>
-      <div class="line">
-        <span class="lbl">How complex is this job?<button class="why" onclick="toggleNote('n1')">Why?</button></span>
-      </div>
+      <div class="line"><span class="lbl">How complex is this job?<button class="why" onclick="toggleNote('n1')">Why?</button></span></div>
       <div class="complexity" id="cxPicker">
-        <button class="cx" data-mult="1" onclick="setComplexity(1,this)">Standard<small>×1.0</small></button>
-        <button class="cx" data-mult="1.25" onclick="setComplexity(1.25,this)">Medium<small>×1.25</small></button>
-        <button class="cx on" data-mult="1.5" onclick="setComplexity(1.5,this)">High<small>×1.5</small></button>
-        <button class="cx" data-mult="1.75" onclick="setComplexity(1.75,this)">Extreme<small>×1.75</small></button>
+        <button class="cx" data-mult="1" onclick="setComplexity(1)">Standard<small>×1.0</small></button>
+        <button class="cx" data-mult="1.25" onclick="setComplexity(1.25)">Medium<small>×1.25</small></button>
+        <button class="cx" data-mult="1.5" onclick="setComplexity(1.5)">High<small>×1.5</small></button>
+        <button class="cx" data-mult="1.75" onclick="setComplexity(1.75)">Extreme<small>×1.75</small></button>
       </div>
-      <div id="n1" class="note">Pre-1980 house with tight access — hidden rot, old pipes, maybe asbestos. Jobs like this run about 50% heavier than a new build. This keeps the surprise from coming out of your pocket.</div>
-      <div class="line"><span class="lbl">Older-home factor</span><span class="amt" id="cxAmt">$0</span></div>
+      <div id="n1" class="note">Older or tighter jobs run heavier than a clean new build — hidden damage, surprises behind walls. This keeps that off your bottom line.</div>
+      <div class="line"><span class="lbl">Complexity factor</span><span class="amt" id="cxAmt">$0</span></div>
       <div class="line"><span class="lbl">Contingency (<span id="contPct">25</span>%)<button class="why" onclick="toggleNote('n2')">Why?</button></span><span class="amt" id="contAmt">$0</span></div>
       <div id="n2" class="note">15% base for a standard reno, +10% for unknowns behind the walls. It shows on the client's quote as its own line — and if you don't need it, you hand it back and look like a hero.</div>
     </div>
@@ -367,31 +370,31 @@
     <button class="big-btn" onclick="go('s-check')">Looks good — check it over</button>
   </section>
 
-  <!-- 7 CONFIDENCE CHECK -->
+  <!-- 8 CONFIDENCE CHECK -->
   <section class="screen" id="s-check">
     <h1>Last look before it goes.</h1>
     <p class="sub">Five quick gut checks. Tap each one you're solid on.</p>
     <div class="card">
       <div class="gate"><div class="box" onclick="gate(this)"></div><p>If this job goes sideways, I still make money.<small>Your cushion holds even if labor runs 20% over.</small></p></div>
-      <div class="gate"><div class="box" onclick="gate(this)"></div><p>This price is fair for my work and my market.<small>Similar jobs around here: $15k–$30k.</small></p></div>
+      <div class="gate"><div class="box" onclick="gate(this)"></div><p>This price is fair for my work and my market.<small>In line with similar jobs around here.</small></p></div>
       <div class="gate"><div class="box" onclick="gate(this)"></div><p>I hit my rate and my target margin.<small>This quote pays your rate on every hour. ✓</small></p></div>
-      <div class="gate"><div class="box" onclick="gate(this)"></div><p>I captured everything at the site visit.<small>Checklist 14/15 — photo of the shut-off is missing.</small></p></div>
-      <div class="gate"><div class="box" onclick="gate(this)"></div><p>The quote says why I'm worth it.<small>Warranty, premium waterproofing, weekly photo updates — in.</small></p></div>
+      <div class="gate"><div class="box" onclick="gate(this)"></div><p>I captured everything at the site visit.<small>Checklist 14/15 — one photo still missing.</small></p></div>
+      <div class="gate"><div class="box" onclick="gate(this)"></div><p>The quote says why I'm worth it.<small>Warranty, quality materials, clear timeline — in.</small></p></div>
     </div>
     <button class="big-btn primary" id="sendBtn" onclick="sendQuote()" disabled style="opacity:.45">Send the quote</button>
     <p class="foot-hint">Button unlocks when all five are checked.</p>
   </section>
 
-  <!-- 8 SENT -->
+  <!-- 9 SENT -->
   <section class="screen" id="s-sent">
     <div class="sent-mark">✓</div>
-    <h1 style="text-align:center" id="sentTitle">Sent to Sarah Henderson.</h1>
-    <p class="sub" style="text-align:center">Texted and emailed. You'll get a ping when she opens it.<br>Follow-up reminder set for Friday.</p>
+    <h1 style="text-align:center" id="sentTitle">Sent.</h1>
+    <p class="sub" style="text-align:center">Texted and emailed. You'll get a ping when they open it.<br>Follow-up reminder set for Friday.</p>
     <div class="pdf">
-      <b id="pdfTitle">Henderson Bathroom Renovation — Estimate</b><br>
+      <b id="pdfTitle">Estimate</b><br>
       Dave Kowalczyk Contracting · 2-year workmanship warranty<br>
-      Scope: full renovation incl. tub-to-shower conversion, premium waterproofing system…<br>
-      Contingency allowance — covers hidden water damage &amp; surprises: <span class="pdf-total" id="pdfCont">$0</span><br>
+      <span id="pdfScope">Scope…</span><br>
+      Contingency allowance — covers surprises: <span class="pdf-total" id="pdfCont">$0</span><br>
       <b>Total: <span class="pdf-total" id="pdfTotal">$0</span></b>
     </div>
     <button class="big-btn ghost" style="margin-top:16px" onclick="go('s-home')">Back to my jobs</button>
@@ -410,50 +413,193 @@
 </div>
 
 <script>
-  /* ---------- state ---------- */
+  /* ===========================================================
+     TEMPLATES — each job type is a data object.
+     Numbers are sensible starting points, tuned with a contractor.
+     Material markup is derived by price tier (see markupFor).
+     =========================================================== */
+  const TEMPLATES = {
+    bathroom: {
+      emoji:'🛁', name:'Bathroom reno', desc:'full gut, tile, fixtures',
+      defaultTitle:'Bathroom reno', complexityDefault:1.5,
+      scope:'full bathroom renovation incl. tub-to-shower conversion and premium waterproofing',
+      example:"Full bathroom gut at the Hendersons'. House is from the seventies. Tub to shower conversion, they're buying their own vanity. Second floor, tight stairs.",
+      confirm:[
+        '<b>Bathroom — full gut</b>, approx. 5×9 ft',
+        'House built in the <b>1970s</b>',
+        '<b>Tub → shower</b> conversion',
+        'Client supplies the <b>vanity</b>',
+        '<b>Second floor</b>, tight access',
+      ],
+      question:{q:'Any signs of water damage on the floor?', help:'Soft spots, stains, that smell. Old houses love to hide it.',
+        chips:[['Yes','saw some staining'],['No','floor feels solid'],['Not sure',"I'll buffer for it"]]},
+      guardian:'<b>Hold up.</b> 1970s house and no “unknowns behind walls” buffer? Last time that cost you a weekend. I added <b>+10%</b> — tap to remove it if you\'re sure.',
+      labor:[
+        ['Demo & prep',8],['Plumbing rough-in',6],['Waterproofing',8],['Tile install',19],['Fixtures & finish',8],
+      ],
+      materials:[
+        ['Schluter shower kit, 5×9',812,'Home Depot · updated today'],
+        ['Tile & grout, 140 sqft +10% waste',1790,"Lowe's · updated today"],
+        ['Plumbing rough-in materials',615,'Local avg · 3 suppliers'],
+        ['Shower valve, head & glass door',948,'Home Depot · updated today'],
+        ['Backer board, fasteners & misc',390,'Local avg'],
+      ],
+    },
+    kitchen: {
+      emoji:'🍳', name:'Kitchen reno', desc:'cabinets, counters, the works',
+      defaultTitle:'Kitchen reno', complexityDefault:1.5,
+      scope:'full kitchen renovation incl. cabinetry, quartz countertops, backsplash and flooring',
+      example:"Full kitchen reno. Tearing out the old cabinets, new shakers, quartz tops, tile backsplash and new LVP floor. Keeping the sink and stove roughly where they are. House is late 80s.",
+      confirm:[
+        '<b>Full kitchen reno</b> — cabinets, counters, floor',
+        'Cabinets <b>replaced</b> (not refaced)',
+        '<b>Quartz</b> countertops, ~45 sqft',
+        'Keeping the <b>same footprint</b>',
+        'Client supplies the <b>appliances</b>',
+      ],
+      question:{q:'Are the sink and stove staying put?', help:'Moving them means new plumbing, gas or electrical runs — a big cost swing.',
+        chips:[['Yes','same layout, keeps it clean'],['No',"we're moving things, add rough-in"],['Not sure',"I'll buffer for it"]]},
+      guardian:'<b>Hold up.</b> Kitchen with no “unknowns behind walls” buffer? Cabinets always hide a surprise. I added <b>+10%</b> — tap to remove it if you\'re sure.',
+      labor:[
+        ['Demo & haul-out',12],['Plumbing rough-in',8],['Electrical rough-in',10],['Drywall & patch',8],
+        ['Cabinet install',20],['Countertop template & install',6],['Backsplash tile',10],['Flooring',12],
+        ['Fixture & finish plumbing',8],['Paint',10],['Punch list',6],
+      ],
+      materials:[
+        ['Cabinets — shaker, mid-grade',6500,'Local supplier · quoted'],
+        ['Countertop — quartz, ~45 sqft installed',3200,'Fabricator · quoted'],
+        ['Flooring — LVP, ~200 sqft',1400,"Lowe's · updated today"],
+        ['Backsplash tile + setting materials',650,'Home Depot · updated today'],
+        ['Sink, faucet & disposal',560,'Home Depot · updated today'],
+        ['Electrical — cans, outlets, GFCI',480,'Local avg'],
+        ['Plumbing rough & finish materials',430,'Local avg'],
+        ['Drywall, primer & paint',380,'Local avg'],
+        ['Fasteners, adhesives & misc',300,'Local avg'],
+      ],
+    },
+    deck: {
+      emoji:'🪚', name:'Deck', desc:'framing, decking, railing, stairs',
+      defaultTitle:'Backyard deck', complexityDefault:1.25,
+      scope:'16×20 composite deck incl. framing, railing and stairs',
+      example:"Building a 16 by 20 composite deck off the back, attached to the house. PT frame, one set of stairs, full railing. Yard slopes a bit. Permit needed.",
+      confirm:[
+        '<b>16×20 deck</b>, ~320 sqft',
+        '<b>Composite</b> decking, PT frame',
+        'Attached to house (<b>ledger</b>)',
+        'One <b>stair run</b> + full railing',
+        '<b>Permit</b> required',
+      ],
+      question:{q:'Any slope or bad soil under the deck?', help:'Grade and soft ground change footings and framing time.',
+        chips:[['Flat & solid','standard footings'],['Some slope','add framing time'],['Not sure',"I'll buffer for it"]]},
+      guardian:'<b>Heads up.</b> Outdoor build with no weather/soil buffer? Footings love to surprise you. I added <b>+10%</b> — tap to remove it if you\'re sure.',
+      labor:[
+        ['Layout & footings',10],['Framing & ledger',16],['Decking',14],['Railing',8],['Stairs',6],['Seal & finish',6],
+      ],
+      materials:[
+        ['PT framing lumber',1200,'Local yard · quoted'],
+        ['Composite decking, ~320 sqft',2600,'Home Depot · updated today'],
+        ['Hidden fasteners & joist hangers',480,'Home Depot · updated today'],
+        ['Railing system',1100,'Home Depot · updated today'],
+        ['Footings, concrete & hardware',420,'Local avg'],
+        ['Stair materials',350,'Local avg'],
+      ],
+    },
+    framing: {
+      emoji:'🔨', name:'Framing', desc:'walls, sheathing, headers',
+      defaultTitle:'Wall framing', complexityDefault:1.0,
+      scope:'interior and exterior wall framing incl. sheathing and structural openings',
+      example:"Framing job — about 180 linear feet of walls, interior and exterior, 9 foot ceilings. One structural opening for a beam. Sheathing included.",
+      confirm:[
+        '<b>Wall framing</b>, ~180 linear ft',
+        '<b>9 ft</b> walls',
+        'Interior + exterior walls',
+        'One <b>structural opening</b>',
+        'Sheathing <b>included</b>',
+      ],
+      question:{q:'Standard height walls, or tall / vaulted?', help:'Height drives lumber and labor more than length does.',
+        chips:[['Standard','straightforward'],['Tall / vaulted','add material & time'],['Not sure',"I'll buffer for it"]]},
+      guardian:'<b>Quick check.</b> Framing with zero buffer? One crooked existing wall eats a day. I added <b>+10%</b> — tap to remove it if you\'re sure.',
+      labor:[
+        ['Layout & plates',6],['Wall framing',24],['Sheathing',10],['Headers & openings',6],['Blocking & strapping',6],
+      ],
+      materials:[
+        ['Studs & plates (SPF)',1400,'Local yard · quoted'],
+        ['Sheathing (OSB)',900,'Home Depot · updated today'],
+        ['Headers & LVL',650,'Local yard · quoted'],
+        ['Fasteners, hangers & hardware',520,'Home Depot · updated today'],
+        ['Waste & misc',300,'Local avg'],
+      ],
+    },
+  };
+
+  /* ===========================================================
+     WORKING ESTIMATE STATE
+     =========================================================== */
   const est = {
-    rate: 95,
-    complexity: 1.5,
-    unknowns: true, // guardian +10% on/off
-    labor: [
-      {name:'Demo & prep', hours:8},
-      {name:'Plumbing rough-in', hours:6},
-      {name:'Waterproofing', hours:8},
-      {name:'Tile install', hours:19},
-      {name:'Fixtures & finish', hours:8},
-    ],
-    materials: [
-      {name:'Schluter shower kit', base:812, markup:.30, src:'Home Depot · updated today'},
-      {name:'Tile & grout (140 sqft +10% waste)', base:1790, markup:.20, src:"Lowe's · updated today"},
-      {name:'Plumbing rough-in materials', base:615, markup:.30, src:'Local avg · 3 suppliers'},
-      {name:'Shower valve, head & glass door', base:948, markup:.30, src:'Home Depot · updated today'},
-      {name:'Backer board, fasteners & misc', base:390, markup:.40, src:'Local avg'},
-    ],
-    title:'Henderson bathroom',
-    client:'Sarah Henderson',
+    rate:95, complexity:1.5, unknowns:true,
+    typeId:'bathroom', title:'', client:'', scope:'',
+    labor:[], materials:[],
   };
 
   const money = n => '$' + Math.round(n).toLocaleString('en-US');
+  // Tiered markup from the methodology: <$100 ×1.40, $100–1000 ×1.30, >$1000 ×1.20
+  const markupFor = base => base < 100 ? .40 : base <= 1000 ? .30 : .20;
 
   function calc(){
     const laborTotal = est.labor.reduce((s,l)=> s + l.hours*est.rate, 0);
-    let matTotal = 0, matBase = 0;
-    est.materials.forEach(m=>{ matTotal += m.base*(1+m.markup); matBase += m.base; });
+    let matTotal=0, matBase=0;
+    est.materials.forEach(m=>{ matTotal += m.base*(1+markupFor(m.base)); matBase += m.base; });
     const subtotal = laborTotal + matTotal;
     const cxAdd = subtotal * (est.complexity - 1);
     const contPct = 15 + (est.unknowns ? 10 : 0);
     const contBase = subtotal + cxAdd;
     const contingency = contBase * contPct/100;
     const clientPays = contBase + contingency;
-    const matMarkup = matTotal - matBase;
-    const cushion = matMarkup + cxAdd + contingency; // margin above bare cost
-    return {laborTotal, matTotal, subtotal, cxAdd, contPct, contingency, clientPays, cushion};
+    const cushion = (matTotal - matBase) + cxAdd + contingency;
+    return {laborTotal, matTotal, cxAdd, contPct, contingency, clientPays, cushion};
   }
 
-  /* ---------- render ---------- */
+  /* ---------- pick a job type ---------- */
+  function renderTypes(){
+    document.getElementById('typeList').innerHTML = Object.keys(TEMPLATES).map(id=>{
+      const t = TEMPLATES[id];
+      return `<button class="type-btn" onclick="pickType('${id}')">
+        <span class="emo">${t.emoji}</span>
+        <span><span class="t-name">${t.name}</span><span class="t-desc">${t.desc}</span></span>
+      </button>`;
+    }).join('');
+  }
+  function loadType(id){
+    const t = TEMPLATES[id];
+    est.typeId = id;
+    est.complexity = t.complexityDefault;
+    est.unknowns = true;
+    est.scope = t.scope;
+    est.title = t.defaultTitle;
+    est.labor = t.labor.map(([name,hours])=>({name,hours}));
+    est.materials = t.materials.map(([name,base,src])=>({name,base,src}));
+    document.getElementById('clientName').value = '';
+    document.getElementById('jobTitle').value = t.defaultTitle;
+    document.getElementById('jobDesc').value = '';
+  }
+  function pickType(id){ loadType(id); go('s-talk'); }
+  function fillExample(){ document.getElementById('jobDesc').value = TEMPLATES[est.typeId].example; }
+
+  /* ---------- render each screen from the template/state ---------- */
+  function renderConfirm(){
+    document.getElementById('confirmItems').innerHTML =
+      TEMPLATES[est.typeId].confirm.map(html=>
+        `<div class="confirm-item"><span class="check">✓</span><span>${html}</span></div>`).join('');
+  }
+  function renderQuestion(){
+    const q = TEMPLATES[est.typeId].question;
+    document.getElementById('qText').textContent = q.q;
+    document.getElementById('qHelp').textContent = q.help;
+    document.getElementById('qChips').innerHTML = q.chips.map(([label,small])=>
+      `<button class="chip" onclick="go('s-prices')">${label} <small>${small}</small></button>`).join('');
+  }
   function renderPrices(){
-    const el = document.getElementById('priceCard');
-    el.innerHTML = est.materials.map((m,i)=>`
+    document.getElementById('priceCard').innerHTML = est.materials.map((m,i)=>`
       <div class="price-line">
         <span><span class="p-name">${m.name}</span><br><span class="p-src"><span class="src-tag">${m.src.split(' · ')[0]}</span>${m.src.split(' · ')[1]||''}</span></span>
         <span style="text-align:right">
@@ -462,10 +608,10 @@
         </span>
       </div>`).join('');
   }
-
   function renderEstimate(){
     document.getElementById('estTitle').textContent = est.title || 'Estimate';
     document.getElementById('rateEcho').textContent = money(est.rate);
+    document.getElementById('guardianText').innerHTML = TEMPLATES[est.typeId].guardian;
 
     document.getElementById('laborLines').innerHTML = est.labor.map((l,i)=>`
       <div class="line">
@@ -475,18 +621,17 @@
         <span class="amt">${money(l.hours*est.rate)}</span>
       </div>`).join('');
 
-    document.getElementById('matLines').innerHTML = est.materials.map((m,i)=>`
-      <div class="line">
+    document.getElementById('matLines').innerHTML = est.materials.map(m=>{
+      const mk = markupFor(m.base);
+      return `<div class="line">
         <span class="lbl">${m.name}</span>
-        <span class="amt">${money(m.base*(1+m.markup))}<span class="sub-amt">${money(m.base)} +${Math.round(m.markup*100)}%</span></span>
-      </div>`).join('');
+        <span class="amt">${money(m.base*(1+mk))}<span class="sub-amt">${money(m.base)} +${Math.round(mk*100)}%</span></span>
+      </div>`;
+    }).join('');
 
-    // complexity picker highlight
-    document.querySelectorAll('#cxPicker .cx').forEach(b=>{
-      b.classList.toggle('on', parseFloat(b.dataset.mult)===est.complexity);
-    });
+    document.querySelectorAll('#cxPicker .cx').forEach(b=>
+      b.classList.toggle('on', parseFloat(b.dataset.mult)===est.complexity));
 
-    // guardian state
     const g = document.getElementById('guardian');
     g.classList.toggle('off', !est.unknowns);
     document.getElementById('guardianBtn').textContent = est.unknowns ? 'Remove the buffer' : 'Add the buffer back';
@@ -502,15 +647,13 @@
     document.getElementById('tapeAmt').textContent = money(t.clientPays);
     document.getElementById('tapeSide').textContent = money(t.cushion);
   }
-
   function renderJobs(){
     const seed = [
       {title:'Miller — bathroom', status:'Sent', amt:21600},
       {title:'Kowalski — deck', status:'Draft', amt:12140},
     ];
     const saved = JSON.parse(localStorage.getItem('qr_jobs')||'[]');
-    const all = [...saved, ...seed];
-    document.getElementById('jobList').innerHTML = all.map(j=>`
+    document.getElementById('jobList').innerHTML = [...saved, ...seed].map(j=>`
       <div class="draft-row">
         <span class="nm">${j.title}</span>
         <span class="tag ${j.status==='Sent'?'sent':''}">${j.status}</span>
@@ -522,60 +665,44 @@
   function setRate(v){ est.rate = Math.max(0, parseFloat(v)||0); document.getElementById('rateInput').value = est.rate; }
   function setHours(i,v){ est.labor[i].hours = Math.max(0, parseFloat(v)||0); renderEstimate(); }
   function setMatBase(i,v){ est.materials[i].base = Math.max(0, parseFloat(v)||0); renderEstimate(); renderPrices(); }
-  function setComplexity(m,el){ est.complexity = m; renderEstimate(); }
+  function setComplexity(m){ est.complexity = m; renderEstimate(); }
   function toggleUnknowns(){ est.unknowns = !est.unknowns; renderEstimate(); }
 
-  /* ---------- intake ---------- */
-  function startNew(){
-    document.getElementById('clientName').value = 'Sarah Henderson';
-    document.getElementById('jobTitle').value = 'Henderson bathroom';
-    document.getElementById('jobDesc').value = '';
-    go('s-talk');
-  }
-  function fillExample(){
-    document.getElementById('jobDesc').value =
-      "Full bathroom gut at the Hendersons'. House is from the seventies. Tub to shower conversion, they're buying their own vanity. Second floor, tight stairs.";
-  }
-
-  /* ---------- send ---------- */
+  /* ---------- intake + send ---------- */
+  function startNew(){ renderTypes(); go('s-type'); }
   function sendQuote(){
     const t = calc();
     const jobs = JSON.parse(localStorage.getItem('qr_jobs')||'[]');
-    jobs.unshift({title: est.client.split(' ')[0] + ' — ' + shortJob(est.title), status:'Sent', amt: t.clientPays});
+    const who = (est.client||'Client').split(' ')[0];
+    jobs.unshift({title: who + ' — ' + TEMPLATES[est.typeId].name.replace(' reno','').toLowerCase(), status:'Sent', amt:t.clientPays});
     localStorage.setItem('qr_jobs', JSON.stringify(jobs.slice(0,6)));
-    document.getElementById('sentTitle').textContent = 'Sent to ' + est.client + '.';
+    document.getElementById('sentTitle').textContent = 'Sent to ' + (est.client||'your client') + '.';
     document.getElementById('pdfTitle').textContent = est.title + ' — Estimate';
+    document.getElementById('pdfScope').textContent = 'Scope: ' + est.scope + '…';
     document.getElementById('pdfCont').textContent = money(t.contingency);
     document.getElementById('pdfTotal').textContent = money(t.clientPays);
-    // reset gates for next time
     document.querySelectorAll('.gate .box').forEach(b=>{ b.classList.remove('on'); b.textContent=''; });
     const btn = document.getElementById('sendBtn'); btn.disabled = true; btn.style.opacity = .45;
     go('s-sent');
   }
-  function shortJob(t){
-    const w = (t||'job').toLowerCase();
-    if(w.includes('bath')) return 'bathroom';
-    if(w.includes('deck')) return 'deck';
-    if(w.includes('kitchen')) return 'kitchen';
-    return t;
-  }
 
   /* ---------- navigation ---------- */
-  const flowBack = {'s-talk':'s-home','s-confirm':'s-talk','s-q1':'s-confirm','s-prices':'s-q1','s-est':'s-prices','s-check':'s-est','s-sent':'s-home'};
+  const flowBack = {'s-type':'s-home','s-talk':'s-type','s-confirm':'s-talk','s-q1':'s-confirm','s-prices':'s-q1','s-est':'s-prices','s-check':'s-est','s-sent':'s-home'};
   const tapeOn = ['s-est','s-check'];
   let current = 's-home';
 
   function go(id){
-    // capture intake when leaving talk
     if(current==='s-talk'){
-      est.client = document.getElementById('clientName').value.trim() || 'your client';
-      est.title  = document.getElementById('jobTitle').value.trim() || 'New estimate';
+      est.client = document.getElementById('clientName').value.trim();
+      est.title  = document.getElementById('jobTitle').value.trim() || TEMPLATES[est.typeId].defaultTitle;
     }
     document.getElementById(current).classList.remove('active');
     document.getElementById(id).classList.add('active');
     current = id;
     document.getElementById('backBtn').classList.toggle('show', id !== 's-home');
     document.getElementById('tapeBar').classList.toggle('show', tapeOn.includes(id));
+    if(id==='s-confirm') renderConfirm();
+    if(id==='s-q1') renderQuestion();
     if(id==='s-prices') renderPrices();
     if(id==='s-est') renderEstimate();
     if(id==='s-home') renderJobs();
@@ -594,6 +721,7 @@
   }
 
   /* ---------- init ---------- */
+  loadType('bathroom'); // preload a default so direct nav works
   renderJobs();
 </script>
 </body>
