@@ -87,7 +87,7 @@ main{flex:1;padding:18px 16px 120px;max-width:100%}
 /* ============ TYPE ============ */
 h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 .lede{font:400 14.5px/1.45 'Archivo';color:var(--faint);margin-top:5px}
-.eyebrow{font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--label)}
+.eyebrow{font:500 10.5px/1.4 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--label)}
 .sec{margin-bottom:26px}
 .sec-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
 .sec-hd .n{font:500 11px/1 var(--mono);color:var(--ghost)}
@@ -109,24 +109,26 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 .mini:hover{background:var(--panel)}
 
 /* ============ ROWS (the core list unit) ============ */
+/* One column, not two. A left/right split fought over the same pixels and let
+   the job line run straight through the date; stacking each pair on its own
+   line means every part can truncate inside its own space instead. */
 .list{background:var(--card);border:1px solid var(--line);border-radius:var(--r-l);overflow:hidden}
 .row{display:flex;align-items:center;gap:13px;padding:14px 15px;width:100%;text-align:left;
   border-top:1px solid var(--line);min-height:70px}
 .row:first-child{border-top:none}
 .row:hover{background:var(--panel)}
-.row .rm{flex:1;min-width:0}
-.row .r1{display:flex;align-items:baseline;gap:8px}
-.row .cl{font:600 15px/1.25 'Archivo';letter-spacing:-.015em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.row .jb{font:400 13px/1.35 'Archivo';color:var(--faint);margin-top:4px;
+.row .rm{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px}
+.row .r1,.row .r2{display:flex;align-items:center;gap:10px;min-width:0}
+.row .cl{flex:1;min-width:0;font:600 15.5px/1.3 'Archivo';letter-spacing:-.015em;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.row .rr{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
-.row .amt{font:600 15.5px/1 var(--mono);letter-spacing:-.02em}
+.row .jb{flex:1;min-width:0;font:400 13px/1.4 'Archivo';color:var(--faint);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row .amt{flex-shrink:0;font:600 15.5px/1.3 var(--mono);letter-spacing:-.02em}
 .row .amt.dim{color:var(--ghost);font-weight:500}
-.row .act{display:flex;align-items:center;gap:4px;font:600 12.5px/1 'Archivo';color:var(--site-ink)}
-.row .act .i{stroke-width:2.2}
-.row .meta{font:400 11.5px/1 'Archivo';color:var(--ghost)}
+.row .meta{min-width:0;font:400 11.5px/1.4 'Archivo';color:var(--ghost);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-.pill{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:3px 9px;
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:3px 9px;flex-shrink:0;
   font:600 10.5px/1.5 'Archivo';letter-spacing:.02em;text-transform:uppercase;white-space:nowrap}
 .pill .d{width:5px;height:5px;border-radius:50%;background:currentColor}
 .p-draft{background:var(--site-soft);color:var(--site-ink)}
@@ -137,17 +139,18 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 
 /* ============ STATS ============ */
 .stats{display:flex;gap:18px;flex-wrap:wrap;padding:2px 2px 0}
-.st .k{font:500 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ghost)}
-.st .v{font:500 15px/1 var(--mono);color:var(--muted);margin-top:6px}
+.st .k{font:500 9.5px/1.35 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ghost)}
+.st .v{font:500 15px/1.2 var(--mono);color:var(--muted);margin-top:6px}
 
 /* ============ FILTERS / SEARCH ============ */
 .search{display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);
   border-radius:var(--r);padding:0 13px;min-height:46px;margin-bottom:12px}
 .search .i{stroke:var(--ghost)}
-.search input{flex:1;border:none;background:none;font:500 15px/1 'Archivo';padding:13px 0;outline:none}
+.search input{flex:1;min-width:0;border:none;background:none;font:500 15px/1.2 'Archivo';padding:13px 0;outline:none}
 .search input::placeholder{color:var(--ghost)}
-.chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:12px;margin-bottom:4px;scrollbar-width:none}
-.chips::-webkit-scrollbar{display:none}
+/* Wrap rather than scroll sideways: a filter you can't see is a filter you
+   don't know you have, and the last two always fell off the right edge. */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .fc{border:1.5px solid var(--line-2);background:var(--card);border-radius:99px;padding:8px 14px;
   font:600 13px/1 'Archivo';color:var(--muted);white-space:nowrap;min-height:38px}
 .fc.on{background:var(--ink);border-color:var(--ink);color:#fff}
@@ -157,7 +160,7 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 .form{background:var(--card);border:1px solid var(--line);border-radius:var(--r-l);padding:18px}
 .fld{margin-bottom:16px}
 .fld:last-child{margin-bottom:0}
-.fld label{display:block;font:500 10.5px/1 var(--mono);letter-spacing:.15em;text-transform:uppercase;
+.fld label{display:block;font:500 10.5px/1.4 var(--mono);letter-spacing:.15em;text-transform:uppercase;
   color:var(--label);margin-bottom:8px}
 .fld input,.fld textarea{width:100%;font:500 15.5px/1.4 'Archivo';background:var(--panel);
   border:1.5px solid var(--line);border-radius:var(--r);padding:13px 14px;outline:none}
@@ -189,21 +192,29 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 .grp{background:var(--card);border:1px solid var(--line);border-radius:var(--r-l);margin-bottom:12px;overflow:hidden}
 .grp-hd{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 15px;
   border-bottom:1px solid var(--line);background:var(--panel)}
-.grp-hd .t{font:600 13.5px/1 'Archivo';letter-spacing:-.01em}
-.grp-hd .v{font:600 13.5px/1 var(--mono)}
+.grp-hd .t{font:600 13.5px/1.35 'Archivo';letter-spacing:-.01em;min-width:0}
+.grp-hd .v{font:600 13.5px/1.35 var(--mono);flex-shrink:0;white-space:nowrap}
 .li{display:flex;align-items:center;gap:8px;padding:11px 15px;border-top:1px solid var(--line)}
 .li:first-of-type{border-top:none}
-.li .nm{flex:1;min-width:0;font:400 14.5px/1.35 'Archivo'}
+.li .nm{flex:1;min-width:0;font:400 14.5px/1.35 'Archivo';overflow-wrap:anywhere}
 .li .nm input{width:100%;border:none;background:none;font:inherit;outline:none;padding:2px 0;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .li .nm input:focus{border-bottom:1.5px solid var(--blue)}
-.num{font:500 14.5px/1 var(--mono);background:var(--panel);border:1.5px solid var(--line);
+/* Editable lines get the name on its own full-width row. Squeezing it beside a
+   number box, a unit, an amount and a delete button left ~70px for the thing
+   that actually says what the line is ("Cabinet in…", "Quartz counter…"). */
+.li.stack{flex-wrap:wrap;align-items:flex-start;gap:9px;padding:13px 15px}
+.li.stack .nm{flex:1 1 100%}
+.li.stack .ctl{display:flex;align-items:center;gap:8px;width:100%}
+.li.stack .ctl .sp{flex:1;min-width:6px}
+.li.stack .src{display:block;font:400 11.5px/1.4 'Archivo';color:var(--ghost);margin-top:4px}
+.num{font:500 14.5px/1.2 var(--mono);background:var(--panel);border:1.5px solid var(--line);
   border-radius:var(--r-s);padding:11px 8px;width:66px;text-align:right;outline:none;min-height:44px;flex-shrink:0}
 .num:focus{border-color:var(--blue);background:#fff}
 .num.w{width:96px}
-.li .u{font:400 12px/1 'Archivo';color:var(--ghost);width:20px;flex-shrink:0}
-.li .amt{font:500 14.5px/1 var(--mono);width:64px;text-align:right;flex-shrink:0}
-.li .x{color:var(--ghost);padding:9px;border-radius:var(--r-s);min-height:40px;display:flex;align-items:center}
+.li .u{font:400 12px/1.3 'Archivo';color:var(--ghost);flex-shrink:0}
+.li .amt{font:500 14.5px/1.2 var(--mono);min-width:64px;text-align:right;flex-shrink:0}
+.li .x{color:var(--ghost);padding:9px;border-radius:var(--r-s);min-height:40px;display:flex;align-items:center;flex-shrink:0}
 .li .x:hover{color:#C0392B;background:#FBEDEB}
 .addline{display:flex;align-items:center;gap:7px;padding:12px 15px;border-top:1px dashed var(--line-2);
   width:100%;font:600 13px/1 'Archivo';color:var(--blue);min-height:46px}
@@ -211,17 +222,22 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 
 .kv{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
 .kv:first-child{border-top:none}
-.kv .k{font:400 14px/1.35 'Archivo';color:var(--muted);flex:1}
-.kv .v{font:500 14.5px/1 var(--mono);white-space:nowrap}
+/* Direct child only — the inline "$", "/hr" and "%" labels are also .k, and
+   letting them inherit flex:1 stretched them and pushed the row 2px wide. */
+.kv>.k{flex:1;min-width:0}
+.kv .k{font:400 14px/1.35 'Archivo';color:var(--muted);overflow-wrap:anywhere}
+.kv .v{font:500 14.5px/1.2 var(--mono);white-space:nowrap;flex-shrink:0}
 .kv.big .k{font-weight:600;color:var(--ink)}
 .kv.big .v{font-weight:600;font-size:16px}
-.kv .sub{display:block;font:400 11.5px/1 var(--mono);color:var(--ghost);margin-top:5px}
+.kv .sub{display:block;font:400 11.5px/1.45 var(--mono);color:var(--ghost);margin-top:5px}
 
-.seg{display:flex;gap:6px;margin-top:10px}
-.sg{flex:1;border:1.5px solid var(--line-2);background:var(--card);border-radius:var(--r-s);
-  padding:10px 4px;text-align:center;min-height:52px}
-.sg .a{font:600 13px/1 'Archivo';color:var(--muted)}
-.sg .b{font:500 10.5px/1 var(--mono);color:var(--ghost);margin-top:5px}
+/* 2×2, not 4-across: four labels in a row pushed "Extreme ×1.75" clean off
+   the right edge of the sheet on any phone. */
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.sg{border:1.5px solid var(--line-2);background:var(--card);border-radius:var(--r-s);
+  padding:11px 8px;text-align:center;min-height:56px}
+.sg .a{display:block;font:600 13px/1.3 'Archivo';color:var(--muted)}
+.sg .b{display:block;font:500 10.5px/1.3 var(--mono);color:var(--ghost);margin-top:4px}
 .sg.on{border-color:var(--site);background:var(--site-soft)}
 .sg.on .a{color:var(--ink)} .sg.on .b{color:var(--site-ink)}
 
@@ -266,7 +282,7 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 .titlefield:hover{border-bottom-color:var(--line-2)}
 .titlefield:focus{border-bottom:2px solid var(--blue)}
 .title-edit{flex-shrink:0;width:30px;height:30px;border-radius:50%;color:var(--ghost);
-  display:flex;align-items:center;justify-content:center;margin:-4px -2px -4px 0}
+  display:flex;align-items:center;justify-content:center;margin:-4px 0}
 .title-edit:hover{background:var(--panel);color:var(--muted)}
 .clientrow{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:6px;margin-bottom:18px;font:500 13.5px/1.3 'Archivo'}
 .clientrow .cx{color:var(--faint)}
@@ -319,15 +335,22 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 .seccard-ic .i{stroke:var(--muted);width:18px;height:18px}
 .seccard-body{flex:1;min-width:0}
 .seccard-name{display:block;font:600 15px/1.25 'Archivo';letter-spacing:-.01em}
-.seccard-desc{display:block;font:400 12.5px/1.4 'Archivo';color:var(--faint);margin-top:4px;
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.seccard-meta{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.seccard-count{font:500 11.5px/1 var(--mono);color:var(--ghost)}
-.seccard-meta .i{stroke:var(--ghost);width:17px;height:17px}
+/* Two lines, clamped — one nowrap line threw away half of every description
+   ("Old kitchen removed, dust b…"). */
+.seccard-desc{display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;
+  font:400 12.5px/1.45 'Archivo';color:var(--faint);margin-top:4px;overflow:hidden}
+.seccard-meta{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;text-align:right}
+.seccard-amt{font:600 14px/1.2 var(--mono);letter-spacing:-.02em}
+.seccard-count{font:500 11px/1.3 var(--mono);color:var(--ghost)}
+.seccard-go{flex-shrink:0;stroke:var(--ghost);width:17px;height:17px}
 .addsection{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;
   border:1.5px dashed var(--line-2);border-radius:var(--r-l);padding:14px;margin-top:4px;
   font:600 13.5px/1 'Archivo';color:var(--blue);min-height:52px}
 .addsection:hover{background:var(--panel);border-color:var(--site)}
+.secsum{margin-top:14px;padding:0 3px}
+.secsum .ss{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:8px 0;
+  font:400 13.5px/1.4 'Archivo';color:var(--faint)}
+.secsum .ss span:last-child{font:500 13.5px/1.4 var(--mono);white-space:nowrap;flex-shrink:0}
 
 /* ============ PRICE — simplified summary ============ */
 .pricecard{background:var(--card);border:1px solid var(--line);border-radius:var(--r-l);padding:5px 16px}
@@ -364,19 +387,22 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 
 /* ============ CLIENT QUOTE SHEET ============ */
 .sheet{background:#fff;border:1px solid var(--line);border-radius:var(--r-l);padding:24px 22px}
-.sh-top{display:flex;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:2px solid var(--ink)}
-.sh-top .biz{font:700 16px/1.2 'Archivo';letter-spacing:-.03em}
-.sh-top .sm{font:400 11.5px/1.5 'Archivo';color:var(--faint);margin-top:5px}
+.sh-top{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px 16px;
+  padding-bottom:16px;border-bottom:2px solid var(--ink)}
+.sh-top .lf{min-width:0;flex:1 1 190px}
+.sh-top .biz{font:700 16px/1.25 'Archivo';letter-spacing:-.03em;overflow-wrap:anywhere}
+.sh-top .sm{font:400 11.5px/1.5 'Archivo';color:var(--faint);margin-top:5px;overflow-wrap:anywhere}
 .sh-top .rt{text-align:right;flex-shrink:0}
-.sh-top .rt .k{font:500 9.5px/1 var(--mono);letter-spacing:.2em;color:var(--label)}
-.sh-top .rt .v{font:500 12px/1 var(--mono);margin-top:6px;white-space:nowrap}
+.sh-top .rt .k{font:500 9.5px/1.3 var(--mono);letter-spacing:.2em;color:var(--label)}
+.sh-top .rt .v{font:500 12px/1.35 var(--mono);margin-top:6px;white-space:nowrap}
 .sh-blk{padding:16px 0;border-bottom:1px solid var(--line)}
-.sh-blk .k{font:500 9.5px/1 var(--mono);letter-spacing:.2em;color:var(--label);margin-bottom:9px}
+.sh-blk .k{font:500 9.5px/1.3 var(--mono);letter-spacing:.2em;color:var(--label);margin-bottom:9px}
 .sh-blk .v{font:400 14px/1.55 'Archivo'}
 .sh-blk .v b{font-weight:600}
 .sh-it{display:flex;justify-content:space-between;gap:16px;padding:13px 0;border-top:1px solid var(--line)}
 .sh-it:first-of-type{border-top:none}
-.sh-it .n{font:600 14px/1.3 'Archivo'}
+.sh-it>div:first-child{min-width:0}
+.sh-it .n{font:600 14px/1.35 'Archivo'}
 .sh-it .d{font:400 12.5px/1.45 'Archivo';color:var(--faint);margin-top:4px}
 .sh-it .a{font:500 14px/1 var(--mono);white-space:nowrap}
 .sh-tot{display:flex;justify-content:space-between;align-items:baseline;padding-top:18px}
@@ -765,9 +791,10 @@ const T = {
     ]},
 };
 
+// The pill carries the status and the Today headings already say what to do
+// with each group, so a per-row "Finish it →" was one more thing to read.
 const STATUS = {
-  draft:{l:'Draft', act:'Finish it'}, ready:{l:'Ready', act:'Send it'},
-  sent:{l:'Sent', act:'Follow up'}, accepted:{l:'Accepted', act:'View'}, lost:{l:'Lost', act:'View'},
+  draft:{l:'Draft'}, ready:{l:'Ready'}, sent:{l:'Sent'}, accepted:{l:'Accepted'}, lost:{l:'Lost'},
 };
 const CX = [[1,'Standard','New build, easy access'],[1.25,'Medium','80s–2000s, some tight spots'],
             [1.5,'High','Pre-1980, hidden-issue risk'],[1.75,'Extreme','Heritage or structural unknowns']];
@@ -999,11 +1026,11 @@ function renderToday(){
   document.getElementById('todayLede').textContent =
     todo ? `${todo} thing${todo>1?'s':''} need you. ${ready.length?ready.length+' ready to go out.':''}` : 'Nothing outstanding. Good spot to be in.';
 
-  const grp=(title,items,tone)=>{
+  const grp=(title,items)=>{
     if(!items.length) return '';
     return `<div class="sec">
       <div class="sec-hd"><span class="eyebrow">${title}</span><span class="n">${items.length}</span></div>
-      <div class="list">${items.map(q=>rowHTML(q,tone)).join('')}</div></div>`;
+      <div class="list">${items.map(q=>rowHTML(q,true)).join('')}</div></div>`;
   };
   document.getElementById('todayGroups').innerHTML =
     grp('Finish these drafts',drafts) + grp('Ready to send',ready) +
@@ -1022,16 +1049,18 @@ function renderToday(){
 // isn't one, and say so plainly rather than leaving the row looking broken.
 const primaryLabel=q=>q.client||q.job;
 const subLabel=q=>q.client ? (q.job+(q.addr?' · '+q.addr:'')) : 'No client attached';
-function rowHTML(q){
-  const c=calc(q), s=STATUS[q.status];
+// Name+money on one line, job+status on the next, timing on a third. Each pair
+// owns its own line so a long address can no longer run over the date beside it.
+function rowHTML(q,showWhen){
+  const c=calc(q);
   return `<button class="row" onclick="openQuote('${q.id}')">
     <span class="rm">
-      <span class="r1"><span class="cl">${esc(primaryLabel(q))}</span>${pill(q.status)}</span>
-      <span class="jb">${esc(subLabel(q))}</span>
-    </span>
-    <span class="rr">
-      <span class="amt ${q.status==='lost'?'dim':''}">${money(c.total)}</span>
-      <span class="act">${s.act}<svg class="i i-s" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M9 5l7 7-7 7"/></svg></span>
+      <span class="r1">
+        <span class="cl">${esc(primaryLabel(q))}</span>
+        <span class="amt ${q.status==='lost'?'dim':''}">${money(c.total)}</span>
+      </span>
+      <span class="r2"><span class="jb">${esc(subLabel(q))}</span>${pill(q.status)}</span>
+      ${showWhen&&q.when?`<span class="meta">${esc(q.when)}</span>`:''}
     </span></button>`;
 }
 
@@ -1047,17 +1076,7 @@ function renderQuotes(){
   let list=DB.quotes.filter(q=>filter==='all'||q.status===filter);
   if(term) list=list.filter(q=>(q.client+' '+q.job+' '+(q.addr||'')).toLowerCase().includes(term));
   document.getElementById('quoteList').innerHTML = list.length
-    ? `<div class="list">${list.map(q=>{
-        const c=calc(q);
-        return `<button class="row" onclick="openQuote('${q.id}')">
-          <span class="rm">
-            <span class="r1"><span class="cl">${esc(primaryLabel(q))}</span>${pill(q.status)}</span>
-            <span class="jb">${esc(subLabel(q))}</span>
-          </span>
-          <span class="rr">
-            <span class="amt ${q.status==='lost'?'dim':''}">${money(c.total)}</span>
-            <span class="meta">${esc(q.when||'')}</span>
-          </span></button>`;}).join('')}</div>`
+    ? `<div class="list">${list.map(q=>rowHTML(q,true)).join('')}</div>`
     : `<div class="empty"><svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg>Nothing matches that.</div>`;
 }
 function setFilter(f){ filter=f; renderQuotes(); }
@@ -1181,6 +1200,11 @@ function renderWorkPane(q){
     </div>` : '';
   const notes = q.notes ? `<div class="grp" style="margin-bottom:12px"><div class="grp-hd"><span class="t">Site notes</span></div>
       <div style="padding:13px 15px;font:400 13.5px/1.5 'Archivo';color:var(--muted)">${esc(q.notes)}</div></div>` : '';
+  // What a section is worth is the thing worth scanning down the page; the item
+  // count is the supporting detail, not the headline. Use the same figures the
+  // client sheet prints, so the sections a contractor sees here add up to the
+  // quote he's about to send rather than to some pre-uplift number.
+  const priced=clientItems(q);
   const cards = q.groups.map((g,gi)=>{
     const n=g.labor.length+g.mats.length+(g.units||[]).length;
     return `<button class="seccard" onclick="openSection(${gi})">
@@ -1190,12 +1214,22 @@ function renderWorkPane(q){
         <span class="seccard-desc">${esc(g.d||'Tap to add labour and materials')}</span>
       </span>
       <span class="seccard-meta">
+        <span class="seccard-amt">${money(priced[gi]?priced[gi].a:0)}</span>
         <span class="seccard-count">${n} item${n===1?'':'s'}</span>
-        <svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
-      </span></button>`;
+      </span>
+      <svg class="i seccard-go" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg>
+      </button>`;
   }).join('');
+  // The sections above plus this line make the total shown in the bar below
+  // (or the side panel on desktop) — without it the cards visibly don't add up
+  // to the number he's about to send. The total itself isn't repeated here;
+  // it's already on screen a few pixels away.
+  const c=calc(q);
+  const foot=`<div class="secsum">
+      <div class="ss"><span>+ Contingency ${c.pct}%</span><span>${money(c.cont)}</span></div>
+    </div>`;
   return banner+notes+cards+`<button class="addsection" onclick="addGroup()">
-    <svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add a section</button>`;
+    <svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add a section</button>`+foot;
 }
 function renderPricePane(q,c){
   const marginOff=c.margin<DB.profile.target;
@@ -1286,24 +1320,33 @@ function sectionDrawerHTML(gi){
     <div style="padding:2px 0 4px"><span class="eyebrow">Labour</span></div>
     <div class="grp" style="margin-bottom:14px">
       ${g.labor.map(([n,h],i)=>`
-        <div class="li">
+        <div class="li stack">
           <span class="nm"><input value="${esc(n)}" onchange="editLabel(${gi},'labor',${i},this.value)" aria-label="Task name"></span>
-          <input class="num" type="number" inputmode="numeric" value="${h}" onchange="editHours(${gi},${i},this.value)" aria-label="Hours">
-          <span class="u">hrs</span>
-          <span class="amt">${money(h*q.rate)}</span>
-          <button class="x" onclick="delLine(${gi},'labor',${i})" aria-label="Remove">${xIcon}</button>
+          <span class="ctl">
+            <input class="num" type="number" inputmode="numeric" value="${h}" onchange="editHours(${gi},${i},this.value)" aria-label="Hours">
+            <span class="u">hrs</span>
+            <span class="sp"></span>
+            <span class="u">price</span>
+            <span class="amt">${money(h*q.rate)}</span>
+            <button class="x" onclick="delLine(${gi},'labor',${i})" aria-label="Remove ${esc(n)}">${xIcon}</button>
+          </span>
         </div>`).join('') || `<div style="padding:12px 15px;color:var(--ghost);font:400 13.5px/1.4 'Archivo'">No labour lines yet.</div>`}
       <button class="addline" onclick="addLine(${gi},'labor')"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add labour line</button>
     </div>
     <div style="padding:2px 0 4px"><span class="eyebrow">Materials</span></div>
     <div class="grp" style="margin-bottom:16px">
       ${g.mats.map(([n,cst,src],i)=>`
-        <div class="li">
+        <div class="li stack">
           <span class="nm"><input value="${esc(n)}" onchange="editLabel(${gi},'mats',${i},this.value)" aria-label="Material name">
-            <span style="display:block;font:400 11.5px/1 'Archivo';color:var(--ghost);margin-top:5px">${esc(src||'')}</span></span>
-          <input class="num" type="number" inputmode="decimal" value="${cst}" onchange="editCost(${gi},${i},this.value)" aria-label="Cost">
-          <span class="amt">${money(cst*(1+mkFor(cst)))}</span>
-          <button class="x" onclick="delLine(${gi},'mats',${i})" aria-label="Remove">${xIcon}</button>
+            ${src?`<span class="src">${esc(src)}</span>`:''}</span>
+          <span class="ctl">
+            <span class="u">cost</span>
+            <input class="num" type="number" inputmode="decimal" value="${cst}" onchange="editCost(${gi},${i},this.value)" aria-label="What you pay">
+            <span class="sp"></span>
+            <span class="u">price</span>
+            <span class="amt">${money(cst*(1+mkFor(cst)))}</span>
+            <button class="x" onclick="delLine(${gi},'mats',${i})" aria-label="Remove ${esc(n)}">${xIcon}</button>
+          </span>
         </div>`).join('') || `<div style="padding:12px 15px;color:var(--ghost);font:400 13.5px/1.4 'Archivo'">No materials yet.</div>`}
       <button class="addline" onclick="addLine(${gi},'mats')"><svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Add material</button>
     </div>
@@ -1311,15 +1354,19 @@ function sectionDrawerHTML(gi){
     <div style="padding:2px 0 4px"><span class="eyebrow">From your price list</span></div>
     <div class="grp" style="margin-bottom:16px">
       ${g.units.map(([n,qty,pr],i)=>`
-        <div class="li">
-          <span class="nm">${esc(n)}<span style="display:block;font:400 11.5px/1 'Archivo';color:var(--ghost);margin-top:5px">${money(pr)} each</span></span>
-          <span class="qty">
-            <button onclick="bumpUnit(${gi},${i},-1)" aria-label="Fewer">–</button>
-            <b>${qty}</b>
-            <button onclick="bumpUnit(${gi},${i},1)" aria-label="More">+</button>
+        <div class="li stack">
+          <span class="nm">${esc(n)}<span class="src">${money(pr)} each</span></span>
+          <span class="ctl">
+            <span class="qty">
+              <button onclick="bumpUnit(${gi},${i},-1)" aria-label="Fewer">–</button>
+              <b>${qty}</b>
+              <button onclick="bumpUnit(${gi},${i},1)" aria-label="More">+</button>
+            </span>
+            <span class="sp"></span>
+            <span class="u">price</span>
+            <span class="amt">${money(qty*pr)}</span>
+            <button class="x" onclick="delUnit(${gi},${i})" aria-label="Remove ${esc(n)}">${xIcon}</button>
           </span>
-          <span class="amt">${money(qty*pr)}</span>
-          <button class="x" onclick="delUnit(${gi},${i})" aria-label="Remove">${xIcon}</button>
         </div>`).join('')}
     </div>`:''}
     ${DB.book?`<button class="addline" style="border:1.5px dashed var(--line-2);border-radius:var(--r);margin-bottom:16px"
@@ -1469,7 +1516,7 @@ function sheetHTML(q){
   const today=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
   return `<div class="sheet">
     <div class="sh-top">
-      <div><div class="biz">${esc(p.biz)}</div>
+      <div class="lf"><div class="biz">${esc(p.biz)}</div>
         <div class="sm">Lic. #${esc(p.lic)} · ${esc(p.phone)}<br>${esc(p.email)}</div></div>
       <div class="rt"><div class="k">ESTIMATE</div><div class="v">#${esc(num)}</div>
         <div class="v" style="color:var(--faint)">${today}</div></div>
