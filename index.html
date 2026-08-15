@@ -122,8 +122,6 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 .row .rr{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0}
 .row .amt{font:600 15.5px/1 var(--mono);letter-spacing:-.02em}
 .row .amt.dim{color:var(--ghost);font-weight:500}
-.row .act{display:flex;align-items:center;gap:4px;font:600 12.5px/1 'Archivo';color:var(--site-ink)}
-.row .act .i{stroke-width:2.2}
 .row .meta{font:400 11.5px/1 'Archivo';color:var(--ghost)}
 
 .pill{display:inline-flex;align-items:center;gap:5px;border-radius:99px;padding:3px 9px;
@@ -135,10 +133,61 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 .p-accepted{background:var(--ok-soft);color:var(--ok-ink)}
 .p-lost{background:#EFEDE8;color:var(--ghost)}
 
-/* ============ STATS ============ */
-.stats{display:flex;gap:18px;flex-wrap:wrap;padding:2px 2px 0}
-.st .k{font:500 9.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ghost)}
-.st .v{font:500 15px/1 var(--mono);color:var(--muted);margin-top:6px}
+/* ============ HOME — Today is a homescreen, not a second quote list ============ */
+.home-hd{margin-bottom:16px}
+.home-hd .eyebrow{display:block;margin-bottom:9px}
+
+.hero{background:var(--ink);color:#fff;border-radius:var(--r-l);padding:18px 17px 17px;margin-bottom:14px}
+.hero .ht{font:700 19px/1.25 'Archivo';letter-spacing:-.03em}
+.hero .hs{font:400 13.5px/1.5 'Archivo';color:#A8ACA6;margin-top:8px;max-width:44ch}
+.hero .ha{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap}
+.hero .ha .btn{padding:13px 20px}
+.hero .ghostd{display:inline-flex;align-items:center;gap:8px;border:1.5px solid #383E42;color:#EDEAE4;
+  border-radius:var(--r);padding:13px 16px;min-height:48px;font:600 14.5px/1 'Archivo'}
+.hero .ghostd .i{stroke:#EDEAE4;stroke-width:2;width:17px;height:17px}
+.hero .ghostd:hover{border-color:#5C6368}
+
+.money{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:26px}
+.mt{background:var(--card);border:1px solid var(--line);border-radius:var(--r-l);padding:13px 12px}
+.mt .k{font:500 9.5px/1.3 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ghost)}
+.mt .v{font:600 clamp(16px,5.2vw,22px)/1 var(--mono);letter-spacing:-.03em;margin-top:10px}
+.mt .s{font:400 11px/1.35 'Archivo';color:var(--ghost);margin-top:7px}
+
+/* an action card — deliberately not the .row unit used by the Quotes list */
+.task{display:flex;align-items:center;gap:13px;width:100%;text-align:left;background:var(--card);
+  border:1px solid var(--line);border-left:3px solid var(--line-2);border-radius:var(--r-l);
+  padding:14px 15px;margin-bottom:9px;min-height:78px}
+.task:hover{border-color:var(--line-2)}
+.task .tic{width:38px;height:38px;border-radius:50%;background:var(--panel);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center}
+.task .tic .i{width:18px;height:18px;stroke:var(--muted)}
+.task .tm{flex:1;min-width:0}
+.task .tt{display:block;font:600 15px/1.3 'Archivo';letter-spacing:-.015em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.task .ts{display:block;font:400 12.5px/1.4 'Archivo';color:var(--faint);margin-top:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.task .tr{display:flex;flex-direction:column;align-items:flex-end;gap:7px;flex-shrink:0}
+.task .tv{font:600 15.5px/1 var(--mono);letter-spacing:-.02em}
+.task .tb{display:flex;align-items:center;gap:4px;font:600 12.5px/1 'Archivo';color:var(--muted)}
+.task .tb .i{width:13px;height:13px;stroke-width:2.2}
+.task.go{border-left-color:var(--site)}
+.task.go .tic{background:var(--site-soft)}
+.task.go .tic .i{stroke:var(--site)}
+.task.go .tb{color:var(--site-ink)}
+.task.wait{border-left-color:var(--blue)}
+.task.wait .tic{background:var(--blue-soft)}
+.task.wait .tic .i{stroke:var(--blue)}
+.task.wait .tb{color:var(--blue)}
+
+.allclear{display:flex;gap:12px;align-items:center;background:var(--card);border:1px dashed var(--line-2);
+  border-radius:var(--r-l);padding:18px 16px}
+.allclear .i{stroke:var(--ok-ink);width:22px;height:22px}
+.allclear .t{font:600 14.5px/1.3 'Archivo'}
+.allclear .s{font:400 12.5px/1.45 'Archivo';color:var(--faint);margin-top:4px}
+.winline{display:flex;gap:10px;align-items:flex-start;background:var(--ok-soft);border:1px solid #BFDCC8;
+  border-radius:var(--r);padding:13px 14px;font:400 13px/1.45 'Archivo';color:#1E4F2E}
+.winline b{font-weight:700;color:var(--ok-ink)}
+.winline .i{stroke:var(--ok-ink);width:17px;height:17px;margin-top:1px}
 
 /* ============ FILTERS / SEARCH ============ */
 .search{display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--line);
@@ -458,7 +507,13 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
   .wrap.ws{max-width:1180px}
   .tgrid{grid-template-columns:repeat(auto-fill,minmax(168px,1fr))}
   .row{padding:15px 18px}
-  .stats{gap:26px}
+  .hero{padding:26px 26px 24px;margin-bottom:16px}
+  .hero .ht{font-size:23px}
+  .hero .hs{font-size:14.5px}
+  .money{gap:12px;margin-bottom:30px}
+  .mt{padding:16px 17px}
+  .mt .v{font-size:23px}
+  .task{padding:15px 18px}
 }
 @media (min-width:1180px){
   .wrap.ws{grid-template-columns:minmax(0,1fr) 410px}
@@ -501,16 +556,36 @@ h1{font:700 25px/1.15 'Archivo';letter-spacing:-.035em}
 
     <main>
 
-      <!-- ===== TODAY ===== -->
+      <!-- ===== TODAY (home) ===== -->
       <section class="wrap" id="v-today" hidden>
-        <div class="sec" style="margin-bottom:20px">
+        <div class="home-hd">
+          <span class="eyebrow" id="todayDate"></span>
           <h1 id="greet">Morning, Dave.</h1>
           <p class="lede" id="todayLede"></p>
         </div>
-        <div id="todayGroups"></div>
-        <div class="sec">
-          <div class="stats" id="todayStats"></div>
+
+        <div class="hero">
+          <div class="ht">What are you quoting today?</div>
+          <div class="hs">Tell me about the job — I'll draft the scope, the labour and the pricing. You review it and send it.</div>
+          <div class="ha">
+            <button class="btn org" onclick="startNew()">
+              <svg class="i i-s" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg> Start a quote</button>
+            <button class="ghostd" onclick="startNew();dictate()">
+              <svg class="i" viewBox="0 0 24 24"><path d="M12 14.5a3.2 3.2 0 0 0 3.2-3.2V6a3.2 3.2 0 1 0-6.4 0v5.3a3.2 3.2 0 0 0 3.2 3.2z"/><path d="M18 11.3a6 6 0 0 1-12 0M12 17.3V21"/></svg> Talk it out</button>
+          </div>
         </div>
+
+        <div class="money" id="todayMoney"></div>
+
+        <div class="sec">
+          <div class="sec-hd">
+            <span class="eyebrow">Needs you</span>
+            <button class="mini" onclick="go('quotes')" id="allQuotesLink">All quotes ›</button>
+          </div>
+          <div id="todayTasks"></div>
+        </div>
+
+        <div id="todayWin"></div>
       </section>
 
       <!-- ===== QUOTES ===== -->
@@ -765,9 +840,10 @@ const T = {
     ]},
 };
 
+// The verb for each state lives on the Today homescreen (taskFor), not here —
+// the Quotes tab is for browsing, so its rows carry status and timing instead.
 const STATUS = {
-  draft:{l:'Draft', act:'Finish it'}, ready:{l:'Ready', act:'Send it'},
-  sent:{l:'Sent', act:'Follow up'}, accepted:{l:'Accepted', act:'View'}, lost:{l:'Lost', act:'View'},
+  draft:{l:'Draft'}, ready:{l:'Ready'}, sent:{l:'Sent'}, accepted:{l:'Accepted'}, lost:{l:'Lost'},
 };
 const CX = [[1,'Standard','New build, easy access'],[1.25,'Medium','80s–2000s, some tight spots'],
             [1.5,'High','Pre-1980, hidden-issue risk'],[1.75,'Extreme','Heritage or structural unknowns']];
@@ -986,54 +1062,91 @@ async function parseWorkbook(file){
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pill=s=>`<span class="pill p-${s}"><span class="d"></span>${STATUS[s].l}</span>`;
 
-/* ---------- TODAY ---------- */
+/* ---------- TODAY (home) ----------
+   Today answers "what do I do next?", so it shows a short, ranked stack of
+   actions — not the whole book of quotes. Browsing lives on the Quotes tab. */
+const STALE_DAYS=5;          // a sent quote goes quiet after about a working week
+const MAX_TASKS=4;           // a homescreen is a shortlist, not an inbox
+const TASK_ICON={
+  send:'<path d="M21 3L10.5 13.5M21 3l-6.8 18-3.7-7.5L3 10.1z"/>',
+  clock:'<circle cx="12" cy="12" r="8.5"/><path d="M12 7.2V12l3.2 2"/>',
+  pencil:'<path d="M4 20l4-1 10-10a2.1 2.1 0 0 0-3-3L5 16z"/><path d="M14.5 6.5l3 3"/>',
+};
+const firstName=q=>q.client?q.client.split(' ')[0]:'';
+function taskFor(q){
+  const f=firstName(q), job=q.job;
+  if(q.status==='ready') return {q,tone:'go',ic:'send',verb:'Send it',
+    t:f?`Send ${f} the quote`:'Send this quote', s:`${job} · priced and ready`};
+  if(q.status==='sent') return {q,tone:'wait',ic:'clock',verb:'Follow up',
+    t:f?`Follow up with ${f}`:'Follow up on this one', s:`${job} · sent ${q.days} days ago, no reply`};
+  return {q,tone:'',ic:'pencil',verb:'Finish it',
+    t:f?`Finish ${f}'s draft`:'Finish this draft', s:`${job}${q.client?'':' · no client attached yet'}`};
+}
+function todayTasks(qs){
+  const rank={ready:0,sent:1,draft:2};
+  return qs
+    .filter(q=>q.status==='ready'||q.status==='draft'||(q.status==='sent'&&(q.days||0)>=STALE_DAYS))
+    .sort((a,b)=>rank[a.status]-rank[b.status]||(b.days||0)-(a.days||0))
+    .map(taskFor);
+}
+function taskHTML(k){
+  const c=calc(k.q);
+  return `<button class="task ${k.tone}" onclick="openQuote('${k.q.id}')">
+    <span class="tic"><svg class="i" viewBox="0 0 24 24">${TASK_ICON[k.ic]}</svg></span>
+    <span class="tm"><span class="tt">${esc(k.t)}</span><span class="ts">${esc(k.s)}</span></span>
+    <span class="tr">
+      <span class="tv">${money(c.total)}</span>
+      <span class="tb">${k.verb}<svg class="i" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></span>
+    </span></button>`;
+}
 function renderToday(){
-  const h=new Date().getHours();
+  const now=new Date(), h=now.getHours(), qs=DB.quotes;
   document.getElementById('greet').textContent=(h<12?'Morning':h<17?'Afternoon':'Evening')+', '+DB.profile.name.split(' ')[0]+'.';
-  const qs=DB.quotes;
-  const drafts=qs.filter(q=>q.status==='draft');
-  const ready=qs.filter(q=>q.status==='ready');
-  const waiting=qs.filter(q=>q.status==='sent');
-  const won=qs.filter(q=>q.status==='accepted');
-  const todo=drafts.length+ready.length+waiting.length;
+  document.getElementById('todayDate').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+
+  const by=s=>qs.filter(q=>q.status===s);
+  const drafts=by('draft'), ready=by('ready'), sent=by('sent'), won=by('accepted');
+  const tasks=todayTasks(qs);
+  const stale=tasks.filter(k=>k.q.status==='sent').length;
+
+  const bits=[];
+  if(ready.length) bits.push(`${ready.length} ready to send`);
+  if(stale) bits.push(`${stale} waiting on a reply`);
+  if(drafts.length) bits.push(`${drafts.length} draft${drafts.length>1?'s':''} to finish`);
   document.getElementById('todayLede').textContent =
-    todo ? `${todo} thing${todo>1?'s':''} need you. ${ready.length?ready.length+' ready to go out.':''}` : 'Nothing outstanding. Good spot to be in.';
+    bits.length ? bits.join(' · ') : 'Nothing needs you right now. Good spot to be in.';
 
-  const grp=(title,items,tone)=>{
-    if(!items.length) return '';
-    return `<div class="sec">
-      <div class="sec-hd"><span class="eyebrow">${title}</span><span class="n">${items.length}</span></div>
-      <div class="list">${items.map(q=>rowHTML(q,tone)).join('')}</div></div>`;
-  };
-  document.getElementById('todayGroups').innerHTML =
-    grp('Finish these drafts',drafts) + grp('Ready to send',ready) +
-    grp('Waiting on a reply',waiting) + grp('Recently accepted',won) ||
-    `<div class="empty"><svg class="i" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>All clear. Start a new quote when you're ready.</div>`;
-
-  const out=ready.concat(waiting).reduce((s,q)=>s+calc(q).total,0);
+  const out=ready.concat(sent).reduce((s,q)=>s+calc(q).total,0);
   const wonV=won.reduce((s,q)=>s+calc(q).total,0);
-  const decided=won.length+qs.filter(q=>q.status==='lost').length;
-  document.getElementById('todayStats').innerHTML=`
-    <div class="st"><div class="k">Out for bid</div><div class="v">${money(out)}</div></div>
-    <div class="st"><div class="k">Accepted</div><div class="v">${money(wonV)}</div></div>
-    <div class="st"><div class="k">Win rate</div><div class="v">${decided?Math.round(won.length/decided*100):0}%</div></div>`;
+  const decided=won.length+by('lost').length;
+  const n=(x,w)=>`${x} ${w}${x===1?'':'s'}`;
+  document.getElementById('todayMoney').innerHTML=`
+    <div class="mt"><div class="k">Out for bid</div><div class="v">${money(out)}</div>
+      <div class="s">${n(ready.length+sent.length,'quote')}</div></div>
+    <div class="mt"><div class="k">Won</div><div class="v">${money(wonV)}</div>
+      <div class="s">${n(won.length,'job')} booked</div></div>
+    <div class="mt"><div class="k">Win rate</div><div class="v">${decided?Math.round(won.length/decided*100):0}%</div>
+      <div class="s">${won.length} of ${decided} decided</div></div>`;
+
+  const shown=tasks.slice(0,MAX_TASKS), rest=tasks.length-shown.length;
+  document.getElementById('todayTasks').innerHTML = shown.length
+    ? shown.map(taskHTML).join('') + (rest?`<button class="mini" style="margin-top:2px" onclick="go('quotes')">
+        ${rest} more waiting on you ›</button>`:'')
+    : `<div class="allclear"><svg class="i" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+        <div><div class="t">You're all caught up.</div>
+        <div class="s">Nothing to finish, send or chase. Start a quote when the next one comes in.</div></div></div>`;
+  document.getElementById('allQuotesLink').textContent=`All ${qs.length} quotes ›`;
+
+  const w=won[0];
+  document.getElementById('todayWin').innerHTML = w
+    ? `<div class="winline"><svg class="i" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+        <span><b>Latest win</b> — ${esc(w.client||w.job)}, ${money(calc(w).total)}. ${esc(w.when||'')}</span></div>`
+    : '';
 }
 // Client is optional now — fall back to the quote's own title when there
 // isn't one, and say so plainly rather than leaving the row looking broken.
 const primaryLabel=q=>q.client||q.job;
 const subLabel=q=>q.client ? (q.job+(q.addr?' · '+q.addr:'')) : 'No client attached';
-function rowHTML(q){
-  const c=calc(q), s=STATUS[q.status];
-  return `<button class="row" onclick="openQuote('${q.id}')">
-    <span class="rm">
-      <span class="r1"><span class="cl">${esc(primaryLabel(q))}</span>${pill(q.status)}</span>
-      <span class="jb">${esc(subLabel(q))}</span>
-    </span>
-    <span class="rr">
-      <span class="amt ${q.status==='lost'?'dim':''}">${money(c.total)}</span>
-      <span class="act">${s.act}<svg class="i i-s" viewBox="0 0 24 24" style="width:13px;height:13px"><path d="M9 5l7 7-7 7"/></svg></span>
-    </span></button>`;
-}
 
 /* ---------- QUOTES ---------- */
 let filter='all';
@@ -1090,9 +1203,14 @@ function toggleClientFieldsIntake(){
   document.getElementById('clientFieldsInline').hidden=!clientFieldsOpen;
   document.getElementById('addClientLinkTxt').textContent = clientFieldsOpen ? '– Hide client details' : '+ Add client details later';
 }
+// With no job template picked — including "My price list", which has no
+// example of its own — fall back to a job described the way a contractor
+// actually says it out loud, not to placeholder instructions.
+const DICTATE_EX="Main floor bathroom, maybe 40 square feet. Rip the old tub and vanity out, tile the walls and floor, all new fixtures. House is from the eighties.";
 function dictate(){
   const n=document.getElementById('n-desc');
-  n.value=(newType?T[newType]:T.custom).ex; n.focus(); toast('Dictated — edit anything');
+  n.value = newType && T[newType] ? T[newType].ex : DICTATE_EX;
+  n.focus(); toast('Dictated — edit anything');
 }
 // No text and no template picked yet? Fall back to a plain title so the
 // quote still has a name — a contractor should never be blocked by this.
