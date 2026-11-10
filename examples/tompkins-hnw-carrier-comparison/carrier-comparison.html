@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en-CA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Estate Preservation Comparison &ndash; Sample</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{--primary:#0f2a47;--accent:#b08d3c;--ink:#1c2530;--muted:#5d6875;--paper:#ffffff;--wash:#f4f1ea;--rule:#d9d4c7;
+--head:'Cormorant Garamond', Georgia, serif;--body:'Inter', 'Helvetica Neue', Arial, sans-serif}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#e9e7e1;color:var(--ink);font:14px/1.55 var(--body)}
+.page{max-width:1000px;margin:24px auto;background:var(--paper);box-shadow:0 2px 24px rgba(0,0,0,.08)}
+.pad{padding:0 56px}
+header.cover{background:var(--primary);color:#fff;padding:36px 56px 40px;border-bottom:5px solid var(--accent)}
+.brandrow{display:flex;justify-content:space-between;align-items:center;gap:24px;margin-bottom:44px}
+.wordmark{font:600 26px/1 var(--head);letter-spacing:.02em}
+.wordmark small{display:block;font:500 10.5px/1 var(--body);letter-spacing:.22em;text-transform:uppercase;opacity:.75;margin-top:8px}
+.tag{font:600 10.5px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(255,255,255,.45);padding:8px 12px;white-space:nowrap}
+.eyebrow{font:600 11px/1 var(--body);letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+header.cover .eyebrow{color:#fff;opacity:.8}
+h1{font:600 44px/1.08 var(--head);margin:14px 0 14px;text-wrap:balance;max-width:17em}
+.dek{font-size:16px;max-width:44em;opacity:.9;margin:0}
+.meta{display:flex;flex-wrap:wrap;gap:10px 40px;margin-top:30px;font-size:12.5px}
+.meta b{display:block;font:600 10px/1.4 var(--body);letter-spacing:.16em;text-transform:uppercase;opacity:.65}
+section{margin:44px 0}
+h2{font:600 28px/1.15 var(--head);color:var(--primary);margin:6px 0 16px;text-wrap:balance}
+h3{font:600 15px/1.3 var(--body);margin:0 0 10px;color:var(--primary)}
+h3 em{font-style:normal;font-weight:400;color:var(--muted)}
+p{margin:0 0 12px;max-width:68ch}
+.two{display:grid;grid-template-columns:1.15fr 1fr;gap:36px}
+dl.facts{margin:0;display:grid;grid-template-columns:auto 1fr;gap:7px 18px;font-size:13.5px}
+dl.facts dt{color:var(--muted)} dl.facts dd{margin:0;font-weight:500}
+.box{background:var(--wash);border-left:3px solid var(--accent);padding:20px 24px}
+.bal{width:100%;border-collapse:collapse;font-size:13.5px}
+.bal td{padding:6px 0;border-bottom:1px solid var(--rule)} .bal tr:last-child td{border:0;font-weight:700;padding-top:10px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--rule);margin-top:24px}
+.kpis div{padding:16px 18px;border-right:1px solid var(--rule)} .kpis div:last-child{border:0}
+.kpis b{display:block;font:600 22px/1.15 var(--head);color:var(--primary)}
+.kpis span{font-size:11.5px;color:var(--muted)}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.scroll{overflow-x:auto}
+table.cmp{width:100%;border-collapse:collapse;font-size:13.5px;min-width:620px}
+.cmp thead th{text-align:right;padding:12px 14px;background:var(--primary);color:#fff;font:600 14px/1.25 var(--body);vertical-align:bottom}
+.cmp thead th:first-child{text-align:left;width:38%}
+.cmp thead small{display:block;font-weight:400;font-size:11.5px;opacity:.75}
+.sw{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px}
+.cmp tbody th{text-align:left;font-weight:500;padding:8px 14px}
+.cmp td{padding:8px 14px}
+.cmp tbody tr{border-bottom:1px solid var(--rule)}
+.cmp tr.grp th{background:var(--wash);font:600 10.5px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--primary);padding:10px 14px}
+.rn{display:block;font-size:11px;color:var(--muted);font-weight:400}
+td.best{font-weight:700;color:var(--primary);box-shadow:inset 0 -2px 0 var(--accent)}
+.key{font-size:11.5px;color:var(--muted);margin-top:10px}
+.key i{display:inline-block;width:18px;height:0;border-bottom:2px solid var(--accent);vertical-align:middle;margin-right:6px}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+figure{margin:0} figcaption b{display:block;font-size:14px;color:var(--primary)} figcaption span{font-size:11.5px;color:var(--muted)}
+svg{width:100%;height:auto;display:block;margin-top:8px}
+.grid{stroke:var(--rule);stroke-width:1} .mark{stroke:var(--muted);stroke-width:1;stroke-dasharray:2 3}
+.tick{font:10px var(--body);fill:var(--muted)} .lab{font:600 10.5px var(--body)}
+.ref{fill:none;stroke:var(--muted);stroke-width:1.4;stroke-dasharray:5 4}
+ol.obs{margin:0;padding-left:20px} ol.obs li{margin-bottom:10px;max-width:72ch}
+.ledger{margin:26px 0}
+.ledger table{width:100%;border-collapse:collapse;font-size:12px;min-width:680px}
+.ledger th{background:var(--wash);color:var(--primary);font-weight:600;padding:6px 10px;text-align:right;border-bottom:1px solid var(--rule);font-size:11px}
+.ledger th:nth-child(-n+2){text-align:left} .ledger th.span{text-align:center;border-left:1px solid var(--rule)}
+.ledger td{padding:5px 10px;border-bottom:1px solid var(--rule)} .ledger td.alt{color:var(--muted)}
+.fine{font-size:11.5px;color:var(--muted);line-height:1.55} .fine p{max-width:none;margin-bottom:8px}
+.fine b{color:var(--ink)}
+footer{background:var(--primary);color:#fff;padding:22px 56px;display:flex;justify-content:space-between;gap:20px;font-size:12px;border-top:5px solid var(--accent)}
+footer span{opacity:.8}
+@media (max-width:760px){.pad,header.cover,footer{padding-left:16px;padding-right:16px}.page{margin:0}h1{font-size:32px}
+.two,.charts{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.kpis div{border-bottom:1px solid var(--rule)}footer,.brandrow{flex-direction:column;align-items:flex-start}}
+@page{size:Letter;margin:0}
+@media print{body{background:#fff}.page{margin:0;box-shadow:none;max-width:none}section{margin:30px 0}
+.brk{break-before:page;padding-top:40px}.ledger,figure,.box,tr{break-inside:avoid}h2{break-after:avoid}}
+</style></head><body><div class="page">
+<header class="cover">
+ <div class="brandrow"><div class="wordmark">Tompkins Insurance<small></small></div><div class="tag">Sample case &middot; Hypothetical</div></div>
+ <div class="eyebrow">Estate preservation &middot; Carrier comparison</div>
+ <h1>$10 million of permanent coverage, three carriers, one decision</h1>
+ <p class="dek">A side-by-side comparison of corporate-owned participating whole life from Canada Life, Manulife and Sun Life, prepared for a fictional client to show how we present a recommendation.</p>
+ <div class="meta"><div><b>Prepared for</b>Jonathan R. Ashcombe (fictional)</div><div><b>Policy owner</b>Ashcombe Holdings Inc.</div><div><b>Date</b>November 10, 2026</div><div><b>Status</b>Modelled sample, not carrier illustrations</div></div>
+</header>
+<div class="pad">
+
+<section class="two">
+ <div>
+  <div class="eyebrow">The client</div>
+  <h2>A founder whose estate will owe more tax than it holds in cash</h2>
+  <p>Jonathan is 52 and owns a manufacturing business through a holding company. Most of his $34.5 million net worth sits in private shares and real estate. On his death those assets are deemed sold, and the tax comes due whether or not anything has been sold.</p>
+  <dl class="facts">
+   <dt>Insured</dt><dd>Male, age 52, non-smoker, standard rates assumed</dd>
+   <dt>Residence</dt><dd>Oakville, Ontario</dd>
+   <dt>Family</dt><dd>Spouse Claire (50), three adult children</dd>
+   <dt>Structure</dt><dd>Ashcombe Holdings Inc. owns the operating company</dd>
+   <dt>Objective</dt><dd>Fund the terminal tax bill and keep the business in the family</dd>
+   <dt>Design</dt><dd>$10,000,000 participating whole life, 20-pay, dividends buying paid-up additions, holding company as owner and beneficiary</dd>
+  </dl>
+ </div>
+ <div class="box">
+  <h3>Net worth and the tax exposure</h3>
+  <table class="bal">
+   <tr><td>Operating company shares</td><td class="num">$21.0M</td></tr>
+   <tr><td>Holding company portfolio</td><td class="num">$6.5M</td></tr>
+   <tr><td>Real estate (home and cottage)</td><td class="num">$4.8M</td></tr>
+   <tr><td>Registered plans</td><td class="num">$2.2M</td></tr>
+   <tr><td>Total net worth</td><td class="num">$34.5M</td></tr>
+  </table>
+  <p style="margin:14px 0 0;font-size:12.5px">Estimated tax at death is about <b>$7.4M today</b> and about <b>$19M by age 85</b> if asset values grow 3% a year.</p>
+ </div>
+</section>
+
+<section>
+ <div class="eyebrow">The answer in brief</div>
+ <h2>All three carriers cover the projected tax bill; they differ on cost, cash and resilience</h2>
+ <div class="kpis">
+  <div><b>$23.73M &ndash; $26.83M</b><span>Projected death benefit at age 85</span></div>
+  <div><b>$455,900 &ndash; $479,600</b><span>Annual premium for 20 years</span></div>
+  <div><b>3.93% &ndash; 4.55%</b><span>Tax-free return on premiums at age 85</span></div>
+  <div><b>Year 7 &ndash; 10</b><span>Cash value passes premiums paid</span></div>
+ </div>
+</section>
+
+<section>
+ <div class="eyebrow">Side by side</div>
+ <h2>Carrier comparison</h2>
+ <div class="scroll"><table class="cmp"><thead><tr><th scope="col">$10,000,000 participating whole life, 20-pay</th><th scope="col"><span class="sw" style="background:#a23b3b"></span>Canada Life<small>Estate Achiever</small></th><th scope="col"><span class="sw" style="background:#2f7d5b"></span>Manulife<small>Manulife Par</small></th><th scope="col"><span class="sw" style="background:#c2861b"></span>Sun Life<small>Sun Par Protector II</small></th></tr></thead><tbody><tr class="grp"><th colspan="4">Funding</th></tr><tr><th scope='row'>Annual premium<span class="rn">Years 1&ndash;20</span></th><td class="num">$468,200</td><td class="num best">$455,900</td><td class="num">$479,600</td></tr><tr><th scope='row'>Total premiums paid</th><td class="num">$9.36M</td><td class="num best">$9.12M</td><td class="num">$9.59M</td></tr><tr><th scope='row'>Assumed dividend scale interest rate<span class="rn">Not guaranteed</span></th><td class="num">5.75%</td><td class="num">6.35%</td><td class="num">6.25%</td></tr><tr class="grp"><th colspan="4">Cash surrender value &mdash; current scale</th></tr><tr><th scope='row'>Year 10 (age 62)</th><td class="num best">$5.13M</td><td class="num">$4.65M</td><td class="num">$5.08M</td></tr><tr><th scope='row'>Year 20 (age 72)<span class="rn">Premiums end</span></th><td class="num">$13.27M</td><td class="num">$12.62M</td><td class="num best">$13.32M</td></tr><tr><th scope='row'>Age 85</th><td class="num">$22.82M</td><td class="num">$22.40M</td><td class="num best">$22.82M</td></tr><tr><th scope='row'>Year cash value exceeds premiums paid</th><td class="num best">Year 7</td><td class="num">Year 10</td><td class="num">Year 9</td></tr><tr class="grp"><th colspan="4">Death benefit &mdash; current scale</th></tr><tr><th scope='row'>Year 10 (age 62)</th><td class="num">$11.14M</td><td class="num best">$11.68M</td><td class="num">$11.55M</td></tr><tr><th scope='row'>Year 20 (age 72)</th><td class="num">$14.56M</td><td class="num best">$17.16M</td><td class="num">$16.32M</td></tr><tr><th scope='row'>Age 85<span class="rn">Planning horizon</span></th><td class="num">$23.73M</td><td class="num best">$26.83M</td><td class="num">$24.46M</td></tr><tr><th scope='row'>Age 90</th><td class="num">$29.12M</td><td class="num best">$30.69M</td><td class="num">$29.24M</td></tr><tr class="grp"><th colspan="4">Estate efficiency at age 85</th></tr><tr><th scope='row'>Return on premiums at death (IRR)</th><td class="num">3.93%</td><td class="num best">4.55%</td><td class="num">3.95%</td></tr><tr><th scope='row'>Pre-tax equivalent yield<span class="rn">At 50.17% passive rate</span></th><td class="num">7.88%</td><td class="num best">9.14%</td><td class="num">7.93%</td></tr><tr><th scope='row'>Estimated capital dividend account credit</th><td class="num">$16.81M</td><td class="num best">$24.11M</td><td class="num">$19.16M</td></tr><tr class="grp"><th colspan="4">Downside &mdash; dividend scale less 1%</th></tr><tr><th scope='row'>Cash surrender value, year 20</th><td class="num">$11.92M</td><td class="num">$11.37M</td><td class="num best">$11.98M</td></tr><tr><th scope='row'>Death benefit, age 85</th><td class="num">$18.86M</td><td class="num best">$19.72M</td><td class="num">$19.11M</td></tr><tr><th scope='row'>Guaranteed cash value, year 20<span class="rn">No dividends</span></th><td class="num best">$8.44M</td><td class="num">$7.60M</td><td class="num">$8.39M</td></tr></tbody></table></div>
+ <p class="key"><i></i>Most favourable value in each row. Dividend scale rates are assumptions for this sample and are not guaranteed.</p>
+</section>
+
+<section class="brk">
+ <div class="eyebrow">Over time</div>
+ <h2>How the three policies grow</h2>
+ <div class="charts"><figure><figcaption><b>Projected death benefit</b><span>Current dividend scale, paid-up additions</span></figcaption><svg viewBox="0 0 520 300" role="img" aria-label="Projected death benefit"><line x1="46" x2="428" y1="266.0" y2="266.0" class="grid"/><text x="38" y="269.5" class="tick" text-anchor="end">$0M</text><line x1="46" x2="428" y1="216.0" y2="216.0" class="grid"/><text x="38" y="219.5" class="tick" text-anchor="end">$10M</text><line x1="46" x2="428" y1="166.0" y2="166.0" class="grid"/><text x="38" y="169.5" class="tick" text-anchor="end">$20M</text><line x1="46" x2="428" y1="116.0" y2="116.0" class="grid"/><text x="38" y="119.5" class="tick" text-anchor="end">$30M</text><line x1="46" x2="428" y1="66.0" y2="66.0" class="grid"/><text x="38" y="69.5" class="tick" text-anchor="end">$40M</text><line x1="46" x2="428" y1="16.0" y2="16.0" class="grid"/><text x="38" y="19.5" class="tick" text-anchor="end">$50M</text><text x="72.7" y="288" class="tick" text-anchor="middle">Age 55</text><text x="161.5" y="288" class="tick" text-anchor="middle">Age 65</text><text x="250.3" y="288" class="tick" text-anchor="middle">Age 75</text><text x="339.2" y="288" class="tick" text-anchor="middle">Age 85</text><text x="428.0" y="288" class="tick" text-anchor="middle">Age 95</text><line x1="223.7" x2="223.7" y1="16" y2="266" class="mark"/><text x="228.7" y="26" class="tick">Premiums end</text><polyline points="54.9,216.0 63.8,215.9 72.7,215.7 81.5,215.2 90.4,214.4 99.3,213.5 108.2,212.3 117.1,210.9 126.0,209.4 134.8,207.6 143.7,205.6 152.6,203.5 161.5,201.1 170.4,198.6 179.3,196.0 188.1,193.1 197.0,190.1 205.9,187.0 214.8,183.7 223.7,180.2 232.6,176.6 241.4,173.0 250.3,169.3 259.2,165.7 268.1,162.0 277.0,158.3 285.9,154.6 294.7,150.8 303.6,147.1 312.5,143.3 321.4,139.5 330.3,135.7 339.2,131.9 348.0,128.0 356.9,124.2 365.8,120.3 374.7,116.4 383.6,112.5 392.5,108.5 401.3,104.2 410.2,99.8 419.1,94.2 428.0,86.3" fill="none" stroke="#2f7d5b" stroke-width="2.2" stroke-linejoin="round"/><text x="434" y="89.8" class="lab" fill="#2f7d5b">Manulife</text><polyline points="54.9,216.0 63.8,215.9 72.7,215.6 81.5,215.1 90.4,214.4 99.3,213.6 108.2,212.5 117.1,211.3 126.0,209.8 134.8,208.3 143.7,206.5 152.6,204.6 161.5,202.6 170.4,200.4 179.3,198.0 188.1,195.6 197.0,193.0 205.9,190.2 214.8,187.4 223.7,184.4 232.6,181.3 241.4,178.2 250.3,175.1 259.2,172.0 268.1,168.9 277.0,165.8 285.9,162.6 294.7,159.5 303.6,156.3 312.5,153.2 321.4,150.0 330.3,146.9 339.2,143.7 348.0,140.5 356.9,137.0 365.8,131.5 374.7,125.8 383.6,119.8 392.5,113.6 401.3,107.2 410.2,100.6 419.1,93.7 428.0,86.7" fill="none" stroke="#c2861b" stroke-width="2.2" stroke-linejoin="round"/><text x="434" y="102.8" class="lab" fill="#c2861b">Sun Life</text><polyline points="54.9,216.0 63.8,215.9 72.7,215.7 81.5,215.3 90.4,214.8 99.3,214.1 108.2,213.4 117.1,212.5 126.0,211.4 134.8,210.3 143.7,209.0 152.6,207.7 161.5,206.2 170.4,204.6 179.3,202.9 188.1,201.2 197.0,199.3 205.9,197.4 214.8,195.3 223.7,193.2 232.6,191.0 241.4,188.8 250.3,186.6 259.2,184.4 268.1,180.9 277.0,177.3 285.9,173.5 294.7,169.6 303.6,165.5 312.5,161.2 321.4,156.8 330.3,152.1 339.2,147.3 348.0,142.4 356.9,137.2 365.8,131.8 374.7,126.2 383.6,120.4 392.5,114.4 401.3,108.1 410.2,101.7 419.1,95.0 428.0,88.1" fill="none" stroke="#a23b3b" stroke-width="2.2" stroke-linejoin="round"/><text x="434" y="115.8" class="lab" fill="#a23b3b">Canada Life</text></svg></figure><figure><figcaption><b>Projected cash surrender value</b><span>Current dividend scale, against premiums paid</span></figcaption><svg viewBox="0 0 520 300" role="img" aria-label="Projected cash surrender value"><line x1="46" x2="428" y1="266.0" y2="266.0" class="grid"/><text x="38" y="269.5" class="tick" text-anchor="end">$0M</text><line x1="46" x2="428" y1="203.5" y2="203.5" class="grid"/><text x="38" y="207.0" class="tick" text-anchor="end">$10M</text><line x1="46" x2="428" y1="141.0" y2="141.0" class="grid"/><text x="38" y="144.5" class="tick" text-anchor="end">$20M</text><line x1="46" x2="428" y1="78.5" y2="78.5" class="grid"/><text x="38" y="82.0" class="tick" text-anchor="end">$30M</text><line x1="46" x2="428" y1="16.0" y2="16.0" class="grid"/><text x="38" y="19.5" class="tick" text-anchor="end">$40M</text><text x="72.7" y="288" class="tick" text-anchor="middle">Age 55</text><text x="161.5" y="288" class="tick" text-anchor="middle">Age 65</text><text x="250.3" y="288" class="tick" text-anchor="middle">Age 75</text><text x="339.2" y="288" class="tick" text-anchor="middle">Age 85</text><text x="428.0" y="288" class="tick" text-anchor="middle">Age 95</text><line x1="223.7" x2="223.7" y1="16" y2="266" class="mark"/><text x="228.7" y="26" class="tick">Premiums end</text><polyline points="46.0,266.0 54.9,263.1 63.8,260.2 72.7,257.2 81.5,254.3 90.4,251.4 99.3,248.5 108.2,245.5 117.1,242.6 126.0,239.7 134.8,236.8 143.7,233.8 152.6,230.9 161.5,228.0 170.4,225.1 179.3,222.1 188.1,219.2 197.0,216.3 205.9,213.4 214.8,210.4 223.7,207.5 232.6,207.5 241.4,207.5 250.3,207.5 259.2,207.5 268.1,207.5 277.0,207.5 285.9,207.5 294.7,207.5 303.6,207.5 312.5,207.5 321.4,207.5 330.3,207.5 339.2,207.5 348.0,207.5 356.9,207.5 365.8,207.5 374.7,207.5 383.6,207.5 392.5,207.5 401.3,207.5 410.2,207.5 419.1,207.5 428.0,207.5" class="ref"/><text x="434" y="211.0" class="lab" fill="#5d6875">Premiums paid</text><polyline points="46.0,266.0 54.9,265.1 63.8,263.2 72.7,260.4 81.5,257.5 90.4,254.4 99.3,251.3 108.2,247.9 117.1,244.4 126.0,240.8 134.8,236.9 143.7,232.9 152.6,228.7 161.5,224.3 170.4,219.7 179.3,214.9 188.1,209.8 197.0,204.5 205.9,199.0 214.8,193.2 223.7,187.1 232.6,183.4 241.4,179.6 250.3,175.6 259.2,171.5 268.1,167.2 277.0,162.7 285.9,158.1 294.7,153.3 303.6,148.2 312.5,143.0 321.4,137.6 330.3,131.9 339.2,126.0 348.0,119.9 356.9,113.5 365.8,106.8 374.7,99.9 383.6,92.6 392.5,84.9 401.3,76.9 410.2,68.4 419.1,59.5 428.0,50.1" fill="none" stroke="#2f7d5b" stroke-width="2.2" stroke-linejoin="round"/><text x="434" y="53.6" class="lab" fill="#2f7d5b">Manulife</text><polyline points="46.0,266.0 54.9,264.7 63.8,262.3 72.7,259.2 81.5,256.1 90.4,252.8 99.3,249.4 108.2,245.9 117.1,242.2 126.0,238.3 134.8,234.2 143.7,230.0 152.6,225.6 161.5,221.0 170.4,216.2 179.3,211.2 188.1,206.0 197.0,200.6 205.9,194.9 214.8,188.9 223.7,182.7 232.6,179.2 241.4,175.5 250.3,171.6 259.2,167.6 268.1,163.4 277.0,159.1 285.9,154.6 294.7,149.9 303.6,145.0 312.5,140.0 321.4,134.7 330.3,129.1 339.2,123.4 348.0,117.3 356.9,111.0 365.8,104.4 374.7,97.5 383.6,90.3 392.5,82.9 401.3,75.2 410.2,67.2 419.1,59.0 428.0,50.4" fill="none" stroke="#c2861b" stroke-width="2.2" stroke-linejoin="round"/><text x="434" y="66.6" class="lab" fill="#c2861b">Sun Life</text><polyline points="46.0,266.0 54.9,264.4 63.8,261.8 72.7,258.8 81.5,255.7 90.4,252.4 99.3,249.0 108.2,245.5 117.1,241.8 126.0,238.0 134.8,234.0 143.7,229.8 152.6,225.4 161.5,220.9 170.4,216.2 179.3,211.2 188.1,206.1 197.0,200.7 205.9,195.1 214.8,189.2 223.7,183.1 232.6,179.5 241.4,175.8 250.3,172.0 259.2,168.0 268.1,163.8 277.0,159.4 285.9,154.9 294.7,150.1 303.6,145.2 312.5,140.1 321.4,134.7 330.3,129.2 339.2,123.4 348.0,117.4 356.9,111.1 365.8,104.7 374.7,97.9 383.6,91.0 392.5,83.7 401.3,76.2 410.2,68.5 419.1,60.5 428.0,52.2" fill="none" stroke="#a23b3b" stroke-width="2.2" stroke-linejoin="round"/><text x="434" y="79.6" class="lab" fill="#a23b3b">Canada Life</text></svg></figure></div>
+</section>
+
+<section>
+ <div class="eyebrow">What the numbers say</div>
+ <h2>Observations</h2>
+ <ol class="obs">
+<li><b>Manulife projects the largest estate value.</b> $26.83M at age 85 on the current scale, a 4.55% tax-free return on premiums, equivalent to 9.14% before tax inside the holding company.</li>
+<li><b>Sun Life builds accessible cash value fastest.</b> $13.32M when premiums end in year 20, and cash value passes premiums paid in year 9. This matters if the policy may later be pledged as collateral.</li>
+<li><b>Manulife carries the lowest outlay.</b> $455,900 a year, $0.47M less over 20 years than the highest premium.</li>
+<li><b>Canada Life holds up best if dividends fall.</b> With the scale 1% lower, its age-85 death benefit keeps 79% of the current-scale value.</li></ol>
+ <div class="box" style="margin-top:20px"><h3>Where we would take this next</h3>
+ <p style="margin:0">Run the carriers&rsquo; own illustrations at the client&rsquo;s underwritten rate class, add a joint last-to-die version with Claire so the benefit lands when the tax does, and test the lead design against a 10-pay and a term-blended alternative before recommending a carrier.</p></div>
+</section>
+
+<section class="brk">
+ <div class="eyebrow">The detail</div>
+ <h2>Year-by-year ledgers</h2>
+ <section class="ledger"><h3><span class="sw" style="background:#a23b3b"></span>Canada Life <em>Estate Achiever</em></h3>
+<div class="scroll"><table><thead>
+<tr><th rowspan="2">Year</th><th rowspan="2">Age</th><th rowspan="2">Annual premium</th><th rowspan="2">Premiums paid</th><th rowspan="2">Guaranteed cash value</th><th colspan="2" class="span">Current scale (5.75%)</th><th colspan="2" class="span">Scale less 1%</th></tr>
+<tr><th>Cash value</th><th>Death benefit</th><th>Cash value</th><th>Death benefit</th></tr></thead><tbody><tr><td>1</td><td>53</td><td class="num">$468,200</td><td class="num">$468,200</td><td class="num">$206,229</td><td class="num">$253,508</td><td class="num">$10,000,000</td><td class="num alt">$250,979</td><td class="num alt">$10,000,000</td></tr><tr><td>5</td><td>57</td><td class="num">$468,200</td><td class="num">$2,341,000</td><td class="num">$1,765,633</td><td class="num">$2,173,044</td><td class="num">$10,240,226</td><td class="num alt">$2,113,759</td><td class="num alt">$10,130,994</td></tr><tr><td>10</td><td>62</td><td class="num">$468,200</td><td class="num">$4,682,000</td><td class="num">$3,859,558</td><td class="num">$5,125,964</td><td class="num">$11,142,198</td><td class="num alt">$4,860,049</td><td class="num alt">$10,612,845</td></tr><tr><td>15</td><td>67</td><td class="num">$468,200</td><td class="num">$7,023,000</td><td class="num">$6,079,895</td><td class="num">$8,764,950</td><td class="num">$12,612,327</td><td class="num alt">$8,090,799</td><td class="num alt">$11,378,467</td></tr><tr><td>20</td><td>72</td><td class="num">$468,200</td><td class="num">$9,364,000</td><td class="num">$8,438,538</td><td class="num">$13,271,992</td><td class="num">$14,560,057</td><td class="num alt">$11,920,177</td><td class="num alt">$12,396,984</td></tr><tr><td>25</td><td>77</td><td class="num">&mdash;</td><td class="num">$9,364,000</td><td class="num">$8,944,528</td><td class="num">$16,356,460</td><td class="num">$17,010,719</td><td class="num alt">$14,022,574</td><td class="num alt">$14,583,477</td></tr><tr><td>30</td><td>82</td><td class="num">&mdash;</td><td class="num">$9,364,000</td><td class="num">$9,481,776</td><td class="num">$20,151,993</td><td class="num">$20,958,073</td><td class="num alt">$16,475,777</td><td class="num alt">$17,134,809</td></tr><tr><td>33</td><td>85</td><td class="num">&mdash;</td><td class="num">$9,364,000</td><td class="num">$9,822,027</td><td class="num">$22,818,306</td><td class="num">$23,731,038</td><td class="num alt">$18,133,772</td><td class="num alt">$18,859,123</td></tr><tr><td>38</td><td>90</td><td class="num">&mdash;</td><td class="num">$9,364,000</td><td class="num">$10,424,337</td><td class="num">$28,004,663</td><td class="num">$29,124,850</td><td class="num alt">$21,231,811</td><td class="num alt">$22,081,084</td></tr><tr><td>43</td><td>95</td><td class="num">&mdash;</td><td class="num">$9,364,000</td><td class="num">$11,064,990</td><td class="num">$34,210,669</td><td class="num">$35,579,096</td><td class="num alt">$24,756,941</td><td class="num alt">$25,747,219</td></tr></tbody></table></div></section><section class="ledger"><h3><span class="sw" style="background:#2f7d5b"></span>Manulife <em>Manulife Par</em></h3>
+<div class="scroll"><table><thead>
+<tr><th rowspan="2">Year</th><th rowspan="2">Age</th><th rowspan="2">Annual premium</th><th rowspan="2">Premiums paid</th><th rowspan="2">Guaranteed cash value</th><th colspan="2" class="span">Current scale (6.35%)</th><th colspan="2" class="span">Scale less 1%</th></tr>
+<tr><th>Cash value</th><th>Death benefit</th><th>Cash value</th><th>Death benefit</th></tr></thead><tbody><tr><td>1</td><td>53</td><td class="num">$455,900</td><td class="num">$455,900</td><td class="num">$99,250</td><td class="num">$142,762</td><td class="num">$10,000,000</td><td class="num alt">$141,303</td><td class="num alt">$10,000,000</td></tr><tr><td>5</td><td>57</td><td class="num">$455,900</td><td class="num">$2,279,500</td><td class="num">$1,460,526</td><td class="num">$1,848,692</td><td class="num">$10,314,929</td><td class="num alt">$1,801,508</td><td class="num alt">$10,200,826</td></tr><tr><td>10</td><td>62</td><td class="num">$455,900</td><td class="num">$4,559,000</td><td class="num">$3,387,741</td><td class="num">$4,650,671</td><td class="num">$11,682,276</td><td class="num alt">$4,418,762</td><td class="num alt">$11,055,889</td></tr><tr><td>15</td><td>67</td><td class="num">$455,900</td><td class="num">$6,838,500</td><td class="num">$5,429,984</td><td class="num">$8,180,278</td><td class="num">$14,005,825</td><td class="num alt">$7,569,001</td><td class="num alt">$12,472,811</td></tr><tr><td>20</td><td>72</td><td class="num">$455,900</td><td class="num">$9,118,000</td><td class="num">$7,597,306</td><td class="num">$12,624,481</td><td class="num">$17,157,346</td><td class="num alt">$11,370,978</td><td class="num alt">$14,344,468</td></tr><tr><td>25</td><td>77</td><td class="num">&mdash;</td><td class="num">$9,118,000</td><td class="num">$8,043,465</td><td class="num">$15,805,648</td><td class="num">$20,801,230</td><td class="num alt">$13,636,495</td><td class="num alt">$16,438,059</td></tr><tr><td>30</td><td>82</td><td class="num">&mdash;</td><td class="num">$9,118,000</td><td class="num">$8,511,299</td><td class="num">$19,680,255</td><td class="num">$24,542,603</td><td class="num alt">$16,317,619</td><td class="num alt">$18,499,646</td></tr><tr><td>33</td><td>85</td><td class="num">&mdash;</td><td class="num">$9,118,000</td><td class="num">$8,803,338</td><td class="num">$22,397,099</td><td class="num">$26,826,898</td><td class="num alt">$18,171,954</td><td class="num alt">$19,720,052</td></tr><tr><td>38</td><td>90</td><td class="num">&mdash;</td><td class="num">$9,118,000</td><td class="num">$9,312,789</td><td class="num">$27,750,916</td><td class="num">$30,691,233</td><td class="num alt">$21,805,348</td><td class="num alt">$22,677,561</td></tr><tr><td>43</td><td>95</td><td class="num">&mdash;</td><td class="num">$9,118,000</td><td class="num">$9,861,591</td><td class="num">$34,548,528</td><td class="num">$35,930,469</td><td class="num alt">$26,092,864</td><td class="num alt">$27,136,579</td></tr></tbody></table></div></section><section class="ledger"><h3><span class="sw" style="background:#c2861b"></span>Sun Life <em>Sun Par Protector II</em></h3>
+<div class="scroll"><table><thead>
+<tr><th rowspan="2">Year</th><th rowspan="2">Age</th><th rowspan="2">Annual premium</th><th rowspan="2">Premiums paid</th><th rowspan="2">Guaranteed cash value</th><th colspan="2" class="span">Current scale (6.25%)</th><th colspan="2" class="span">Scale less 1%</th></tr>
+<tr><th>Cash value</th><th>Death benefit</th><th>Cash value</th><th>Death benefit</th></tr></thead><tbody><tr><td>1</td><td>53</td><td class="num">$479,600</td><td class="num">$479,600</td><td class="num">$162,769</td><td class="num">$210,138</td><td class="num">$10,000,000</td><td class="num alt">$208,028</td><td class="num alt">$10,000,000</td></tr><tr><td>5</td><td>57</td><td class="num">$479,600</td><td class="num">$2,398,000</td><td class="num">$1,695,611</td><td class="num">$2,105,409</td><td class="num">$10,311,638</td><td class="num alt">$2,049,482</td><td class="num alt">$10,194,719</td></tr><tr><td>10</td><td>62</td><td class="num">$479,600</td><td class="num">$4,796,000</td><td class="num">$3,796,540</td><td class="num">$5,083,011</td><td class="num">$11,548,532</td><td class="num alt">$4,823,752</td><td class="num alt">$10,952,195</td></tr><tr><td>15</td><td>67</td><td class="num">$479,600</td><td class="num">$7,194,000</td><td class="num">$6,024,247</td><td class="num">$8,763,582</td><td class="num">$13,593,096</td><td class="num alt">$8,098,536</td><td class="num alt">$12,173,042</td></tr><tr><td>20</td><td>72</td><td class="num">$479,600</td><td class="num">$9,592,000</td><td class="num">$8,390,623</td><td class="num">$13,321,393</td><td class="num">$16,318,458</td><td class="num alt">$11,981,827</td><td class="num alt">$13,757,776</td></tr><tr><td>25</td><td>77</td><td class="num">&mdash;</td><td class="num">$9,592,000</td><td class="num">$8,893,205</td><td class="num">$16,409,538</td><td class="num">$19,421,816</td><td class="num alt">$14,120,840</td><td class="num alt">$15,502,666</td></tr><tr><td>30</td><td>82</td><td class="num">&mdash;</td><td class="num">$9,592,000</td><td class="num">$9,426,500</td><td class="num">$20,167,553</td><td class="num">$22,560,602</td><td class="num alt">$16,645,497</td><td class="num alt">$17,311,317</td></tr><tr><td>33</td><td>85</td><td class="num">&mdash;</td><td class="num">$9,592,000</td><td class="num">$9,764,005</td><td class="num">$22,823,040</td><td class="num">$24,458,836</td><td class="num alt">$18,376,998</td><td class="num alt">$19,112,078</td></tr><tr><td>38</td><td>90</td><td class="num">&mdash;</td><td class="num">$9,592,000</td><td class="num">$10,362,072</td><td class="num">$28,113,048</td><td class="num">$29,237,570</td><td class="num alt">$21,623,471</td><td class="num alt">$22,488,409</td></tr><tr><td>43</td><td>95</td><td class="num">&mdash;</td><td class="num">$9,592,000</td><td class="num">$10,998,898</td><td class="num">$34,489,385</td><td class="num">$35,868,960</td><td class="num alt">$25,328,230</td><td class="num alt">$26,341,359</td></tr></tbody></table></div></section>
+</section>
+
+<section class="fine">
+ <h3>Assumptions and important information</h3>
+ <p><b>This is a sample.</b> The client, the holding company and every figure in this document are fictional. The values were produced by a simplified projection model for demonstration; they were not generated by Canada Life, Manulife or Sun Life illustration software and are not quotes, offers or carrier-approved illustrations. Actual premiums, values and dividend scales will differ.</p>
+ <p><b>Basis.</b> Male, age 52 nearest, non-smoker, standard risk, Ontario. $10,000,000 basic coverage, premiums payable annually for 20 years, dividend option paid-up additions, no riders, no policy loans or withdrawals. Product names are shown to indicate the type of plan each carrier offers in this category.</p>
+ <p><b>Dividends are not guaranteed.</b> Current-scale values assume each carrier&rsquo;s assumed dividend scale interest rate stays unchanged for the life of the policy. The alternate scale reduces that rate by one percentage point in all years. Guaranteed cash values assume no dividends are ever paid.</p>
+ <p><b>Tax.</b> Estimated tax at death assumes Ontario top marginal rates, a 50% capital gains inclusion rate and nominal cost base on private shares. Pre-tax equivalent yield uses a 50.17% rate on corporate passive income. Capital dividend account credit is the death benefit less an estimated adjusted cost basis. This is not tax or legal advice.</p>
+</section>
+</div>
+<footer><div><b>Tompkins Insurance</b></div><span>tompkinsinsurance.com</span><span>Sample case &middot; for demonstration only</span></footer>
+</div></body></html>
