@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en-CA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One-Request Illustrations &ndash; Executive Summary</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{--primary:#0f2a47;--accent:#b08d3c;--ink:#1c2530;--muted:#5d6875;--paper:#fff;--wash:#f4f1ea;--rule:#d9d4c7;
+--head:'Cormorant Garamond',Georgia,serif;--body:'Inter','Helvetica Neue',Arial,sans-serif}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#e9e7e1;color:var(--ink);font:13.5px/1.5 var(--body)}
+.sheet{width:8.5in;height:11in;margin:20px auto;background:var(--paper);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 2px 24px rgba(0,0,0,.08)}
+.pad{padding:0 48px;flex:1}
+header{background:var(--primary);color:#fff;padding:20px 48px 22px;border-bottom:5px solid var(--accent)}
+.brandrow{display:flex;justify-content:space-between;align-items:center}
+.wordmark{font:600 22px/1 var(--head);letter-spacing:.02em}
+.tag{font:600 9.5px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(255,255,255,.45);padding:7px 10px}
+h1{font:600 35px/1.05 var(--head);margin:20px 0 8px}
+.dek{font-size:15.5px;margin:0;max-width:38em;opacity:.93}
+.eyebrow{font:600 10px/1 var(--body);letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+h2{font:600 24px/1.15 var(--head);color:var(--primary);margin:4px 0 9px}
+section{margin:19px 0 0}
+.lane{display:grid;grid-template-columns:86px 1fr;align-items:center;gap:14px;padding:10px 16px;border:1px solid var(--rule)}
+.lane+.lane{border-top:0}
+.lane.new{background:var(--wash);border-left:4px solid var(--accent)}
+.lane .who{font:600 10px/1.3 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.lane.new .who{color:var(--primary)}
+.chain{display:flex;align-items:center;gap:10px}
+.box{flex:1;background:#fff;border:1px solid var(--rule);border-radius:6px;padding:9px 11px;font-size:12px;line-height:1.35;text-align:center}
+.box b{display:block;color:var(--primary);font-size:12.5px}
+.box.dark{background:var(--primary);border-color:var(--primary);color:#fff}.box.dark b{color:#fff}
+.box.x3{box-shadow:4px 4px 0 #fff,4px 4px 0 1px var(--rule),8px 8px 0 #fff,8px 8px 0 1px var(--rule);margin-right:8px}
+.arr{flex:none;border:6px solid transparent;border-left:9px solid var(--accent);width:0;height:0}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.num{font:600 28px/1 var(--head);color:var(--accent)}
+.three b{display:block;color:var(--primary);font-size:14px;margin:4px 0 3px}
+.three p{margin:0;font-size:12.5px}
+.gain{display:grid;grid-template-columns:1fr 1fr;gap:10px 30px;margin:0;padding:0;list-style:none}
+.gain li{padding-left:18px;position:relative;font-size:13px}
+.gain li:before{content:"";position:absolute;left:0;top:8px;width:8px;height:2px;background:var(--accent)}
+.gain b{color:var(--primary)}
+.ask{background:var(--primary);color:#fff;padding:12px 20px;display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:center}
+.ask h3{font:600 22px/1.1 var(--head);margin:0}
+.ask ol{margin:0;padding-left:18px;font-size:13px}.ask li{margin:2px 0}
+.fine{font-size:10.5px;color:var(--muted);margin:8px 0 0}
+footer{background:var(--primary);color:#fff;padding:12px 48px;display:flex;justify-content:space-between;font-size:10.5px;border-top:4px solid var(--accent)}
+footer span{opacity:.8}
+@page{size:Letter;margin:0}
+@media print{body{background:#fff}.sheet{margin:0;box-shadow:none;height:10.97in}}
+@media screen and (max-width:860px){.sheet{width:auto;height:auto;margin:0}.pad,header,footer{padding-left:16px;padding-right:16px}
+.three,.gain,.ask,.lane{grid-template-columns:1fr}.chain{flex-direction:column;align-items:stretch}.arr{transform:rotate(90deg);align-self:center}.box.x3{margin:0 8px 8px 0}h1{font-size:30px}}
+</style></head><body>
+<div class="sheet">
+<header>
+ <div class="brandrow"><div class="wordmark">Tompkins Insurance</div><div class="tag">Executive summary</div></div>
+ <h1>Ask once. Get every carrier&rsquo;s illustration back.</h1>
+ <p class="dek">Advisors spend time typing the same client into each carrier&rsquo;s software and rebuilding the results by hand. We can take that work off their desk.</p>
+</header>
+<div class="pad">
+
+ <section>
+  <div class="eyebrow">The change</div>
+  <h2>From three tools and a spreadsheet to one request</h2>
+  <div class="lane">
+   <div class="who">Today</div>
+   <div class="chain">
+    <div class="box"><b>Advisor</b>logs in to each carrier</div><i class="arr"></i>
+    <div class="box x3"><b>Three carrier tools</b>same client typed three times</div><i class="arr"></i>
+    <div class="box"><b>By hand</b>numbers copied into a comparison</div><i class="arr"></i>
+    <div class="box"><b>Client</b>sees it</div>
+   </div>
+  </div>
+  <div class="lane new">
+   <div class="who">With this</div>
+   <div class="chain">
+    <div class="box"><b>Advisor</b>makes one request</div><i class="arr"></i>
+    <div class="box dark" style="flex:2.2"><b>Our system does the rest</b>runs each carrier&rsquo;s tool, checks the results, builds the comparison</div><i class="arr"></i>
+    <div class="box"><b>Client</b>sees it</div>
+   </div>
+  </div>
+ </section>
+
+ <section>
+  <div class="eyebrow">What an advisor does</div>
+  <h2>Three steps, and only the first takes any effort</h2>
+  <div class="three">
+   <div><div class="num">1</div><b>Ask</b><p>Open the client, choose the type of case, enter the amount, click one button.</p></div>
+   <div><div class="num">2</div><b>Carry on</b><p>Nothing to log in to and nothing to watch. They get on with their day.</p></div>
+   <div><div class="num">3</div><b>Receive</b><p>A finished, Tompkins-branded comparison arrives with each carrier&rsquo;s own illustration attached.</p></div>
+  </div>
+ </section>
+
+ <section>
+  <div class="eyebrow">Why it matters</div>
+  <h2>What the firm gains</h2>
+  <ul class="gain">
+   <li><b>More time with clients.</b> The repetitive part of preparing a case disappears.</li>
+   <li><b>One firm standard.</b> Every client sees the same quality of comparison, whoever the advisor is.</li>
+   <li><b>Fewer mistakes.</b> Nothing is retyped, and every figure is checked against the carrier&rsquo;s document.</li>
+   <li><b>Numbers you can stand behind.</b> They come from the carriers&rsquo; own software and are kept on file.</li>
+  </ul>
+ </section>
+
+ <section>
+  <div class="ask">
+   <h3>What we need from you</h3>
+   <ol>
+    <li><b>Approval to ask the three carriers</b> for permission to run their tools this way. This is the one thing that could slow us down.</li>
+    <li><b>Compliance sign-off</b> on the branded comparison.</li>
+    <li><b>One person named</b> to own it inside the firm.</li>
+   </ol>
+  </div>
+  <p class="fine">We would start with one carrier and expand. This is a proposal and has not yet been tested against the carrier tools.</p>
+ </section>
+</div>
+<footer><b>Tompkins Insurance</b><span>Draft for discussion</span><span>Technical design available separately</span></footer>
+</div>
+</body></html>
