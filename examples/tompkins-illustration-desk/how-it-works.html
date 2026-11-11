@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en-CA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One-Request Illustrations &ndash; How It Works</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{--primary:#0f2a47;--accent:#b08d3c;--ink:#1c2530;--muted:#5d6875;--paper:#fff;--wash:#f4f1ea;--rule:#d9d4c7;
+--head:'Cormorant Garamond',Georgia,serif;--body:'Inter','Helvetica Neue',Arial,sans-serif}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#e9e7e1;color:var(--ink);font:13px/1.5 var(--body)}
+.sheet{width:8.5in;height:11in;margin:20px auto;background:var(--paper);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 2px 24px rgba(0,0,0,.08)}
+.pad{padding:0 48px;flex:1}
+header{background:var(--primary);color:#fff;padding:20px 48px 22px;border-bottom:5px solid var(--accent)}
+.brandrow{display:flex;justify-content:space-between;align-items:center}
+.wordmark{font:600 22px/1 var(--head);letter-spacing:.02em}
+.tag{font:600 9.5px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(255,255,255,.45);padding:7px 10px}
+h1{font:600 35px/1.05 var(--head);margin:20px 0 8px}
+.dek{font-size:14.5px;margin:0;max-width:41em;opacity:.93}
+.eyebrow{font:600 10px/1 var(--body);letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+h2{font:600 23px/1.15 var(--head);color:var(--primary);margin:4px 0 4px}
+section{margin:18px 0 0}
+.lead{margin:0 0 6px;color:var(--muted);font-size:12.5px}
+.steps{margin:0;padding:0;list-style:none}
+.steps li{display:grid;grid-template-columns:38px 1fr 132px;gap:14px;padding:9px 0;border-bottom:1px solid var(--rule);position:relative}
+.steps li:last-child{border-bottom:0}
+.n{width:32px;height:32px;border-radius:50%;background:var(--primary);color:#fff;font:600 17px/32px var(--head);text-align:center;position:relative;z-index:1}
+.steps li:not(:last-child):before{content:"";position:absolute;left:15px;top:41px;bottom:-9px;width:2px;background:var(--rule)}
+.steps h3{font:600 14px/1.3 var(--body);color:var(--primary);margin:0 0 2px}
+.steps p{margin:0;font-size:12.5px}
+.eg{display:block;color:var(--muted);font-size:11.5px;margin-top:3px}
+.eg b{color:var(--accent);font-weight:600}
+.by{font-size:11px;color:var(--muted);text-align:right;line-height:1.4}
+.chip{display:inline-block;white-space:nowrap;font:600 9.5px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;padding:5px 8px;border-radius:3px;background:var(--wash);color:var(--primary);margin-bottom:4px}
+.chip.p{background:var(--accent);color:#fff}
+.know{display:grid;grid-template-columns:repeat(3,1fr);gap:0;background:var(--wash);border-left:4px solid var(--accent)}
+.know div{padding:13px 16px;border-right:1px solid var(--rule)}.know div:last-child{border:0}
+.know b{display:block;color:var(--primary);font-size:13px;margin-bottom:3px}
+.know span{font-size:12px}
+.fine{font-size:10.5px;color:var(--muted);margin:8px 0 0}
+footer{background:var(--primary);color:#fff;padding:12px 48px;display:flex;justify-content:space-between;font-size:10.5px;border-top:4px solid var(--accent)}
+footer span{opacity:.8}
+@page{size:Letter;margin:0}
+@media print{body{background:#fff}.sheet{margin:0;box-shadow:none;height:10.97in}}
+@media screen and (max-width:860px){.sheet{width:auto;height:auto;margin:0}.pad,header,footer{padding-left:16px;padding-right:16px}
+.know{grid-template-columns:1fr}.steps li{grid-template-columns:38px 1fr}.by{grid-column:2;text-align:left}h1{font-size:28px}}
+</style></head><body>
+<div class="sheet">
+<header>
+ <div class="brandrow"><div class="wordmark">Tompkins Insurance</div><div class="tag">How it works</div></div>
+ <h1>One request in. Every carrier&rsquo;s illustration back.</h1>
+ <p class="dek">Think of it as a fast, careful assistant who knows every carrier&rsquo;s software. The advisor asks once. The assistant runs each carrier&rsquo;s tool, checks the results and hands back a finished comparison.</p>
+</header>
+<div class="pad">
+ <section>
+  <div class="eyebrow">Step by step</div>
+  <h2>What happens after the advisor clicks the button</h2>
+  <p class="lead">Followed through one example: a 52-year-old business owner who needs $10 million of permanent coverage.</p>
+  <ol class="steps">
+   <li><div class="n">1</div>
+    <div><h3>The advisor asks</h3>
+     <p>They open the client&rsquo;s record, pick the type of case and enter the amount. The client&rsquo;s details are already there, so nothing is typed twice.</p>
+     <span class="eg"><b>Example:</b> &ldquo;Estate preservation, $10 million, compare Canada Life, Manulife and Sun Life.&rdquo;</span></div>
+    <div class="by"><span class="chip p">Advisor</span><br>About a minute</div></li>
+   <li><div class="n">2</div>
+    <div><h3>The request is put into each carrier&rsquo;s language</h3>
+     <p>Every carrier asks for the same facts in a different way and has its own product rules. The system converts the one request into the exact answers each carrier&rsquo;s software expects.</p>
+     <span class="eg"><b>How it knows:</b> the firm&rsquo;s most experienced case designer sets these rules once, and every advisor benefits.</span></div>
+    <div class="by"><span class="chip">System</span><br>Instant</div></li>
+   <li><div class="n">3</div>
+    <div><h3>Each carrier&rsquo;s own software produces the illustration</h3>
+     <p>On a secure firm computer, the system signs in to each carrier&rsquo;s illustration tool and fills it in the way a person would, then saves the carrier&rsquo;s official document. The carrier does the calculating, so the figures are current and theirs.</p>
+     <span class="eg"><b>If a carrier changes its screens:</b> Claude, the firm&rsquo;s AI, reads the new screen and finishes the job. If that fails, a back-office person completes it.</span></div>
+    <div class="by"><span class="chip">System + Claude</span><br>A few minutes for all three</div></li>
+   <li><div class="n">4</div>
+    <div><h3>The system checks its own work</h3>
+     <p>It reads each carrier document and confirms the age, amount and plan match what the advisor asked for. Anything that does not match is held back and sent to back office.</p></div>
+    <div class="by"><span class="chip">System</span><br>Seconds</div></li>
+   <li><div class="n">5</div>
+    <div><h3>The comparison is built and delivered</h3>
+     <p>The figures are lifted from the carrier documents into one Tompkins-branded comparison. The advisor receives it with the three originals attached, and a copy is saved to the client&rsquo;s file.</p>
+     <span class="eg"><b>To change it:</b> the advisor replies &ldquo;rerun at $7.5 million&rdquo; and the same steps repeat.</span></div>
+    <div class="by"><span class="chip">System</span><br>Then the <b>advisor</b> reviews it</div></li>
+  </ol>
+ </section>
+
+ <section>
+  <div class="know">
+   <div><b>The numbers are the carriers&rsquo;</b><span>The system never works out a client figure itself. It only operates the carriers&rsquo; tools and reads their documents.</span></div>
+   <div><b>People stay in charge</b><span>The advisor reviews everything before a client sees it. Back office handles anything unusual.</span></div>
+   <div><b>It needs the carriers&rsquo; permission</b><span>Running their tools this way has to be agreed with each carrier before launch.</span></div>
+  </div>
+  <p class="fine">Times are targets. This is a proposal and has not yet been tested against the carrier tools. The example client is fictional.</p>
+ </section>
+</div>
+<footer><b>Tompkins Insurance</b><span>Draft for discussion</span><span>Technical design available separately</span></footer>
+</div>
+</body></html>
