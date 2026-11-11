@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en-CA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>One-Request Illustrations &ndash; Solution Design</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{--primary:#0f2a47;--accent:#b08d3c;--ink:#1c2530;--muted:#5d6875;--paper:#fff;--wash:#f4f1ea;--rule:#d9d4c7;
+--ok:#2f7d5b;--head:'Cormorant Garamond',Georgia,serif;--body:'Inter','Helvetica Neue',Arial,sans-serif}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{margin:0;background:#e9e7e1;color:var(--ink);font:12.5px/1.5 var(--body)}
+.sheet{width:8.5in;height:11in;margin:20px auto;background:var(--paper);display:flex;flex-direction:column;overflow:hidden;box-shadow:0 2px 24px rgba(0,0,0,.08)}
+.pad{padding:0 46px;flex:1}
+header{background:var(--primary);color:#fff;padding:26px 46px 28px;border-bottom:5px solid var(--accent)}
+header.slim{padding:16px 46px}
+.brandrow{display:flex;justify-content:space-between;align-items:center}
+.wordmark{font:600 22px/1 var(--head);letter-spacing:.02em}
+.tag{font:600 9.5px/1 var(--body);letter-spacing:.18em;text-transform:uppercase;border:1px solid rgba(255,255,255,.45);padding:7px 10px}
+.eyebrow{font:600 10px/1 var(--body);letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+header .eyebrow{color:#fff;opacity:.8;margin-top:26px}
+h1{font:600 38px/1.06 var(--head);margin:10px 0 10px;text-wrap:balance}
+.dek{font-size:14.5px;margin:0;max-width:40em;opacity:.92}
+h2{font:600 24px/1.15 var(--head);color:var(--primary);margin:5px 0 12px;text-wrap:balance}
+h3{font:600 13px/1.3 var(--body);color:var(--primary);margin:0 0 4px}
+p{margin:0 0 8px}
+section{margin:22px 0 0}.p2 section{margin-top:13px}.p2 h2{font-size:22px;margin-bottom:9px}.p2 ul.tight li{margin-bottom:3px}
+.promise{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--rule)}
+.promise div{padding:11px 14px;border-right:1px solid var(--rule)}
+.promise div:last-child{border:0}
+.promise b{display:block;font:600 24px/1.1 var(--head);color:var(--primary)}
+.promise span{font-size:11px;color:var(--muted)}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.step .n{font:600 10px/1 var(--body);letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:6px}
+.step p{font-size:12px;color:var(--ink);margin:10px 0 0}
+/* mock screens */
+.ui{background:var(--wash);border:1px solid var(--rule);border-radius:8px;padding:12px;height:252px;font-size:11px;display:flex;flex-direction:column;gap:8px}
+.ui .bar{display:flex;align-items:center;gap:8px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+.av{width:26px;height:26px;border-radius:50%;background:var(--primary);color:#fff;font:600 10px/26px var(--body);text-align:center;flex:none}
+.bar b{display:block;font-size:11.5px}.bar span{color:var(--muted);font-size:10px}
+.lbl{font:600 9px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pills{display:flex;flex-direction:column;gap:5px}
+.pill{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:6px 9px}
+.pill.on{border-color:var(--primary);box-shadow:inset 3px 0 0 var(--accent);font-weight:600;color:var(--primary)}
+.field{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:6px 9px;display:flex;justify-content:space-between}
+.field span{color:var(--muted)}
+.btn{background:var(--primary);color:#fff;border-radius:6px;padding:9px;text-align:center;font-weight:600;margin-top:auto}
+.run{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:8px 10px;display:flex;align-items:center;gap:9px}
+.run b{flex:1}.run span{color:var(--muted);font-size:10px}
+.dot{width:14px;height:14px;border-radius:50%;flex:none;border:2px solid var(--rule)}
+.dot.done{background:var(--ok);border-color:var(--ok);position:relative}
+.dot.done:after{content:"";position:absolute;left:3px;top:1px;width:3px;height:6px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+.dot.go{border-color:var(--accent);border-right-color:transparent}
+.note{background:#fff;border-left:3px solid var(--accent);padding:7px 9px;font-size:10.5px;color:var(--muted);margin-top:auto}
+.note b{color:var(--ink)}
+.mini{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--rule);font-size:10px}
+.mini th{background:var(--primary);color:#fff;font-weight:600;padding:5px 6px;text-align:right}
+.mini th:first-child,.mini td:first-child{text-align:left}
+.mini td{padding:4px 6px;border-top:1px solid var(--rule);text-align:right;font-variant-numeric:tabular-nums}
+.files{display:flex;gap:5px}
+.file{background:#fff;border:1px solid var(--rule);border-radius:5px;padding:4px 7px;font-size:9.5px;color:var(--primary);font-weight:600}
+.reply{background:#fff;border:1px solid var(--primary);border-radius:14px;padding:6px 11px;color:var(--muted);margin-top:auto}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:6px 30px;margin:0;padding:0;list-style:none}
+.rules li{padding-left:16px;position:relative;font-size:12px}
+.rules li:before{content:"";position:absolute;left:0;top:7px;width:7px;height:2px;background:var(--accent)}
+/* page 2 */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:0;align-items:stretch}
+.node{background:var(--wash);border:1px solid var(--rule);padding:10px 11px;position:relative;margin-right:14px}
+.node:last-child{margin-right:0}
+.node:not(:last-child):after{content:"";position:absolute;right:-12px;top:50%;margin-top:-5px;border:5px solid transparent;border-left:7px solid var(--accent)}
+.node b{display:block;color:var(--primary);font-size:12.5px}
+.node span{font-size:10.5px;color:var(--muted);line-height:1.4;display:block;margin-top:3px}
+.node.key{background:var(--primary);border-color:var(--primary)}.node.key b{color:#fff}.node.key span{color:#fff;opacity:.8}
+table.routes{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:4px}
+.routes th{text-align:left;font:600 9.5px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--primary);background:var(--wash);padding:8px 10px}
+.routes td{padding:6px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+.routes td:first-child{font-weight:600;color:var(--primary);white-space:nowrap}
+.routes td:nth-child(3){white-space:nowrap;font-weight:600}
+.rk{display:inline-block;width:18px;height:18px;border-radius:50%;background:var(--accent);color:#fff;font:600 10px/18px var(--body);text-align:center;margin-right:7px}
+.two{display:grid;grid-template-columns:1.15fr 1fr;gap:26px}
+ul.tight{margin:0;padding-left:16px}ul.tight li{margin-bottom:5px;font-size:12px}
+.box{align-self:start;background:var(--wash);border-left:3px solid var(--accent);padding:14px 16px}
+.phases{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--rule)}
+.phases div{padding:9px 14px;border-right:1px solid var(--rule)}.phases div:last-child{border:0}
+.phases small{display:block;font:600 9.5px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin-bottom:5px}
+.phases b{display:block;color:var(--primary);font-size:12.5px;margin-bottom:3px}.phases span{font-size:11.5px}
+.fine{font-size:10.5px;color:var(--muted);margin-top:9px}
+footer{background:var(--primary);color:#fff;padding:13px 46px;display:flex;justify-content:space-between;font-size:10.5px;border-top:4px solid var(--accent)}
+footer span{opacity:.8}
+@page{size:Letter;margin:0}
+@media print{body{background:#fff}.sheet{margin:0;box-shadow:none;height:10.97in}.sheet+.sheet{break-before:page}}
+@media screen and (max-width:860px){.sheet{width:auto;height:auto;margin:0}.pad,header,footer{padding-left:16px;padding-right:16px}
+.steps,.two,.rules,.phases,.flow{grid-template-columns:1fr}.promise{grid-template-columns:1fr 1fr}.node{margin:0 0 8px}.node:after{display:none}h1{font-size:30px}}
+</style></head><body>
+
+<div class="sheet">
+<header>
+ <div class="brandrow"><div class="wordmark">Tompkins Insurance</div><div class="tag">Solution design &middot; Draft</div></div>
+ <div class="eyebrow">Illustrations without the busywork</div>
+ <h1>One request in. Every carrier&rsquo;s illustration back.</h1>
+ <p class="dek">The advisor asks once and gets a finished, branded comparison built from the carriers&rsquo; own illustrations. The firm&rsquo;s system does everything in between.</p>
+</header>
+<div class="pad">
+ <section>
+  <div class="promise">
+   <div><b>3 choices</b><span>Client, scenario, amount. Nothing else to enter.</span></div>
+   <div><b>0 logins</b><span>Advisors never open a carrier tool.</span></div>
+   <div><b>Minutes</b><span>Target turnaround, without watching it run.</span></div>
+   <div><b>100% carrier</b><span>Every final figure comes from the carrier&rsquo;s PDF.</span></div>
+  </div>
+ </section>
+
+ <section>
+  <div class="eyebrow">The advisor experience</div>
+  <h2>Three moments, and only the first takes effort</h2>
+  <div class="steps">
+   <div class="step">
+    <div class="n">1 &middot; Ask</div>
+    <div class="ui">
+     <div class="bar"><div class="av">JA</div><div><b>Jonathan Ashcombe</b><span>52 &middot; Male &middot; Non-smoker</span></div></div>
+     <div class="lbl">Scenario</div>
+     <div class="pills"><div class="pill on">Estate preservation, corporate par</div><div class="pill">Term ladder</div></div>
+     <div class="field"><span>Coverage</span><b>$10,000,000</b></div>
+     <div class="btn">Run illustrations</div>
+    </div>
+    <p>From the client record, where the details are already filled in. Or said in plain words to Claude, at a desk or on a phone.</p>
+   </div>
+   <div class="step">
+    <div class="n">2 &middot; Carry on</div>
+    <div class="ui">
+     <div class="lbl">Running for Jonathan Ashcombe</div>
+     <div class="run"><i class="dot done"></i><b>Canada Life</b><span>Done</span></div>
+     <div class="run"><i class="dot go"></i><b>Manulife</b><span>Running</span></div>
+     <div class="run"><i class="dot"></i><b>Sun Life</b><span>Next</span></div>
+     <div class="note"><b>Estimate ready now.</b> Indicative figures, replaced by carrier figures as each run lands.</div>
+    </div>
+    <p>The work happens on the firm&rsquo;s system, so the advisor can close the laptop. A labelled estimate appears in seconds for early thinking.</p>
+   </div>
+   <div class="step">
+    <div class="n">3 &middot; Receive</div>
+    <div class="ui">
+     <table class="mini"><tr><th>Age 85</th><th>CL</th><th>MFC</th><th>SLF</th></tr>
+      <tr><td>Premium</td><td>$468K</td><td>$456K</td><td>$480K</td></tr>
+      <tr><td>Benefit</td><td>$23.7M</td><td>$26.8M</td><td>$24.5M</td></tr>
+      <tr><td>Cash</td><td>$22.8M</td><td>$22.4M</td><td>$22.8M</td></tr></table>
+     <div class="files"><div class="file">Comparison.pdf</div><div class="file">3 carrier PDFs</div></div>
+     <div class="lbl">Inputs checked on all 3</div>
+     <div class="reply">Rerun at $7.5M, add a 10-pay&hellip;</div>
+    </div>
+    <p>One message with the branded comparison and the carrier PDFs, saved to the client file. Changes are a reply, not a new form.</p>
+   </div>
+  </div>
+ </section>
+
+ <section>
+  <div class="eyebrow">Design rules</div>
+  <h2>What we hold to, whatever the back end becomes</h2>
+  <ul class="rules">
+   <li><b>Pick a scenario, not a product.</b> The firm&rsquo;s best case designer sets each preset once.</li>
+   <li><b>Start where advisors already are.</b> The client record, Claude, or a phone.</li>
+   <li><b>Never make them wait or watch.</b> They are told when it is ready.</li>
+   <li><b>Problems go to back office.</b> A stalled run arrives later, not as an error.</li>
+   <li><b>Estimates are always labelled.</b> Only carrier figures reach a client.</li>
+   <li><b>Every number has a source.</b> The carrier PDF is attached, with date and version.</li>
+  </ul>
+ </section>
+</div>
+<footer><b>Tompkins Insurance</b><span>Sample figures are fictional</span><span>Page 1 of 2</span></footer>
+</div>
+
+<div class="sheet p2">
+<header class="slim"><div class="brandrow"><div class="wordmark">Tompkins Insurance</div><div class="tag">Solution design &middot; Draft</div></div></header>
+<div class="pad">
+ <section>
+  <div class="eyebrow">Behind the button</div>
+  <h2>One pipeline, with the carrier tools doing the calculating</h2>
+  <div class="flow">
+   <div class="node"><b>Intake</b><span>Client record, Claude or phone. Preset fills in the design.</span></div>
+   <div class="node"><b>Translate</b><span>One case becomes each carrier&rsquo;s own fields and limits.</span></div>
+   <div class="node key"><b>Run</b><span>The carrier&rsquo;s tool produces its illustration. Fastest available route.</span></div>
+   <div class="node"><b>Check</b><span>Inputs printed on each PDF are matched to the request.</span></div>
+   <div class="node"><b>Deliver</b><span>Comparison built, PDFs attached, saved and sent.</span></div>
+  </div>
+ </section>
+
+ <section>
+  <h3>The run step tries the fastest route first and falls back on its own</h3>
+  <table class="routes">
+   <tr><th>Route</th><th>How it works</th><th>Target time</th><th>Used when</th></tr>
+   <tr><td><span class="rk">1</span>Direct link</td><td>The system sends the case straight to the carrier&rsquo;s illustration service and receives the PDF, with no screens involved.</td><td>Seconds</td><td>The carrier agrees to it</td></tr>
+   <tr><td><span class="rk">2</span>Scripted browser</td><td>A recorded script operates the carrier&rsquo;s web tool on a firm-run cloud machine.</td><td>1&ndash;2 min</td><td>The default</td></tr>
+   <tr><td><span class="rk">3</span>Claude takes over</td><td>If a carrier screen has changed, Claude finishes the run by reading the screen, then drafts the script fix.</td><td>3&ndash;5 min</td><td>A script fails</td></tr>
+   <tr><td><span class="rk">4</span>Case-prep person</td><td>Back office completes the run by hand and drops in the PDF.</td><td>Same day</td><td>Last resort</td></tr>
+  </table>
+ </section>
+
+ <section class="two">
+  <div>
+   <div class="eyebrow">Why it holds up technically</div>
+   <h2>Standard parts, arranged carefully</h2>
+   <ul class="tight">
+    <li><b>Carrier tools are forms that return a PDF.</b> Filling a web form and reading a PDF are both well-established automation.</li>
+    <li><b>Logins sit in a secure vault</b> on the firm&rsquo;s system. Sessions are kept alive, and an advisor approves on their phone only if a carrier asks for a code.</li>
+    <li><b>A daily test case per carrier</b> finds a changed screen before an advisor does.</li>
+    <li><b>Nothing is delivered unchecked.</b> A mismatch between the request and the carrier PDF stops that carrier and alerts back office.</li>
+    <li><b>Full record.</b> Who asked, when, which carrier software version, and the PDF itself.</li>
+   </ul>
+  </div>
+  <div class="box">
+   <h3>What has to be true first</h3>
+   <ul class="tight">
+    <li><b>Carrier consent in writing</b> for automated runs on the firm&rsquo;s system. This is the largest dependency.</li>
+    <li><b>Compliance approval</b> of the branded comparison and the labelled estimate.</li>
+    <li><b>A privacy decision</b> on where client data is processed and stored.</li>
+    <li><b>A named owner</b> for presets, carrier mappings and upkeep.</li>
+   </ul>
+  </div>
+ </section>
+
+ <section>
+  <div class="eyebrow">Getting there</div>
+  <h2>Advisors get the simple experience from the first phase</h2>
+  <div class="phases">
+   <div><small>Phase 1</small><b>The front door</b><span>Intake, presets, estimate and comparison. Back office runs the carrier tools by hand behind it.</span></div>
+   <div><small>Phase 2</small><b>One carrier automated</b><span>Scripted browser with Claude as the fallback, for the most-used carrier and product.</span></div>
+   <div><small>Phase 3</small><b>All carriers, fastest routes</b><span>Remaining carriers added, client-record button, direct links where carriers agree.</span></div>
+  </div>
+  <p class="fine">Times are design targets and have not been tested against the carrier tools. Sample client and figures are fictional. Branding is a stand-in pending the firm&rsquo;s logo and colours.</p>
+ </section>
+</div>
+<footer><b>Tompkins Insurance</b><span>Solution design &middot; Draft for discussion</span><span>Page 2 of 2</span></footer>
+</div>
+</body></html>
